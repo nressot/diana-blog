@@ -7,9 +7,9 @@ export default function ArticleCard({ article, variant = 'default', disabled = f
     const wrapperProps = disabled ? {} : { to: `/article/${article.slug}` }
 
     return (
-      <article className={`group relative overflow-hidden rounded-2xl ${disabled ? 'cursor-default' : ''}`}>
+      <article className="group relative overflow-hidden rounded-2xl cursor-pointer">
         <Wrapper {...wrapperProps} className="block">
-            <div className="aspect-[16/10] lg:aspect-[21/9]">
+            <div className="aspect-[16/10] lg:aspect-[21/9] img-zoom">
             <img
               src={article.image}
               alt={article.title}
@@ -23,7 +23,7 @@ export default function ArticleCard({ article, variant = 'default', disabled = f
               {article.category}
             </span>
             <h2
-              className="text-3xl lg:text-5xl font-bold text-white mb-4"
+              className="text-3xl lg:text-5xl font-bold text-white mb-4 group-hover:text-primary-300 transition-colors"
               style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
             >
               {article.title}
@@ -60,8 +60,8 @@ export default function ArticleCard({ article, variant = 'default', disabled = f
     const wrapperProps = disabled ? {} : { to: `/article/${article.slug}` }
 
     return (
-      <article className={`group flex gap-5 ${disabled ? 'cursor-default' : ''}`}>
-        <Wrapper {...wrapperProps} className="shrink-0 w-32 h-24 sm:w-40 sm:h-28 rounded-xl overflow-hidden">
+      <article className="group flex gap-5 cursor-pointer">
+        <Wrapper {...wrapperProps} className="shrink-0 w-32 h-24 sm:w-40 sm:h-28 rounded-xl overflow-hidden img-zoom">
           <img
             src={article.image}
             alt={article.title}
@@ -72,7 +72,7 @@ export default function ArticleCard({ article, variant = 'default', disabled = f
           <span className={`${article.categoryColor} text-white text-xs font-medium px-2.5 py-0.5 rounded-full w-fit mb-2`}>
             {article.category}
           </span>
-          <h3 className="font-semibold line-clamp-2 mb-2">
+          <h3 className="font-semibold group-hover:text-primary-600 transition-colors line-clamp-2 mb-2">
             {article.title}
           </h3>
           <div className="flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
@@ -92,8 +92,8 @@ export default function ArticleCard({ article, variant = 'default', disabled = f
   const wrapperProps = disabled ? {} : { to: `/article/${article.slug}` }
 
   return (
-    <article className={`group bg-cream-50 dark:bg-neutral-900 rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 ${disabled ? 'cursor-default' : 'card-hover'}`}>
-      <Wrapper {...wrapperProps} className="block aspect-[16/10]">
+    <article className="group card-hover bg-cream-50 dark:bg-neutral-900 rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 cursor-pointer">
+      <Wrapper {...wrapperProps} className="block aspect-[16/10] img-zoom">
         <img
           src={article.image}
           alt={article.title}
@@ -109,7 +109,7 @@ export default function ArticleCard({ article, variant = 'default', disabled = f
             {article.date}
           </span>
         </div>
-        <h3 className="text-xl font-bold mb-2 line-clamp-2">
+        <h3 className="text-xl font-bold mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
           {article.title}
         </h3>
         <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 mb-4">

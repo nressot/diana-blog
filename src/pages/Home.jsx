@@ -43,20 +43,23 @@ export default function Home() {
                 Bienvenue dans mon univers littéraire. Je suis {author?.name || 'Diana'}, et ici je partage mes réflexions, mes récits et mes découvertes au fil de la plume.
               </p>
 
-              {/* CTA Buttons - desactives */}
+              {/* CTA Buttons - style preserve, no navigation */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <span
-                  className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-neutral-400 text-white font-medium cursor-not-allowed opacity-60 shadow-lg shadow-neutral-900/10"
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-neutral-900 text-white font-medium hover:bg-neutral-800 transition-colors shadow-lg shadow-neutral-900/10 cursor-pointer"
                 >
                   <BookOpen className="w-5 h-5" />
                   Lire mes articles
-                </span>
-                <span
-                  className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full font-medium border border-neutral-300 text-neutral-400 cursor-not-allowed opacity-60"
+                </button>
+                <button
+                  type="button"
+                  className="btn-outline-arrow inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full font-medium border hover:bg-cream-200 transition-colors cursor-pointer"
+                  style={{ borderColor: '#1c1a17' }}
                 >
                   Qui suis-je ?
                   <ArrowRight className="w-4 h-4" />
-                </span>
+                </button>
               </div>
 
               {/* Ligne decorative */}
@@ -100,9 +103,9 @@ export default function Home() {
               <h2 className="text-2xl lg:text-3xl font-semibold">Catégories</h2>
               <p className="text-neutral-500 dark:text-neutral-400 mt-1">Explorez par thème</p>
             </div>
-            <span className="text-sm font-medium text-neutral-400 flex items-center gap-1 cursor-not-allowed">
+            <button type="button" className="text-sm font-medium text-primary-600 hover:text-primary-700 flex items-center gap-1 cursor-pointer">
               Tout voir <ArrowRight className="w-4 h-4" />
-            </span>
+            </button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {(categories || []).map((category) => (
@@ -120,9 +123,9 @@ export default function Home() {
               <h2 className="text-2xl lg:text-3xl font-semibold">Derniers articles</h2>
               <p className="text-neutral-500 dark:text-neutral-400 mt-1">Mes écrits les plus récents</p>
             </div>
-            <span className="text-sm font-medium text-neutral-400 flex items-center gap-1 cursor-not-allowed">
+            <button type="button" className="text-sm font-medium text-primary-600 hover:text-primary-700 flex items-center gap-1 cursor-pointer">
               Tout voir <ArrowRight className="w-4 h-4" />
-            </span>
+            </button>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {(articles || []).slice(0, 6).map((article) => (

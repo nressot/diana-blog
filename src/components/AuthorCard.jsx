@@ -20,9 +20,9 @@ export default function AuthorCard({ variant = 'default' }) {
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
           {author.bio}
         </p>
-        <span className="text-sm font-medium text-neutral-400 cursor-not-allowed">
+        <button type="button" className="text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors cursor-pointer">
           En savoir plus
-        </span>
+        </button>
       </div>
     )
   }
