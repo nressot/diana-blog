@@ -1,0 +1,204 @@
+/* CSS Cat - Based on CodePen by armanb */
+/* Adapted for React with scroll-triggered peeking animation */
+
+.css-cat-wrapper {
+  --cat-color: #1c1a17;
+  --cat-eye-color: #FFC107;
+  width: 50px;
+  height: 50px;
+  opacity: 0;
+  transform: translateY(-60px) rotate(-15deg);
+  transition: none;
+  pointer-events: none;
+}
+
+/* Dark mode - chat blanc */
+.dark .css-cat-wrapper {
+  --cat-color: #f5f3ef;
+}
+
+/* Animation d'apparition quand visible */
+.css-cat-wrapper.visible {
+  animation: cat-peek 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes cat-peek {
+  0% {
+    opacity: 0;
+    transform: translateY(-60px) rotate(-15deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(5px) rotate(3deg);
+  }
+  80% {
+    transform: translateY(-3px) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Pas d'animation idle - le chat reste pose */
+.css-cat-wrapper.visible {
+  animation: cat-peek 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Structure du chat */
+.css-cat {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.css-cat * {
+  position: absolute;
+}
+
+.css-cat *:before,
+.css-cat *:after {
+  content: "";
+  position: absolute;
+}
+
+/* Corps */
+.cat-body {
+  width: 85%;
+  height: 60%;
+  background-color: var(--cat-color);
+  border-radius: 50% 10% 50% 40%/60% 5% 65% 50%;
+  right: 0;
+  bottom: 0;
+}
+
+/* Tete */
+.cat-head {
+  width: 60%;
+  height: 50%;
+  background-color: var(--cat-color);
+  border-radius: 50% 50% 30% 30% /60% 60% 30% 30%;
+  right: 0;
+  top: 10%;
+}
+
+/* Yeux */
+.cat-eyes {
+  height: 5%;
+  width: 40%;
+  top: 40%;
+  right: 20%;
+  transform: translate(-2px, -2px);
+}
+
+.cat-eye {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--cat-eye-color);
+  animation: eye-blink 3s ease-in-out infinite;
+  box-shadow: 0 0 2px var(--cat-eye-color), 0 0 4px var(--cat-eye-color);
+}
+
+.cat-eye.left {
+  left: 0;
+}
+
+.cat-eye.right {
+  right: 0;
+}
+
+/* Oreilles */
+.cat-ear {
+  width: 0;
+  height: 0;
+  border-color: transparent transparent var(--cat-color);
+  border-style: solid;
+}
+
+.cat-ear.left {
+  border-width: 0 6px 9px 6px;
+  left: 15%;
+  bottom: 90%;
+  transform: rotate(-30deg);
+}
+
+.cat-ear.right {
+  border-width: 0 8px 12px 8px;
+  right: 5%;
+  bottom: 85%;
+  transform: rotate(30deg);
+}
+
+/* Queue - structure imbriquee */
+.css-cat > .cat-tail {
+  height: 18%;
+  width: 50%;
+  background-color: var(--cat-color);
+  bottom: 0;
+  right: 35%;
+  border-radius: 50%/250%;
+}
+
+.css-cat > .cat-tail > .cat-tail {
+  right: 90%;
+}
+
+.cat-tail > .cat-tail {
+  height: 100%;
+  transform-origin: center right;
+  transform: rotate(0deg);
+  width: 20px;
+  right: 26%;
+  animation: tail-wag 2s ease-in-out infinite;
+  border-top-left-radius: 50% 50%;
+  border-bottom-left-radius: 50% 50%;
+  background-color: inherit;
+}
+
+/* Animations */
+@keyframes tail-wag {
+  0%, 5% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  70%, 100% {
+    transform: rotate(0);
+  }
+}
+
+@keyframes eye-blink {
+  0%, 10%, 100% {
+    transform: scaleY(1);
+  }
+  5% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .css-cat-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .cat-eye {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .css-cat-wrapper {
+    width: 70px;
+    height: 70px;
+  }
+
+  .cat-eye {
+    width: 6px;
+    height: 6px;
+  }
+}

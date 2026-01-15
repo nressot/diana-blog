@@ -1,0 +1,1122 @@
+@import "tailwindcss";
+@import "@fontsource/be-vietnam-pro/400.css";
+@import "@fontsource/be-vietnam-pro/500.css";
+@import "@fontsource/be-vietnam-pro/600.css";
+@import "@fontsource/be-vietnam-pro/700.css";
+
+@theme {
+  --font-sans: "Be Vietnam Pro", system-ui, sans-serif;
+
+  /* Base colors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* Primary colors - warm brown/terracotta tones for writing theme */
+  --color-primary-50: #fdf8f6;
+  --color-primary-100: #f9ece6;
+  --color-primary-200: #f3d5c7;
+  --color-primary-300: #e9b8a0;
+  --color-primary-400: #db9373;
+  --color-primary-500: #c97550;
+  --color-primary-600: #b85d3a;
+  --color-primary-700: #9a4a2f;
+  --color-primary-800: #7f3e2a;
+  --color-primary-900: #693627;
+
+  /* Cream/warm neutral colors */
+  --color-cream-50: #FDFCFA;
+  --color-cream-100: #FAF6F2;
+  --color-cream-200: #F9F4F0;
+  --color-cream-300: #F3EBE4;
+  --color-cream-400: #EBE0D6;
+  --color-cream-500: #DFD0C2;
+
+  /* Neutral colors - warmer tones */
+  --color-neutral-50: #faf9f7;
+  --color-neutral-100: #f5f3ef;
+  --color-neutral-200: #e8e4dc;
+  --color-neutral-300: #d6d0c4;
+  --color-neutral-400: #a8a196;
+  --color-neutral-500: #78726a;
+  --color-neutral-600: #5c5650;
+  --color-neutral-700: #45403b;
+  --color-neutral-800: #2d2a26;
+  --color-neutral-900: #1c1a17;
+  --color-neutral-950: #0f0e0c;
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-cream-100);
+  color: var(--color-neutral-900);
+}
+
+.dark body {
+  background-color: var(--color-neutral-950);
+  color: var(--color-neutral-100);
+}
+
+/* Cream background utilities */
+.bg-cream-50 {
+  background-color: var(--color-cream-50);
+}
+
+.bg-cream-100 {
+  background-color: var(--color-cream-100);
+}
+
+.bg-cream-100\/90 {
+  background-color: rgb(250 246 242 / 0.9);
+}
+
+.bg-cream-200\/50 {
+  background-color: rgb(249 244 240 / 0.5);
+}
+
+.from-cream-200 {
+  --tw-gradient-from: #F9F4F0 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(249 244 240 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-cream-100 {
+  --tw-gradient-to: #FAF6F2 var(--tw-gradient-to-position);
+}
+
+.hover\:bg-cream-300:hover {
+  background-color: var(--color-cream-300);
+}
+
+.bg-cream-200 {
+  background-color: var(--color-cream-200);
+}
+
+.bg-cream-300 {
+  background-color: var(--color-cream-300);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-neutral-100 dark:bg-neutral-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-300 dark:bg-neutral-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-400 dark:bg-neutral-500;
+}
+
+/* Selection */
+::selection {
+  @apply bg-primary-500/20 text-primary-900 dark:text-primary-100;
+}
+
+/* Focus styles */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary-500;
+}
+
+/* Link hover effect */
+.link-hover {
+  @apply relative;
+}
+
+.link-hover::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300;
+}
+
+.link-hover:hover::after {
+  @apply w-full;
+}
+
+/* Card hover effect */
+.card-hover {
+  @apply transition-all duration-300;
+}
+
+.card-hover:hover {
+  @apply -translate-y-1 shadow-xl;
+}
+
+/* Image zoom effect */
+.img-zoom {
+  @apply overflow-hidden;
+}
+
+.img-zoom img {
+  @apply transition-transform duration-500;
+}
+
+.img-zoom:hover img {
+  @apply scale-105;
+}
+
+/* Gradient text */
+.text-gradient {
+  @apply bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent;
+}
+
+/* Container */
+.container-custom {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Prose styles for blog content */
+.prose-content {
+  color: var(--color-neutral-700);
+  line-height: 1.75;
+}
+
+.dark .prose-content {
+  color: var(--color-neutral-300);
+}
+
+.prose-content h1,
+.prose-content h2,
+.prose-content h3,
+.prose-content h4 {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--color-neutral-900);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.dark .prose-content h1,
+.dark .prose-content h2,
+.dark .prose-content h3,
+.dark .prose-content h4 {
+  color: var(--color-neutral-100);
+}
+
+.prose-content h2 {
+  font-size: 1.5rem;
+}
+
+.prose-content h3 {
+  font-size: 1.25rem;
+}
+
+.prose-content p {
+  margin-bottom: 1rem;
+}
+
+.prose-content a {
+  color: var(--color-primary-600);
+}
+
+.prose-content a:hover {
+  text-decoration: underline;
+}
+
+.prose-content blockquote {
+  border-left: 4px solid var(--color-primary-500);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--color-neutral-600);
+  margin: 1.5rem 0;
+}
+
+.dark .prose-content blockquote {
+  color: var(--color-neutral-400);
+}
+
+.prose-content ul,
+.prose-content ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose-content li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-content ul li {
+  list-style-type: disc;
+}
+
+.prose-content ol li {
+  list-style-type: decimal;
+}
+
+.prose-content hr {
+  margin: 2rem 0;
+  border-color: var(--color-neutral-200);
+}
+
+.dark .prose-content hr {
+  border-color: var(--color-neutral-700);
+}
+
+.prose-content img {
+  border-radius: 1rem;
+  margin: 1.5rem 0;
+}
+
+.prose-content code {
+  background-color: var(--color-neutral-100);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.dark .prose-content code {
+  background-color: var(--color-neutral-800);
+}
+
+.prose-content pre {
+  background-color: var(--color-neutral-900);
+  color: var(--color-neutral-100);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.dark .prose-content pre {
+  background-color: var(--color-neutral-800);
+}
+
+/* ===== BUTTON ANIMATIONS ===== */
+
+/* Option 1: Slide Fill - Background slides from left */
+.btn-outline-slide {
+  @apply relative overflow-hidden border border-neutral-900 dark:border-white;
+  z-index: 1;
+}
+
+.btn-outline-slide::before {
+  content: '';
+  @apply absolute inset-0 bg-neutral-900 dark:bg-white;
+  transform: translateX(-101%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.btn-outline-slide:hover::before {
+  transform: translateX(0);
+}
+
+.btn-outline-slide:hover {
+  @apply text-white dark:text-neutral-900;
+}
+
+/* Option 2: Scale Bounce - Subtle scale with bounce */
+.btn-outline-scale {
+  @apply border border-neutral-900 dark:border-white;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.btn-outline-scale:hover {
+  transform: scale(1.05);
+  @apply shadow-lg shadow-neutral-900/20 dark:shadow-white/10;
+}
+
+.btn-outline-scale:active {
+  transform: scale(0.98);
+}
+
+/* Option 3: Arrow Slide - Arrow moves on hover */
+.btn-outline-arrow {
+  transition: all 0.3s ease;
+  color: #1c1a17;
+}
+
+.btn-outline-arrow:hover {
+  background-color: #1c1a17;
+  color: #ffffff;
+}
+
+.btn-outline-arrow svg {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.btn-outline-arrow:hover svg {
+  transform: translateX(4px);
+  color: #ffffff;
+}
+
+/* Option 4: Border Glow - Glowing border effect */
+.btn-outline-glow {
+  @apply border border-neutral-900 dark:border-white;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-glow:hover {
+  @apply border-primary-600 dark:border-primary-400;
+  box-shadow: 0 0 20px rgba(185, 93, 58, 0.4);
+}
+
+.dark .btn-outline-glow:hover {
+  box-shadow: 0 0 20px rgba(219, 147, 115, 0.3);
+}
+
+/* Option 5: Fill Up - Background fills from bottom */
+.btn-outline-fill-up {
+  @apply relative overflow-hidden border border-neutral-900 dark:border-white;
+  z-index: 1;
+}
+
+.btn-outline-fill-up::before {
+  content: '';
+  @apply absolute inset-0 bg-neutral-900 dark:bg-white;
+  transform: translateY(101%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.btn-outline-fill-up:hover::before {
+  transform: translateY(0);
+}
+
+.btn-outline-fill-up:hover {
+  @apply text-white dark:text-neutral-900;
+}
+
+/* Option 6: Magnetic - Subtle magnetic/pull effect */
+.btn-outline-magnetic {
+  @apply border border-neutral-900 dark:border-white;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-outline-magnetic:hover {
+  @apply bg-neutral-900 dark:bg-white text-white dark:text-neutral-900;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.3);
+}
+
+.dark .btn-outline-magnetic:hover {
+  box-shadow: 0 10px 20px -10px rgba(255, 255, 255, 0.2);
+}
+
+/* Option 7: Double Border - Animated double border */
+.btn-outline-double {
+  @apply relative border border-neutral-900 dark:border-white;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-double::after {
+  content: '';
+  @apply absolute rounded-full border border-neutral-900 dark:border-white;
+  inset: -6px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-double:hover::after {
+  inset: -4px;
+  opacity: 1;
+}
+
+.btn-outline-double:hover {
+  @apply bg-neutral-900 dark:bg-white text-white dark:text-neutral-900;
+}
+
+/* ===== FLOAT ANIMATION ===== */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(4deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(4deg);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ===== ANIMATED STARS ===== */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-12px) rotate(8deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes float-medium {
+  0%, 100% {
+    transform: translateY(0) rotate(-5deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-18px) rotate(5deg);
+    opacity: 0.6;
+  }
+}
+
+@keyframes float-fast {
+  0%, 100% {
+    transform: translateY(0) rotate(10deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-8px) rotate(-10deg);
+    opacity: 0.5;
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes twinkle-delayed {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  25% {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+  75% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 6s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: float-fast 4s ease-in-out infinite;
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.animate-twinkle-delayed {
+  animation: twinkle-delayed 4s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+/* Legacy star animations */
+@keyframes star-float-1 {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-15px) rotate(10deg);
+    opacity: 1;
+  }
+}
+
+@keyframes star-float-2 {
+  0%, 100% {
+    transform: translateY(0) rotate(5deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-20px) rotate(-5deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes star-float-3 {
+  0%, 100% {
+    transform: translateY(0) rotate(-10deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-10px) rotate(15deg);
+    opacity: 1;
+  }
+}
+
+/* Warm terracotta section with floating stars */
+.bg-terracotta-warm {
+  background: linear-gradient(135deg, var(--color-primary-700) 0%, var(--color-primary-600) 50%, var(--color-primary-500) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-terracotta-warm::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* Floating star container */
+.floating-stars {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.floating-star {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.floating-star:nth-child(1) {
+  top: 15%;
+  left: 10%;
+  animation: star-float-1 6s ease-in-out infinite;
+}
+
+.floating-star:nth-child(2) {
+  top: 25%;
+  right: 15%;
+  animation: star-float-2 8s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+.floating-star:nth-child(3) {
+  bottom: 20%;
+  left: 20%;
+  animation: star-float-3 7s ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+.floating-star:nth-child(4) {
+  top: 60%;
+  right: 25%;
+  animation: star-float-1 9s ease-in-out infinite;
+  animation-delay: -1s;
+}
+
+.floating-star:nth-child(5) {
+  bottom: 35%;
+  right: 10%;
+  animation: star-float-2 6.5s ease-in-out infinite;
+  animation-delay: -3s;
+}
+
+/* Light version for light mode */
+.bg-terracotta-stars-light {
+  background: linear-gradient(135deg, var(--color-primary-200) 0%, var(--color-primary-100) 100%);
+  position: relative;
+}
+
+/* Terracotta background pattern */
+.bg-terracotta-pattern {
+  background-color: var(--color-cream-100);
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(185, 93, 58, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(185, 93, 58, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 60% 80%, rgba(185, 93, 58, 0.04) 0%, transparent 45%);
+}
+
+.dark .bg-terracotta-pattern {
+  background-color: var(--color-neutral-950);
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(185, 93, 58, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(185, 93, 58, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 60% 80%, rgba(185, 93, 58, 0.02) 0%, transparent 45%);
+}
+
+/* ===== CELESTIAL BACKGROUNDS - Style subtil etoiles et lune ===== */
+
+/* VERSION 1: Etoiles 4 branches simples - tres epure */
+.bg-stars-v1 {
+  background-color: var(--color-cream-100);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 35 L41 39 L40 40 L39 39 Z M40 45 L39 41 L40 40 L41 41 Z M35 40 L39 39 L40 40 L39 41 Z M45 40 L41 41 L40 40 L41 39 Z' fill='%23d6d0c4' /%3E%3C/svg%3E");
+  background-size: 120px 120px;
+}
+.dark .bg-stars-v1 {
+  background-color: var(--color-neutral-950);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 35 L41 39 L40 40 L39 39 Z M40 45 L39 41 L40 40 L41 41 Z M35 40 L39 39 L40 40 L39 41 Z M45 40 L41 41 L40 40 L41 39 Z' fill='%232d2a26' /%3E%3C/svg%3E");
+  background-size: 120px 120px;
+}
+
+/* VERSION 2: Ciel etoile aleatoire - multiples inclinaisons par type */
+.bg-stars-v2 {
+  background-color: var(--color-cream-100);
+  background-image:
+    /* Etoile 4br droite */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='503' height='509' viewBox='0 0 503 509'%3E%3Cg transform='rotate(22 120 88)'%3E%3Cpath d='M120 80 L121.5 86 L120 88 L118.5 86 Z M120 96 L118.5 90 L120 88 L121.5 90 Z M112 88 L118 86.5 L120 88 L118 89.5 Z M128 88 L122 89.5 L120 88 L122 86.5 Z' fill='%23d6d0c4'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Etoile 5br gauche */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='601' height='607' viewBox='0 0 601 607'%3E%3Cpolygon points='280,150 282,158 290,158 284,163 286,171 280,166 274,171 276,163 270,158 278,158' fill='%23d6d0c4' transform='rotate(-18 280 160)'/%3E%3C/svg%3E"),
+    /* Etoile 4br gauche */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='701' height='709' viewBox='0 0 701 709'%3E%3Cg transform='rotate(-8 400 308)'%3E%3Cpath d='M400 300 L401 306 L400 308 L399 306 Z M400 316 L399 310 L400 308 L401 310 Z M392 308 L398 306.5 L400 308 L398 309.5 Z M408 308 L402 309.5 L400 308 L402 306.5 Z' fill='%23d6d0c4'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Etoile 5br droite */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='457' height='461' viewBox='0 0 457 461'%3E%3Cpolygon points='230,200 232,208 240,208 234,213 236,221 230,216 224,221 226,213 220,208 228,208' fill='%23d6d0c4' transform='rotate(12 230 210)'/%3E%3C/svg%3E"),
+    /* Etoile 8br */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='907' height='911' viewBox='0 0 907 911'%3E%3Cg transform='rotate(-15 450 400)'%3E%3Cpath d='M450 390 L451 398 L450 400 L449 398 Z M450 410 L449 402 L450 400 L451 402 Z M440 400 L448 399 L450 400 L448 401 Z M460 400 L452 401 L450 400 L452 399 Z M443 393 L448 398 L450 400 L448 398 Z M457 407 L452 402 L450 400 L452 402 Z M443 407 L448 402 L450 400 L448 402 Z M457 393 L452 398 L450 400 L452 398 Z' fill='%23d6d0c4'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Etoile 5br neutre */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='809' height='811' viewBox='0 0 809 811'%3E%3Cpolygon points='500,400 501.5,405 507,405 502.5,409 504,414 500,410 496,414 497.5,409 493,405 498.5,405' fill='%23d6d0c4' transform='rotate(3 500 407)'/%3E%3C/svg%3E"),
+    /* Etoile 4br tres inclinee droite */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='659' height='653' viewBox='0 0 659 653'%3E%3Cg transform='rotate(35 330 280)'%3E%3Cpath d='M330 272 L331.5 278 L330 280 L328.5 278 Z M330 288 L328.5 282 L330 280 L331.5 282 Z M322 280 L328 278.5 L330 280 L328 281.5 Z M338 280 L332 281.5 L330 280 L332 278.5 Z' fill='%23d6d0c4'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Etoile 5br tres inclinee gauche */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='547' height='557' viewBox='0 0 547 557'%3E%3Cpolygon points='270,280 271.5,285 277,285 272.5,289 274,294 270,290 266,294 267.5,289 263,285 268.5,285' fill='%23d6d0c4' transform='rotate(-28 270 287)'/%3E%3C/svg%3E"),
+    /* Etoile 8br inclinee inverse */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1103' height='1109' viewBox='0 0 1103 1109'%3E%3Cg transform='rotate(11 600 550)'%3E%3Cpath d='M600 540 L601 548 L600 550 L599 548 Z M600 560 L599 552 L600 550 L601 552 Z M590 550 L598 549 L600 550 L598 551 Z M610 550 L602 551 L600 550 L602 549 Z M593 543 L598 548 L600 550 L598 548 Z M607 557 L602 552 L600 550 L602 552 Z M593 557 L598 552 L600 550 L598 552 Z M607 543 L602 548 L600 550 L602 548 Z' fill='%23d6d0c4'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Etoile 4br neutre */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='751' height='757' viewBox='0 0 751 757'%3E%3Cpath d='M380 350 L381.5 356 L380 358 L378.5 356 Z M380 366 L378.5 360 L380 358 L381.5 360 Z M372 358 L378 356.5 L380 358 L378 359.5 Z M388 358 L382 359.5 L380 358 L382 356.5 Z' fill='%23d6d0c4'/%3E%3C/svg%3E"),
+    /* Petit point */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='307' height='311' viewBox='0 0 307 311'%3E%3Ccircle cx='150' cy='180' r='1.2' fill='%23d6d0c4'/%3E%3C/svg%3E"),
+    /* Etoile 5br legere droite */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='853' height='859' viewBox='0 0 853 859'%3E%3Cpolygon points='420,430 421.5,435 427,435 422.5,439 424,444 420,440 416,444 417.5,439 413,435 418.5,435' fill='%23d6d0c4' transform='rotate(7 420 437)'/%3E%3C/svg%3E"),
+    /* Etoile scintillante Star154 - rotation 0 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1201' height='1213' viewBox='0 0 1201 1213'%3E%3Cg transform='translate(567 573) scale(0.45)'%3E%3Cpath d='M58.6 46.19C58.42 46.55 48.92 41.81 36.69 35.6C36.51 35.96 36.15 36.15 35.96 36.51C40.34 43.45 43.27 48.56 43.08 48.74C42.9 48.92 39.43 44 34.87 37.24C34.5 37.42 34.14 37.61 33.77 37.61C33.77 51.85 33.41 62.8 33.04 62.8C32.68 62.8 32.49 51.85 32.31 37.61C31.95 37.61 31.58 37.42 31.22 37.24C26.84 44 23.37 48.92 23 48.74C22.82 48.56 25.74 43.27 30.12 36.51C29.76 36.33 29.57 35.96 29.39 35.6C17.16 41.99 7.67 46.55 7.48 46.19C7.3 45.82 16.61 40.71 28.84 34.32C28.84 34.14 28.66 33.96 28.66 33.77C20.81 33.77 14.97 33.41 14.97 33.04C14.97 32.68 20.81 32.49 28.48 32.31C28.48 31.95 28.66 31.58 28.66 31.4C16.43 25.19 7.3 20.08 7.3 19.72C7.48 19.35 16.98 24.1 29.21 30.3C29.39 30.12 29.57 29.76 29.76 29.57C25.56 22.82 22.64 17.71 22.82 17.53C23 17.34 26.47 22.09 30.67 28.66C31.03 28.48 31.58 28.3 31.95 28.3C31.95 14.06 32.31 3.1 32.68 3.1C33.04 3.1 33.23 14.06 33.41 28.3C33.96 28.3 34.32 28.48 34.69 28.66C39.07 22.09 42.35 17.34 42.54 17.53C42.72 17.71 39.8 22.82 35.6 29.57C35.78 29.76 35.96 29.94 36.15 30.3C48.38 23.91 57.87 19.35 58.05 19.72C58.24 20.08 48.92 25.19 36.69 31.58C36.88 31.95 36.88 32.13 36.88 32.49C44.73 32.49 50.39 32.86 50.39 33.22C50.39 33.59 44.54 33.77 36.88 33.96C36.88 34.14 36.88 34.32 36.69 34.5C49.47 40.71 58.6 46 58.6 46.19Z' stroke='%23d6d0c4' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Etoile scintillante Star154 - rotation 17 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='983' height='991' viewBox='0 0 983 991'%3E%3Cg transform='translate(462 466) scale(0.45) rotate(17 33 33)'%3E%3Cpath d='M58.6 46.19C58.42 46.55 48.92 41.81 36.69 35.6C36.51 35.96 36.15 36.15 35.96 36.51C40.34 43.45 43.27 48.56 43.08 48.74C42.9 48.92 39.43 44 34.87 37.24C34.5 37.42 34.14 37.61 33.77 37.61C33.77 51.85 33.41 62.8 33.04 62.8C32.68 62.8 32.49 51.85 32.31 37.61C31.95 37.61 31.58 37.42 31.22 37.24C26.84 44 23.37 48.92 23 48.74C22.82 48.56 25.74 43.27 30.12 36.51C29.76 36.33 29.57 35.96 29.39 35.6C17.16 41.99 7.67 46.55 7.48 46.19C7.3 45.82 16.61 40.71 28.84 34.32C28.84 34.14 28.66 33.96 28.66 33.77C20.81 33.77 14.97 33.41 14.97 33.04C14.97 32.68 20.81 32.49 28.48 32.31C28.48 31.95 28.66 31.58 28.66 31.4C16.43 25.19 7.3 20.08 7.3 19.72C7.48 19.35 16.98 24.1 29.21 30.3C29.39 30.12 29.57 29.76 29.76 29.57C25.56 22.82 22.64 17.71 22.82 17.53C23 17.34 26.47 22.09 30.67 28.66C31.03 28.48 31.58 28.3 31.95 28.3C31.95 14.06 32.31 3.1 32.68 3.1C33.04 3.1 33.23 14.06 33.41 28.3C33.96 28.3 34.32 28.48 34.69 28.66C39.07 22.09 42.35 17.34 42.54 17.53C42.72 17.71 39.8 22.82 35.6 29.57C35.78 29.76 35.96 29.94 36.15 30.3C48.38 23.91 57.87 19.35 58.05 19.72C58.24 20.08 48.92 25.19 36.69 31.58C36.88 31.95 36.88 32.13 36.88 32.49C44.73 32.49 50.39 32.86 50.39 33.22C50.39 33.59 44.54 33.77 36.88 33.96C36.88 34.14 36.88 34.32 36.69 34.5C49.47 40.71 58.6 46 58.6 46.19Z' stroke='%23d6d0c4' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Etoile scintillante Star154 - rotation -23 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1307' height='1319' viewBox='0 0 1307 1319'%3E%3Cg transform='translate(624 630) scale(0.45) rotate(-23 33 33)'%3E%3Cpath d='M58.6 46.19C58.42 46.55 48.92 41.81 36.69 35.6C36.51 35.96 36.15 36.15 35.96 36.51C40.34 43.45 43.27 48.56 43.08 48.74C42.9 48.92 39.43 44 34.87 37.24C34.5 37.42 34.14 37.61 33.77 37.61C33.77 51.85 33.41 62.8 33.04 62.8C32.68 62.8 32.49 51.85 32.31 37.61C31.95 37.61 31.58 37.42 31.22 37.24C26.84 44 23.37 48.92 23 48.74C22.82 48.56 25.74 43.27 30.12 36.51C29.76 36.33 29.57 35.96 29.39 35.6C17.16 41.99 7.67 46.55 7.48 46.19C7.3 45.82 16.61 40.71 28.84 34.32C28.84 34.14 28.66 33.96 28.66 33.77C20.81 33.77 14.97 33.41 14.97 33.04C14.97 32.68 20.81 32.49 28.48 32.31C28.48 31.95 28.66 31.58 28.66 31.4C16.43 25.19 7.3 20.08 7.3 19.72C7.48 19.35 16.98 24.1 29.21 30.3C29.39 30.12 29.57 29.76 29.76 29.57C25.56 22.82 22.64 17.71 22.82 17.53C23 17.34 26.47 22.09 30.67 28.66C31.03 28.48 31.58 28.3 31.95 28.3C31.95 14.06 32.31 3.1 32.68 3.1C33.04 3.1 33.23 14.06 33.41 28.3C33.96 28.3 34.32 28.48 34.69 28.66C39.07 22.09 42.35 17.34 42.54 17.53C42.72 17.71 39.8 22.82 35.6 29.57C35.78 29.76 35.96 29.94 36.15 30.3C48.38 23.91 57.87 19.35 58.05 19.72C58.24 20.08 48.92 25.19 36.69 31.58C36.88 31.95 36.88 32.13 36.88 32.49C44.73 32.49 50.39 32.86 50.39 33.22C50.39 33.59 44.54 33.77 36.88 33.96C36.88 34.14 36.88 34.32 36.69 34.5C49.47 40.71 58.6 46 58.6 46.19Z' stroke='%23d6d0c4' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Croissant de lune */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1409' height='1423' viewBox='0 0 1409 1423'%3E%3Cg transform='rotate(-30 700 700)'%3E%3Ccircle cx='700' cy='700' r='10' fill='%23d6d0c4'/%3E%3Ccircle cx='705' cy='700' r='8' fill='%23FAF6F2'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 503px 509px, 601px 607px, 701px 709px, 457px 461px, 907px 911px, 809px 811px, 659px 653px, 547px 557px, 1103px 1109px, 751px 757px, 307px 311px, 853px 859px, 1201px 1213px, 983px 991px, 1307px 1319px, 1409px 1423px;
+  background-position: 23px 17px, 151px 89px, 67px 197px, 289px 143px, 283px 71px, 179px 263px, 311px 181px, 137px 317px, 53px 331px, 401px 97px, 41px 127px, 211px 379px, 127px 251px, 347px 163px, 83px 419px, 97px 211px;
+}
+.dark .bg-stars-v2 {
+  background-color: var(--color-neutral-950);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='503' height='509' viewBox='0 0 503 509'%3E%3Cg transform='rotate(22 120 88)'%3E%3Cpath d='M120 80 L121.5 86 L120 88 L118.5 86 Z M120 96 L118.5 90 L120 88 L121.5 90 Z M112 88 L118 86.5 L120 88 L118 89.5 Z M128 88 L122 89.5 L120 88 L122 86.5 Z' fill='%232d2a26'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='601' height='607' viewBox='0 0 601 607'%3E%3Cpolygon points='280,150 282,158 290,158 284,163 286,171 280,166 274,171 276,163 270,158 278,158' fill='%232d2a26' transform='rotate(-18 280 160)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='701' height='709' viewBox='0 0 701 709'%3E%3Cg transform='rotate(-8 400 308)'%3E%3Cpath d='M400 300 L401 306 L400 308 L399 306 Z M400 316 L399 310 L400 308 L401 310 Z M392 308 L398 306.5 L400 308 L398 309.5 Z M408 308 L402 309.5 L400 308 L402 306.5 Z' fill='%232d2a26'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='457' height='461' viewBox='0 0 457 461'%3E%3Cpolygon points='230,200 232,208 240,208 234,213 236,221 230,216 224,221 226,213 220,208 228,208' fill='%232d2a26' transform='rotate(12 230 210)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='907' height='911' viewBox='0 0 907 911'%3E%3Cg transform='rotate(-15 450 400)'%3E%3Cpath d='M450 390 L451 398 L450 400 L449 398 Z M450 410 L449 402 L450 400 L451 402 Z M440 400 L448 399 L450 400 L448 401 Z M460 400 L452 401 L450 400 L452 399 Z M443 393 L448 398 L450 400 L448 398 Z M457 407 L452 402 L450 400 L452 402 Z M443 407 L448 402 L450 400 L448 402 Z M457 393 L452 398 L450 400 L452 398 Z' fill='%232d2a26'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='809' height='811' viewBox='0 0 809 811'%3E%3Cpolygon points='500,400 501.5,405 507,405 502.5,409 504,414 500,410 496,414 497.5,409 493,405 498.5,405' fill='%232d2a26' transform='rotate(3 500 407)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='659' height='653' viewBox='0 0 659 653'%3E%3Cg transform='rotate(35 330 280)'%3E%3Cpath d='M330 272 L331.5 278 L330 280 L328.5 278 Z M330 288 L328.5 282 L330 280 L331.5 282 Z M322 280 L328 278.5 L330 280 L328 281.5 Z M338 280 L332 281.5 L330 280 L332 278.5 Z' fill='%232d2a26'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='547' height='557' viewBox='0 0 547 557'%3E%3Cpolygon points='270,280 271.5,285 277,285 272.5,289 274,294 270,290 266,294 267.5,289 263,285 268.5,285' fill='%232d2a26' transform='rotate(-28 270 287)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1103' height='1109' viewBox='0 0 1103 1109'%3E%3Cg transform='rotate(11 600 550)'%3E%3Cpath d='M600 540 L601 548 L600 550 L599 548 Z M600 560 L599 552 L600 550 L601 552 Z M590 550 L598 549 L600 550 L598 551 Z M610 550 L602 551 L600 550 L602 549 Z M593 543 L598 548 L600 550 L598 548 Z M607 557 L602 552 L600 550 L602 552 Z M593 557 L598 552 L600 550 L598 552 Z M607 543 L602 548 L600 550 L602 548 Z' fill='%232d2a26'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='751' height='757' viewBox='0 0 751 757'%3E%3Cpath d='M380 350 L381.5 356 L380 358 L378.5 356 Z M380 366 L378.5 360 L380 358 L381.5 360 Z M372 358 L378 356.5 L380 358 L378 359.5 Z M388 358 L382 359.5 L380 358 L382 356.5 Z' fill='%232d2a26'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='307' height='311' viewBox='0 0 307 311'%3E%3Ccircle cx='150' cy='180' r='1.2' fill='%232d2a26'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='853' height='859' viewBox='0 0 853 859'%3E%3Cpolygon points='420,430 421.5,435 427,435 422.5,439 424,444 420,440 416,444 417.5,439 413,435 418.5,435' fill='%232d2a26' transform='rotate(7 420 437)'/%3E%3C/svg%3E"),
+    /* Etoile scintillante Star154 - rotation 0 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1201' height='1213' viewBox='0 0 1201 1213'%3E%3Cg transform='translate(567 573) scale(0.45)'%3E%3Cpath d='M58.6 46.19C58.42 46.55 48.92 41.81 36.69 35.6C36.51 35.96 36.15 36.15 35.96 36.51C40.34 43.45 43.27 48.56 43.08 48.74C42.9 48.92 39.43 44 34.87 37.24C34.5 37.42 34.14 37.61 33.77 37.61C33.77 51.85 33.41 62.8 33.04 62.8C32.68 62.8 32.49 51.85 32.31 37.61C31.95 37.61 31.58 37.42 31.22 37.24C26.84 44 23.37 48.92 23 48.74C22.82 48.56 25.74 43.27 30.12 36.51C29.76 36.33 29.57 35.96 29.39 35.6C17.16 41.99 7.67 46.55 7.48 46.19C7.3 45.82 16.61 40.71 28.84 34.32C28.84 34.14 28.66 33.96 28.66 33.77C20.81 33.77 14.97 33.41 14.97 33.04C14.97 32.68 20.81 32.49 28.48 32.31C28.48 31.95 28.66 31.58 28.66 31.4C16.43 25.19 7.3 20.08 7.3 19.72C7.48 19.35 16.98 24.1 29.21 30.3C29.39 30.12 29.57 29.76 29.76 29.57C25.56 22.82 22.64 17.71 22.82 17.53C23 17.34 26.47 22.09 30.67 28.66C31.03 28.48 31.58 28.3 31.95 28.3C31.95 14.06 32.31 3.1 32.68 3.1C33.04 3.1 33.23 14.06 33.41 28.3C33.96 28.3 34.32 28.48 34.69 28.66C39.07 22.09 42.35 17.34 42.54 17.53C42.72 17.71 39.8 22.82 35.6 29.57C35.78 29.76 35.96 29.94 36.15 30.3C48.38 23.91 57.87 19.35 58.05 19.72C58.24 20.08 48.92 25.19 36.69 31.58C36.88 31.95 36.88 32.13 36.88 32.49C44.73 32.49 50.39 32.86 50.39 33.22C50.39 33.59 44.54 33.77 36.88 33.96C36.88 34.14 36.88 34.32 36.69 34.5C49.47 40.71 58.6 46 58.6 46.19Z' stroke='%232d2a26' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Etoile scintillante Star154 - rotation 17 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='983' height='991' viewBox='0 0 983 991'%3E%3Cg transform='translate(462 466) scale(0.45) rotate(17 33 33)'%3E%3Cpath d='M58.6 46.19C58.42 46.55 48.92 41.81 36.69 35.6C36.51 35.96 36.15 36.15 35.96 36.51C40.34 43.45 43.27 48.56 43.08 48.74C42.9 48.92 39.43 44 34.87 37.24C34.5 37.42 34.14 37.61 33.77 37.61C33.77 51.85 33.41 62.8 33.04 62.8C32.68 62.8 32.49 51.85 32.31 37.61C31.95 37.61 31.58 37.42 31.22 37.24C26.84 44 23.37 48.92 23 48.74C22.82 48.56 25.74 43.27 30.12 36.51C29.76 36.33 29.57 35.96 29.39 35.6C17.16 41.99 7.67 46.55 7.48 46.19C7.3 45.82 16.61 40.71 28.84 34.32C28.84 34.14 28.66 33.96 28.66 33.77C20.81 33.77 14.97 33.41 14.97 33.04C14.97 32.68 20.81 32.49 28.48 32.31C28.48 31.95 28.66 31.58 28.66 31.4C16.43 25.19 7.3 20.08 7.3 19.72C7.48 19.35 16.98 24.1 29.21 30.3C29.39 30.12 29.57 29.76 29.76 29.57C25.56 22.82 22.64 17.71 22.82 17.53C23 17.34 26.47 22.09 30.67 28.66C31.03 28.48 31.58 28.3 31.95 28.3C31.95 14.06 32.31 3.1 32.68 3.1C33.04 3.1 33.23 14.06 33.41 28.3C33.96 28.3 34.32 28.48 34.69 28.66C39.07 22.09 42.35 17.34 42.54 17.53C42.72 17.71 39.8 22.82 35.6 29.57C35.78 29.76 35.96 29.94 36.15 30.3C48.38 23.91 57.87 19.35 58.05 19.72C58.24 20.08 48.92 25.19 36.69 31.58C36.88 31.95 36.88 32.13 36.88 32.49C44.73 32.49 50.39 32.86 50.39 33.22C50.39 33.59 44.54 33.77 36.88 33.96C36.88 34.14 36.88 34.32 36.69 34.5C49.47 40.71 58.6 46 58.6 46.19Z' stroke='%232d2a26' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Etoile scintillante Star154 - rotation -23 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1307' height='1319' viewBox='0 0 1307 1319'%3E%3Cg transform='translate(624 630) scale(0.45) rotate(-23 33 33)'%3E%3Cpath d='M58.6 46.19C58.42 46.55 48.92 41.81 36.69 35.6C36.51 35.96 36.15 36.15 35.96 36.51C40.34 43.45 43.27 48.56 43.08 48.74C42.9 48.92 39.43 44 34.87 37.24C34.5 37.42 34.14 37.61 33.77 37.61C33.77 51.85 33.41 62.8 33.04 62.8C32.68 62.8 32.49 51.85 32.31 37.61C31.95 37.61 31.58 37.42 31.22 37.24C26.84 44 23.37 48.92 23 48.74C22.82 48.56 25.74 43.27 30.12 36.51C29.76 36.33 29.57 35.96 29.39 35.6C17.16 41.99 7.67 46.55 7.48 46.19C7.3 45.82 16.61 40.71 28.84 34.32C28.84 34.14 28.66 33.96 28.66 33.77C20.81 33.77 14.97 33.41 14.97 33.04C14.97 32.68 20.81 32.49 28.48 32.31C28.48 31.95 28.66 31.58 28.66 31.4C16.43 25.19 7.3 20.08 7.3 19.72C7.48 19.35 16.98 24.1 29.21 30.3C29.39 30.12 29.57 29.76 29.76 29.57C25.56 22.82 22.64 17.71 22.82 17.53C23 17.34 26.47 22.09 30.67 28.66C31.03 28.48 31.58 28.3 31.95 28.3C31.95 14.06 32.31 3.1 32.68 3.1C33.04 3.1 33.23 14.06 33.41 28.3C33.96 28.3 34.32 28.48 34.69 28.66C39.07 22.09 42.35 17.34 42.54 17.53C42.72 17.71 39.8 22.82 35.6 29.57C35.78 29.76 35.96 29.94 36.15 30.3C48.38 23.91 57.87 19.35 58.05 19.72C58.24 20.08 48.92 25.19 36.69 31.58C36.88 31.95 36.88 32.13 36.88 32.49C44.73 32.49 50.39 32.86 50.39 33.22C50.39 33.59 44.54 33.77 36.88 33.96C36.88 34.14 36.88 34.32 36.69 34.5C49.47 40.71 58.6 46 58.6 46.19Z' stroke='%232d2a26' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E"),
+    /* Croissant de lune */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1409' height='1423' viewBox='0 0 1409 1423'%3E%3Cg transform='rotate(-30 700 700)'%3E%3Ccircle cx='700' cy='700' r='10' fill='%232d2a26'/%3E%3Ccircle cx='705' cy='700' r='8' fill='%230f0e0c'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 503px 509px, 601px 607px, 701px 709px, 457px 461px, 907px 911px, 809px 811px, 659px 653px, 547px 557px, 1103px 1109px, 751px 757px, 307px 311px, 853px 859px, 1201px 1213px, 983px 991px, 1307px 1319px, 1409px 1423px;
+  background-position: 23px 17px, 151px 89px, 67px 197px, 289px 143px, 283px 71px, 179px 263px, 311px 181px, 137px 317px, 53px 331px, 401px 97px, 41px 127px, 211px 379px, 127px 251px, 347px 163px, 83px 419px, 97px 211px;
+}
+
+/* VERSION 3: Etoiles avec croissant de lune */
+.bg-stars-moon-v3 {
+  background-color: var(--color-cream-100);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cpath d='M45 40 L46 44 L45 45 L44 44 Z M45 50 L44 46 L45 45 L46 46 Z M40 45 L44 44 L45 45 L44 46 Z M50 45 L46 46 L45 45 L46 44 Z' fill='%23d6d0c4'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cpath d='M160 140 a12 12 0 1 0 0 24 a10 10 0 1 1 0 -24' fill='%23d6d0c4'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Ccircle cx='25' cy='25' r='0.8' fill='%23d6d0c4'/%3E%3C/svg%3E");
+  background-size: 130px 130px, 400px 400px, 70px 70px;
+  background-position: 0 0, 50px 100px, 25px 40px;
+}
+.dark .bg-stars-moon-v3 {
+  background-color: var(--color-neutral-950);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cpath d='M45 40 L46 44 L45 45 L44 44 Z M45 50 L44 46 L45 45 L46 46 Z M40 45 L44 44 L45 45 L44 46 Z M50 45 L46 46 L45 45 L46 44 Z' fill='%232d2a26'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cpath d='M160 140 a12 12 0 1 0 0 24 a10 10 0 1 1 0 -24' fill='%232d2a26'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Ccircle cx='25' cy='25' r='0.8' fill='%232d2a26'/%3E%3C/svg%3E");
+  background-size: 130px 130px, 400px 400px, 70px 70px;
+  background-position: 0 0, 50px 100px, 25px 40px;
+}
+
+/* VERSION 4: Minimaliste - petits points et etoiles rares */
+.bg-stars-minimal-v4 {
+  background-color: var(--color-cream-100);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath d='M100 94 L101 99 L100 100 L99 99 Z M100 106 L99 101 L100 100 L101 101 Z M94 100 L99 99 L100 100 L99 101 Z M106 100 L101 101 L100 100 L101 99 Z' fill='%23d6d0c4'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='0.6' fill='%23d6d0c4'/%3E%3C/svg%3E");
+  background-size: 250px 250px, 60px 60px;
+  background-position: 0 0, 30px 45px;
+}
+.dark .bg-stars-minimal-v4 {
+  background-color: var(--color-neutral-950);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath d='M100 94 L101 99 L100 100 L99 99 Z M100 106 L99 101 L100 100 L101 101 Z M94 100 L99 99 L100 100 L99 101 Z M106 100 L101 101 L100 100 L101 99 Z' fill='%232d2a26'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='0.6' fill='%232d2a26'/%3E%3C/svg%3E");
+  background-size: 250px 250px, 60px 60px;
+  background-position: 0 0, 30px 45px;
+}
+
+/* VERSION 5: Complet celeste - etoiles variees, lune, points (style image reference) */
+.bg-celestial-v5 {
+  background-color: var(--color-cream-100);
+  background-image:
+    /* Etoile 4 branches fine */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 44 L50.8 49 L50 50 L49.2 49 Z M50 56 L49.2 51 L50 50 L50.8 51 Z M44 50 L49 49.2 L50 50 L49 50.8 Z M56 50 L51 50.8 L50 50 L51 49.2 Z' fill='%23d6d0c4'/%3E%3C/svg%3E"),
+    /* Etoile 4 branches epaisse */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cpath d='M90 80 L92 88 L90 90 L88 88 Z M90 100 L88 92 L90 90 L92 92 Z M80 90 L88 88 L90 90 L88 92 Z M100 90 L92 92 L90 90 L92 88 Z' fill='%23d6d0c4'/%3E%3C/svg%3E"),
+    /* Croissant de lune */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cpath d='M210 190 a14 14 0 1 0 0 28 a11 11 0 1 1 0 -28' fill='%23d6d0c4'/%3E%3C/svg%3E"),
+    /* Petits points */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Ccircle cx='25' cy='25' r='0.7' fill='%23d6d0c4'/%3E%3C/svg%3E"),
+    /* Etoile 6 branches */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cpath d='M110 102 L111 108 L110 110 L109 108 Z M110 118 L109 112 L110 110 L111 112 Z M102 110 L108 109 L110 110 L108 111 Z M118 110 L112 111 L110 110 L112 109 Z M104 104 L108 108 L110 110 L108 108 Z M116 116 L112 112 L110 110 L112 112 Z M104 116 L108 112 L110 110 L108 112 Z M116 104 L112 108 L110 110 L112 108 Z' fill='%23d6d0c4'/%3E%3C/svg%3E");
+  background-size: 140px 140px, 220px 220px, 500px 500px, 65px 65px, 280px 280px;
+  background-position: 0 0, 70px 110px, 100px 150px, 35px 50px, 180px 60px;
+}
+.dark .bg-celestial-v5 {
+  background-color: var(--color-neutral-950);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 44 L50.8 49 L50 50 L49.2 49 Z M50 56 L49.2 51 L50 50 L50.8 51 Z M44 50 L49 49.2 L50 50 L49 50.8 Z M56 50 L51 50.8 L50 50 L51 49.2 Z' fill='%232d2a26'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cpath d='M90 80 L92 88 L90 90 L88 88 Z M90 100 L88 92 L90 90 L92 92 Z M80 90 L88 88 L90 90 L88 92 Z M100 90 L92 92 L90 90 L92 88 Z' fill='%232d2a26'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cpath d='M210 190 a14 14 0 1 0 0 28 a11 11 0 1 1 0 -28' fill='%232d2a26'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Ccircle cx='25' cy='25' r='0.7' fill='%232d2a26'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cpath d='M110 102 L111 108 L110 110 L109 108 Z M110 118 L109 112 L110 110 L111 112 Z M102 110 L108 109 L110 110 L108 111 Z M118 110 L112 111 L110 110 L112 109 Z M104 104 L108 108 L110 110 L108 108 Z M116 116 L112 112 L110 110 L112 112 Z M104 116 L108 112 L110 110 L108 112 Z M116 104 L112 108 L110 110 L112 108 Z' fill='%232d2a26'/%3E%3C/svg%3E");
+  background-size: 140px 140px, 220px 220px, 500px 500px, 65px 65px, 280px 280px;
+  background-position: 0 0, 70px 110px, 100px 150px, 35px 50px, 180px 60px;
+}
+
+/* ===== BOUTIQUE EDITORIAL MINIMAL STYLES ===== */
+
+/* Serif typography for editorial feel */
+.font-serif {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+/* Product image overlay on hover */
+.product-img-overlay {
+  @apply relative overflow-hidden;
+}
+
+.product-img-overlay::after {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-500;
+}
+
+.product-img-overlay:hover::after {
+  @apply opacity-100;
+}
+
+/* Editorial link underline effect */
+.editorial-link {
+  @apply relative;
+}
+
+.editorial-link::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-300 ease-out;
+}
+
+.editorial-link:hover::after {
+  @apply w-full;
+}
+
+/* Category filter pill - minimal style */
+.category-filter {
+  @apply relative px-4 py-2 text-sm transition-colors;
+}
+
+.category-filter::after {
+  content: '';
+  @apply absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-neutral-900 dark:bg-white transition-all duration-300;
+}
+
+.category-filter.active::after,
+.category-filter:hover::after {
+  @apply w-full;
+}
+
+/* Price display with Euro formatting */
+.price-display {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* Strikethrough price animation */
+.price-strikethrough {
+  @apply relative text-neutral-400;
+}
+
+.price-strikethrough::after {
+  content: '';
+  @apply absolute top-1/2 left-0 w-full h-px bg-neutral-400;
+}
+
+/* Featured product section gradient overlay */
+.featured-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(185, 93, 58, 0.03) 0%,
+    transparent 50%,
+    rgba(185, 93, 58, 0.02) 100%
+  );
+}
+
+.dark .featured-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(185, 93, 58, 0.02) 0%,
+    transparent 50%,
+    rgba(185, 93, 58, 0.01) 100%
+  );
+}
+
+/* Product card editorial hover effect */
+.product-card-editorial {
+  @apply transition-transform duration-500;
+}
+
+.product-card-editorial:hover {
+  @apply -translate-y-1;
+}
+
+/* Image zoom slow effect for editorial cards */
+.img-zoom-slow {
+  @apply overflow-hidden;
+}
+
+.img-zoom-slow img {
+  @apply transition-transform duration-700 ease-out;
+}
+
+.img-zoom-slow:hover img {
+  @apply scale-105;
+}
+
+/* Boutique grid asymmetric layout */
+.boutique-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+  gap: 2rem 2rem;
+}
+
+@media (min-width: 1024px) {
+  .boutique-grid {
+    gap: 4rem 2rem;
+  }
+}
+
+/* Large product card spanning 2 columns */
+.product-card-large {
+  @apply md:col-span-2 lg:col-span-2;
+}
+
+/* Subtle border accent */
+.border-accent-left {
+  @apply border-l-2 border-l-primary-200/50;
+  padding-left: 1rem;
+}
+
+.dark .border-accent-left {
+  @apply border-l-primary-700/30;
+}
+
+/* Scrollbar hide for horizontal category scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Loading skeleton for boutique */
+.skeleton-boutique {
+  @apply animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded;
+}
+
+/* Empty state styling */
+.empty-state {
+  @apply text-center py-24;
+}
+
+.empty-state-icon {
+  @apply w-16 h-16 mx-auto mb-4 text-neutral-300 dark:text-neutral-600;
+}
+
+/* Promotion badge */
+.promo-badge {
+  @apply absolute top-4 left-4 px-3 py-1 text-xs font-medium tracking-wider uppercase;
+  @apply bg-primary-600 text-white rounded-full;
+}
+
+.dark .promo-badge {
+  @apply bg-primary-500;
+}
+
+/* ===== TERRACOTTA VARIANT COLOR UTILITIES ===== */
+
+/* Cream text colors */
+.text-cream-100 {
+  color: var(--color-cream-100);
+}
+
+.text-cream-200 {
+  color: var(--color-cream-200);
+}
+
+.text-cream-300 {
+  color: var(--color-cream-300);
+}
+
+.text-cream-400 {
+  color: var(--color-cream-400);
+}
+
+/* Primary background colors */
+.bg-primary-50 {
+  background-color: var(--color-primary-50);
+}
+
+.bg-primary-100 {
+  background-color: var(--color-primary-100);
+}
+
+.bg-primary-200 {
+  background-color: var(--color-primary-200);
+}
+
+.bg-primary-500 {
+  background-color: var(--color-primary-500);
+}
+
+.bg-primary-600 {
+  background-color: var(--color-primary-600);
+}
+
+.bg-primary-700 {
+  background-color: var(--color-primary-700);
+}
+
+.bg-primary-800 {
+  background-color: var(--color-primary-800);
+}
+
+/* Primary text colors */
+.text-primary-400 {
+  color: var(--color-primary-400);
+}
+
+.text-primary-500 {
+  color: var(--color-primary-500);
+}
+
+.text-primary-600 {
+  color: var(--color-primary-600);
+}
+
+.text-primary-700 {
+  color: var(--color-primary-700);
+}
+
+.text-primary-800 {
+  color: var(--color-primary-800);
+}
+
+.text-primary-900 {
+  color: var(--color-primary-900);
+}
+
+/* Primary border colors */
+.border-primary-200 {
+  border-color: var(--color-primary-200);
+}
+
+.border-primary-300 {
+  border-color: var(--color-primary-300);
+}
+
+.border-primary-500 {
+  border-color: var(--color-primary-500);
+}
+
+.border-primary-600 {
+  border-color: var(--color-primary-600);
+}
+
+/* Hover states */
+.hover\:text-primary-600:hover {
+  color: var(--color-primary-600);
+}
+
+.hover\:text-primary-700:hover {
+  color: var(--color-primary-700);
+}
+
+.hover\:text-primary-800:hover {
+  color: var(--color-primary-800);
+}
+
+.hover\:text-primary-900:hover {
+  color: var(--color-primary-900);
+}
+
+.hover\:bg-primary-100:hover {
+  background-color: var(--color-primary-100);
+}
+
+.hover\:bg-primary-400:hover {
+  background-color: var(--color-primary-400);
+}
+
+/* Primary gradients for terracotta variants */
+.from-primary-400 {
+  --tw-gradient-from: var(--color-primary-400) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(219 147 115 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-primary-500 {
+  --tw-gradient-from: var(--color-primary-500) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(201 117 80 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.via-primary-400 {
+  --tw-gradient-to: rgb(219 147 115 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--color-primary-400) var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+
+.to-primary-50 {
+  --tw-gradient-to: var(--color-primary-50) var(--tw-gradient-to-position);
+}
+
+.to-primary-200 {
+  --tw-gradient-to: var(--color-primary-200) var(--tw-gradient-to-position);
+}
+
+.from-primary-100 {
+  --tw-gradient-from: var(--color-primary-100) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(249 236 230 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+/* Background opacity variants */
+.bg-primary-200\/50 {
+  background-color: rgb(243 213 199 / 0.5);
+}
+
+.bg-primary-600\/50 {
+  background-color: rgb(184 93 58 / 0.5);
+}
+
+.bg-primary-700\/30 {
+  background-color: rgb(154 74 47 / 0.3);
+}
+
+.bg-primary-800\/50 {
+  background-color: rgb(127 62 42 / 0.5);
+}
+
