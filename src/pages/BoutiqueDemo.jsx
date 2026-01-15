@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Search, ArrowRight, Loader2, ChevronLeft, ChevronRight, List, LayoutGrid, Columns, Clock, Sparkles } from 'lucide-react'
 import { useProducts, useProductCategories, useFeaturedProducts } from '../lib/useProducts'
@@ -92,6 +92,11 @@ export default function BoutiqueDemo() {
   const prevVariant = VARIANTS[currentIndex - 1]
   const nextVariant = VARIANTS[currentIndex + 1]
   const currentVariant = VARIANTS[currentIndex] || VARIANTS[0]
+
+  // Scroll to top when variant changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [variant])
 
   const renderVariant = () => {
     switch (variant) {

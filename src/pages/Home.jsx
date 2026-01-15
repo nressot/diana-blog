@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { ArrowRight, BookOpen, PenLine } from 'lucide-react'
 import ArticleCard from '../components/ArticleCard'
 import CategoryCard from '../components/CategoryCard'
@@ -44,23 +43,20 @@ export default function Home() {
                 Bienvenue dans mon univers littéraire. Je suis {author?.name || 'Diana'}, et ici je partage mes réflexions, mes récits et mes découvertes au fil de la plume.
               </p>
 
-              {/* CTA Buttons */}
+              {/* CTA Buttons - desactives */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  to="/blog"
-                  className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors shadow-lg shadow-neutral-900/10"
+                <span
+                  className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-neutral-400 text-white font-medium cursor-not-allowed opacity-60 shadow-lg shadow-neutral-900/10"
                 >
                   <BookOpen className="w-5 h-5" />
                   Lire mes articles
-                </Link>
-                <Link
-                  to="/about"
-                  className="btn-outline-arrow inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full font-medium border"
-                  style={{ borderColor: '#1c1a17' }}
+                </span>
+                <span
+                  className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full font-medium border border-neutral-300 text-neutral-400 cursor-not-allowed opacity-60"
                 >
                   Qui suis-je ?
                   <ArrowRight className="w-4 h-4" />
-                </Link>
+                </span>
               </div>
 
               {/* Ligne decorative */}
@@ -91,7 +87,7 @@ export default function Home() {
                 <p className="text-neutral-500 dark:text-neutral-400 mt-1">Ma dernière pensée</p>
               </div>
             </div>
-            <ArticleCard article={featuredArticles[0]} variant="featured" />
+            <ArticleCard article={featuredArticles[0]} variant="featured" disabled />
           </div>
         </section>
       )}
@@ -104,16 +100,13 @@ export default function Home() {
               <h2 className="text-2xl lg:text-3xl font-semibold">Catégories</h2>
               <p className="text-neutral-500 dark:text-neutral-400 mt-1">Explorez par thème</p>
             </div>
-            <Link
-              to="/blog"
-              className="text-sm font-medium text-primary-600 hover:text-primary-700 flex items-center gap-1"
-            >
+            <span className="text-sm font-medium text-neutral-400 flex items-center gap-1 cursor-not-allowed">
               Tout voir <ArrowRight className="w-4 h-4" />
-            </Link>
+            </span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {(categories || []).map((category) => (
-              <CategoryCard key={category.id} category={category} />
+              <CategoryCard key={category.id} category={category} disabled />
             ))}
           </div>
         </div>
@@ -127,16 +120,13 @@ export default function Home() {
               <h2 className="text-2xl lg:text-3xl font-semibold">Derniers articles</h2>
               <p className="text-neutral-500 dark:text-neutral-400 mt-1">Mes écrits les plus récents</p>
             </div>
-            <Link
-              to="/blog"
-              className="text-sm font-medium text-primary-600 hover:text-primary-700 flex items-center gap-1"
-            >
+            <span className="text-sm font-medium text-neutral-400 flex items-center gap-1 cursor-not-allowed">
               Tout voir <ArrowRight className="w-4 h-4" />
-            </Link>
+            </span>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {(articles || []).slice(0, 6).map((article) => (
-              <ArticleCard key={article.id} article={article} />
+              <ArticleCard key={article.id} article={article} disabled />
             ))}
           </div>
         </div>

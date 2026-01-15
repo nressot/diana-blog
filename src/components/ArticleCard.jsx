@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Eye, MessageCircle, Clock } from 'lucide-react'
 
-export default function ArticleCard({ article, variant = 'default' }) {
+export default function ArticleCard({ article, variant = 'default', disabled = false }) {
   if (variant === 'featured') {
+    const Wrapper = disabled ? 'div' : Link
+    const wrapperProps = disabled ? {} : { to: `/article/${article.slug}` }
+
     return (
-      <article className="group relative overflow-hidden rounded-2xl">
-        <Link to={`/article/${article.slug}`} className="block">
-            <div className="aspect-[16/10] lg:aspect-[21/9] img-zoom">
+      <article className={`group relative overflow-hidden rounded-2xl ${disabled ? 'cursor-default' : ''}`}>
+        <Wrapper {...wrapperProps} className="block">
+            <div className="aspect-[16/10] lg:aspect-[21/9]">
             <img
               src={article.image}
               alt={article.title}
@@ -20,7 +23,7 @@ export default function ArticleCard({ article, variant = 'default' }) {
               {article.category}
             </span>
             <h2
-              className="text-3xl lg:text-5xl font-bold text-white mb-4 group-hover:text-primary-300 transition-colors"
+              className="text-3xl lg:text-5xl font-bold text-white mb-4"
               style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
             >
               {article.title}
@@ -47,30 +50,31 @@ export default function ArticleCard({ article, variant = 'default' }) {
               </span>
             </div>
           </div>
-          </Link>
+          </Wrapper>
         </article>
     )
   }
 
   if (variant === 'horizontal') {
+    const Wrapper = disabled ? 'div' : Link
+    const wrapperProps = disabled ? {} : { to: `/article/${article.slug}` }
+
     return (
-      <article className="group flex gap-5">
-        <Link to={`/article/${article.slug}`} className="shrink-0 w-32 h-24 sm:w-40 sm:h-28 rounded-xl overflow-hidden img-zoom">
+      <article className={`group flex gap-5 ${disabled ? 'cursor-default' : ''}`}>
+        <Wrapper {...wrapperProps} className="shrink-0 w-32 h-24 sm:w-40 sm:h-28 rounded-xl overflow-hidden">
           <img
             src={article.image}
             alt={article.title}
             className="w-full h-full object-cover"
           />
-        </Link>
+        </Wrapper>
         <div className="flex flex-col justify-center">
           <span className={`${article.categoryColor} text-white text-xs font-medium px-2.5 py-0.5 rounded-full w-fit mb-2`}>
             {article.category}
           </span>
-          <Link to={`/article/${article.slug}`}>
-            <h3 className="font-semibold group-hover:text-primary-600 transition-colors line-clamp-2 mb-2">
-              {article.title}
-            </h3>
-          </Link>
+          <h3 className="font-semibold line-clamp-2 mb-2">
+            {article.title}
+          </h3>
           <div className="flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
             <span>{article.date}</span>
             <span className="flex items-center gap-1">
@@ -84,15 +88,18 @@ export default function ArticleCard({ article, variant = 'default' }) {
   }
 
   // Default variant
+  const Wrapper = disabled ? 'div' : Link
+  const wrapperProps = disabled ? {} : { to: `/article/${article.slug}` }
+
   return (
-    <article className="group card-hover bg-cream-50 dark:bg-neutral-900 rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800">
-      <Link to={`/article/${article.slug}`} className="block aspect-[16/10] img-zoom">
+    <article className={`group bg-cream-50 dark:bg-neutral-900 rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 ${disabled ? 'cursor-default' : 'card-hover'}`}>
+      <Wrapper {...wrapperProps} className="block aspect-[16/10]">
         <img
           src={article.image}
           alt={article.title}
           className="w-full h-full object-cover"
         />
-      </Link>
+      </Wrapper>
       <div className="p-5">
         <div className="flex items-center gap-3 mb-3">
           <span className={`${article.categoryColor} text-white text-xs font-medium px-2.5 py-0.5 rounded-full`}>
@@ -102,11 +109,9 @@ export default function ArticleCard({ article, variant = 'default' }) {
             {article.date}
           </span>
         </div>
-        <Link to={`/article/${article.slug}`}>
-          <h3 className="text-xl font-bold mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
-            {article.title}
-          </h3>
-        </Link>
+        <h3 className="text-xl font-bold mb-2 line-clamp-2">
+          {article.title}
+        </h3>
         <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 mb-4">
           {article.excerpt}
         </p>
