@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { CartProvider } from './context/CartContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -14,30 +14,16 @@ import BackgroundDemo from './pages/BackgroundDemo'
 import BoutiqueDemo from './pages/BoutiqueDemo'
 
 function App() {
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('darkMode')
-      if (saved !== null) return JSON.parse(saved)
-      return window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
-    return false
-  })
-
+  // Forcer le mode light
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(darkMode))
-    if (darkMode) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [darkMode])
-
-  const toggleDarkMode = () => setDarkMode(!darkMode)
+    document.documentElement.classList.remove('dark')
+    localStorage.removeItem('darkMode')
+  }, [])
 
   return (
     <CartProvider>
       <div className="min-h-screen flex flex-col">
-        <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        <Header />
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
