@@ -2,19 +2,19 @@ import { Truck, Package, RotateCcw, MapPin, Clock, Shield } from 'lucide-react'
 
 function ShippingOption({ icon: Icon, title, description, detail }) {
   return (
-    <div className="flex gap-4 p-4 bg-cream-50 dark:bg-neutral-800/50 rounded-xl">
-      <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
-        <Icon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+    <div className="flex gap-4 p-4 bg-cream-50 rounded-xl border border-cream-200">
+      <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
+        <Icon className="w-5 h-5 text-primary-600" />
       </div>
       <div>
-        <h4 className="font-medium text-neutral-900 dark:text-white mb-1">
+        <h4 className="font-medium text-neutral-900 mb-1">
           {title}
         </h4>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-neutral-700">
           {description}
         </p>
         {detail && (
-          <p className="text-xs text-neutral-500 dark:text-neutral-500 mt-1">
+          <p className="text-xs text-neutral-600 mt-1">
             {detail}
           </p>
         )}
@@ -28,7 +28,7 @@ export default function ShippingTab() {
     <div className="space-y-8">
       {/* Options de livraison */}
       <section>
-        <h3 className="font-semibold text-lg mb-4 text-neutral-900 dark:text-white">
+        <h3 className="font-semibold text-lg mb-4 text-neutral-900">
           Options de livraison
         </h3>
 
@@ -50,22 +50,22 @@ export default function ShippingTab() {
 
       {/* Zones de livraison */}
       <section>
-        <h3 className="font-semibold text-lg mb-4 text-neutral-900 dark:text-white">
+        <h3 className="font-semibold text-lg mb-4 text-neutral-900">
           Zones de livraison
         </h3>
 
-        <div className="p-4 bg-cream-50 dark:bg-neutral-800/50 rounded-xl">
+        <div className="p-4 bg-cream-50 rounded-xl border border-cream-200">
           <div className="flex items-start gap-3">
-            <MapPin className="w-5 h-5 text-primary-600 dark:text-primary-400 mt-0.5" />
+            <MapPin className="w-5 h-5 text-primary-600 mt-0.5" />
             <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
+              <p className="text-sm text-neutral-700 mb-3">
                 Nous livrons actuellement dans les pays suivants :
               </p>
               <div className="flex flex-wrap gap-2">
                 {['France', 'Belgique', 'Suisse', 'Luxembourg', 'Monaco'].map((country) => (
                   <span
                     key={country}
-                    className="px-2 py-1 bg-cream-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded text-xs"
+                    className="px-3 py-1 bg-cream-200 text-neutral-800 rounded-full text-xs font-medium"
                   >
                     {country}
                   </span>
@@ -78,7 +78,7 @@ export default function ShippingTab() {
 
       {/* Ebooks */}
       <section>
-        <h3 className="font-semibold text-lg mb-4 text-neutral-900 dark:text-white">
+        <h3 className="font-semibold text-lg mb-4 text-neutral-900">
           Pour les ebooks
         </h3>
 
@@ -92,7 +92,7 @@ export default function ShippingTab() {
 
       {/* Retours */}
       <section>
-        <h3 className="font-semibold text-lg mb-4 text-neutral-900 dark:text-white">
+        <h3 className="font-semibold text-lg mb-4 text-neutral-900">
           Retours et remboursements
         </h3>
 
@@ -113,8 +113,8 @@ export default function ShippingTab() {
       </section>
 
       {/* Note */}
-      <div className="p-4 border border-amber-200 dark:border-amber-800/30 bg-amber-50 dark:bg-amber-900/10 rounded-xl">
-        <p className="text-sm text-amber-800 dark:text-amber-200">
+      <div className="p-4 border border-amber-300 bg-amber-50 rounded-xl">
+        <p className="text-sm text-amber-800">
           <strong>Note :</strong> Les delais peuvent varier en periode de forte activite
           (fetes, soldes). Vous recevrez un email de confirmation avec le numero de suivi
           des l'expedition de votre commande.

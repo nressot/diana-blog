@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Search, ArrowRight, Loader2, ChevronLeft, ChevronRight, List, LayoutGrid, Columns, Clock, Sparkles } from 'lucide-react'
 import { useProducts, useProductCategories, useFeaturedProducts } from '../lib/useProducts'
@@ -92,11 +92,6 @@ export default function BoutiqueDemo() {
   const prevVariant = VARIANTS[currentIndex - 1]
   const nextVariant = VARIANTS[currentIndex + 1]
   const currentVariant = VARIANTS[currentIndex] || VARIANTS[0]
-
-  // Scroll to top when variant changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [variant])
 
   const renderVariant = () => {
     switch (variant) {
@@ -459,7 +454,7 @@ function CardsHorizontalLayout({ products, categories, featured, featuredProduct
 function FeaturedHorizontalCard({ product }) {
   return (
     <Link to={`/boutique/${product.slug}`} className="group flex-shrink-0 w-full sm:w-[400px] lg:w-[480px] mb-4">
-      <div className="relative bg-cream-50 dark:bg-primary-900 rounded-3xl overflow-hidden shadow-xl shadow-black/15 dark:shadow-black/40">
+      <div className="relative bg-cream-50 rounded-3xl overflow-hidden shadow-md shadow-black/8">
         <div className="grid grid-cols-2">
           <div className="aspect-[3/4] overflow-hidden">
             <img src={product.image} alt={product.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />

@@ -32,13 +32,13 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-cream-200 dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800">
+    <footer className="bg-cream-200 bg-neutral-900 border-t border-neutral-200 border-neutral-800">
       {/* Main Footer */}
       <div className="container-custom py-12 lg:py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           {/* Social Links */}
           <div className="col-span-2 lg:col-span-2">
-            <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-sm">
+            <p className="text-neutral-600 text-neutral-400 mb-6 max-w-sm">
               Ecrivaine passionnée, je partage ici mes mots, mes histoires et mes réflexions sur le monde qui nous entoure.
             </p>
             <div className="flex gap-3">
@@ -46,7 +46,7 @@ export default function Footer() {
                 <a
                   key={social.label}
                   href={social.href}
-                  className="w-10 h-10 rounded-full bg-cream-300 dark:bg-neutral-800 flex items-center justify-center hover:bg-primary-600 hover:text-white transition-colors"
+                  className="w-10 h-10 rounded-full bg-cream-300 bg-neutral-800 flex items-center justify-center hover:bg-primary-600 hover:text-white transition-colors"
                   aria-label={social.label}
                 >
                   <social.icon className="w-4 h-4" />
@@ -63,7 +63,7 @@ export default function Footer() {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                    className="text-neutral-600 text-neutral-400 hover:text-neutral-900 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -80,7 +80,7 @@ export default function Footer() {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                    className="text-neutral-600 text-neutral-400 hover:text-neutral-900 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -97,7 +97,7 @@ export default function Footer() {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                    className="text-neutral-600 text-neutral-400 hover:text-neutral-900 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -109,9 +109,9 @@ export default function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className="border-t border-neutral-200 dark:border-neutral-800">
+      <div className="border-t border-neutral-200 border-neutral-800">
         <div className="container-custom py-6">
-          <p className="text-center text-sm text-neutral-600 dark:text-neutral-400">
+          <p className="text-center text-sm text-neutral-600 text-neutral-400">
             {currentYear} Fait avec <Heart className="w-4 h-4 inline text-rose-500" /> et beaucoup de cafe.
           </p>
         </div>

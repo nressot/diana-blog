@@ -72,20 +72,40 @@ export default function CommentSection({ articleId }) {
     }
   }
 
-  // Si Sanity n'est pas configure, ne pas afficher la section
+  // Si Sanity n'est pas configure, afficher un empty state
   if (!isSanityConfigured) {
-    return null
+    return (
+      <section className="mt-12 pt-8 border-t border-neutral-200">
+        {/* En-tete */}
+        <div className="flex items-center gap-2 mb-8">
+          <MessageCircle className="w-6 h-6 text-primary-600" />
+          <h2 className="text-2xl font-bold">Commentaires</h2>
+        </div>
+
+        {/* Empty state */}
+        <div className="text-center py-12 px-6 bg-cream-100 rounded-2xl border border-neutral-200">
+          <MessageCircle className="w-16 h-16 mx-auto mb-4 text-neutral-300" />
+          <h3 className="text-lg font-semibold text-neutral-700 mb-2">
+            Les commentaires arrivent bientot
+          </h3>
+          <p className="text-neutral-500 max-w-md mx-auto">
+            La section commentaires est en cours de configuration.
+            Revenez bientot pour partager votre avis sur cet article !
+          </p>
+        </div>
+      </section>
+    )
   }
 
   return (
-    <section className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-700">
+    <section className="mt-12 pt-8 border-t border-neutral-200">
       {/* En-tete */}
       <div className="flex items-center gap-2 mb-8">
         <MessageCircle className="w-6 h-6 text-primary-600" />
         <h2 className="text-2xl font-bold">
           Commentaires
           {!loadingComments && (
-            <span className="text-neutral-500 dark:text-neutral-400 text-lg font-normal ml-2">
+            <span className="text-neutral-500 text-lg font-normal ml-2">
               ({comments.length})
             </span>
           )}
@@ -93,7 +113,7 @@ export default function CommentSection({ articleId }) {
       </div>
 
       {/* Formulaire */}
-      <div className="mb-8 p-6 bg-cream-100 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
+      <div className="mb-8 p-6 bg-cream-100 rounded-2xl border border-neutral-200">
         <h3 className="text-lg font-semibold mb-4">Ajouter un commentaire</h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -111,10 +131,10 @@ export default function CommentSection({ articleId }) {
                 onChange={handleChange}
                 placeholder="Jean Dupont"
                 disabled={submitting}
-                className={`w-full px-4 py-2.5 rounded-lg border bg-white dark:bg-neutral-900
+                className={`w-full px-4 py-2.5 rounded-lg border bg-white
                   ${formErrors.name
                     ? 'border-red-500 focus:ring-red-500'
-                    : 'border-neutral-300 dark:border-neutral-600 focus:ring-primary-500'
+                    : 'border-neutral-300 focus:ring-primary-500'
                   }
                   focus:outline-none focus:ring-2 focus:border-transparent
                   disabled:opacity-50 disabled:cursor-not-allowed
@@ -138,10 +158,10 @@ export default function CommentSection({ articleId }) {
                 onChange={handleChange}
                 placeholder="jean@exemple.fr"
                 disabled={submitting}
-                className={`w-full px-4 py-2.5 rounded-lg border bg-white dark:bg-neutral-900
+                className={`w-full px-4 py-2.5 rounded-lg border bg-white
                   ${formErrors.email
                     ? 'border-red-500 focus:ring-red-500'
-                    : 'border-neutral-300 dark:border-neutral-600 focus:ring-primary-500'
+                    : 'border-neutral-300 focus:ring-primary-500'
                   }
                   focus:outline-none focus:ring-2 focus:border-transparent
                   disabled:opacity-50 disabled:cursor-not-allowed
@@ -166,10 +186,10 @@ export default function CommentSection({ articleId }) {
               placeholder="Partagez votre avis..."
               rows={4}
               disabled={submitting}
-              className={`w-full px-4 py-2.5 rounded-lg border bg-white dark:bg-neutral-900 resize-none
+              className={`w-full px-4 py-2.5 rounded-lg border bg-white resize-none
                 ${formErrors.content
                   ? 'border-red-500 focus:ring-red-500'
-                  : 'border-neutral-300 dark:border-neutral-600 focus:ring-primary-500'
+                  : 'border-neutral-300 focus:ring-primary-500'
                 }
                 focus:outline-none focus:ring-2 focus:border-transparent
                 disabled:opacity-50 disabled:cursor-not-allowed
@@ -182,7 +202,7 @@ export default function CommentSection({ articleId }) {
 
           {/* Message de succes */}
           {success && (
-            <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-700 dark:text-green-400">
+            <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700">
               <CheckCircle className="w-5 h-5 shrink-0" />
               <span className="text-sm">Votre commentaire a ete publie avec succes !</span>
             </div>
@@ -190,7 +210,7 @@ export default function CommentSection({ articleId }) {
 
           {/* Message d'erreur */}
           {submitError && (
-            <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400">
+            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <span className="text-sm">
                 Une erreur est survenue. Veuillez reessayer plus tard.
@@ -232,7 +252,7 @@ export default function CommentSection({ articleId }) {
             <span className="ml-2 text-neutral-500">Chargement des commentaires...</span>
           </div>
         ) : comments.length === 0 ? (
-          <div className="text-center py-8 text-neutral-500 dark:text-neutral-400">
+          <div className="text-center py-8 text-neutral-500">
             <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p>Aucun commentaire pour le moment.</p>
             <p className="text-sm">Soyez le premier a partager votre avis !</p>

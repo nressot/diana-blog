@@ -4,13 +4,13 @@ function DetailRow({ icon: Icon, label, value }) {
   if (!value) return null
 
   return (
-    <div className="flex items-start gap-3 py-3 border-b border-neutral-100 dark:border-neutral-800 last:border-0">
-      <Icon className="w-4 h-4 text-neutral-400 mt-0.5 flex-shrink-0" />
+    <div className="flex items-start gap-3 py-3 border-b border-neutral-200 last:border-0">
+      <Icon className="w-4 h-4 text-neutral-500 mt-0.5 flex-shrink-0" />
       <div className="flex-1 min-w-0">
-        <dt className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-0.5">
+        <dt className="text-xs uppercase tracking-wider text-neutral-600 mb-0.5">
           {label}
         </dt>
-        <dd className="text-sm text-neutral-900 dark:text-neutral-100">
+        <dd className="text-sm text-neutral-900 font-medium">
           {value}
         </dd>
       </div>
@@ -48,7 +48,7 @@ export default function DetailsTab({ product }) {
   if (!bookMeta && productType !== 'book' && productType !== 'ebook') {
     return (
       <div className="text-center py-8">
-        <p className="text-neutral-500 dark:text-neutral-400">
+        <p className="text-neutral-600">
           Aucun detail supplementaire disponible pour ce produit.
         </p>
       </div>
@@ -59,7 +59,7 @@ export default function DetailsTab({ product }) {
     <div className="grid md:grid-cols-2 gap-8">
       {/* Colonne gauche: Specs */}
       <div>
-        <h3 className="font-semibold text-lg mb-4 text-neutral-900 dark:text-white">
+        <h3 className="font-semibold text-lg mb-4 text-neutral-900">
           Caracteristiques
         </h3>
 
@@ -107,14 +107,14 @@ export default function DetailsTab({ product }) {
         {/* Genres */}
         {bookMeta?.genres?.length > 0 && (
           <div>
-            <h3 className="font-semibold text-lg mb-3 text-neutral-900 dark:text-white">
+            <h3 className="font-semibold text-lg mb-3 text-neutral-900">
               Genres
             </h3>
             <div className="flex flex-wrap gap-2">
               {bookMeta.genres.map((genre) => (
                 <span
                   key={genre}
-                  className="px-3 py-1.5 bg-cream-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-full text-sm"
+                  className="px-3 py-1.5 bg-cream-200 text-neutral-800 rounded-full text-sm font-medium"
                 >
                   {genre}
                 </span>
@@ -125,15 +125,15 @@ export default function DetailsTab({ product }) {
 
         {/* Serie */}
         {series && series.name && (
-          <div className="p-5 bg-primary-50 dark:bg-primary-900/20 rounded-xl border border-primary-100 dark:border-primary-800/30">
-            <p className="text-xs uppercase tracking-wider text-primary-600 dark:text-primary-400 mb-1">
+          <div className="p-5 bg-primary-50 rounded-xl border border-primary-200">
+            <p className="text-xs uppercase tracking-wider text-primary-600 mb-1">
               Fait partie de la serie
             </p>
-            <p className="font-semibold text-neutral-900 dark:text-white">
+            <p className="font-semibold text-neutral-900">
               {series.name}
             </p>
             {series.volume && (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+              <p className="text-sm text-neutral-600 mt-1">
                 Tome {series.volume}
               </p>
             )}
@@ -141,11 +141,11 @@ export default function DetailsTab({ product }) {
         )}
 
         {/* Type de produit */}
-        <div className="p-4 bg-cream-100 dark:bg-neutral-800 rounded-xl">
-          <p className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+        <div className="p-4 bg-cream-100 rounded-xl border border-cream-200">
+          <p className="text-xs uppercase tracking-wider text-neutral-600 mb-1">
             Type de produit
           </p>
-          <p className="font-medium text-neutral-900 dark:text-white capitalize">
+          <p className="font-medium text-neutral-900 capitalize">
             {productType === 'book' && 'Livre papier'}
             {productType === 'ebook' && 'Livre numerique'}
             {productType === 'goodie' && 'Goodie / Accessoire'}

@@ -38,15 +38,27 @@ function useSanityWithFallback(query, params, fallbackData, normalizer = (x) => 
   const [error, setError] = useState(null)
   const [usingSanity, setUsingSanity] = useState(false)
 
+  const paramsString = JSON.stringify(params)
+
+  // Reset data when fallback changes (e.g., when slug changes)
+  useEffect(() => {
+    if (!isSanityConfigured) {
+      setData(fallbackData)
+    }
+  }, [fallbackData])
+
   useEffect(() => {
     if (!isSanityConfigured) {
       setLoading(false)
       return
     }
 
+    // Reset to fallback immediately when params change
+    setData(fallbackData)
+    setLoading(true)
+
     const fetchData = async () => {
       try {
-        setLoading(true)
         const result = await client.fetch(query, params)
         if (result && (Array.isArray(result) ? result.length > 0 : true)) {
           setData(normalizer(result))
@@ -63,7 +75,7 @@ function useSanityWithFallback(query, params, fallbackData, normalizer = (x) => 
     }
 
     fetchData()
-  }, [query, JSON.stringify(params)])
+  }, [query, paramsString])
 
   return { data, loading, error, usingSanity }
 }

@@ -14,7 +14,6 @@ import { useCheckout } from '../lib/useCheckout'
 import { useCart } from '../context/CartContext'
 import ProductTabs from '../components/product/ProductTabs'
 import FormatSelector from '../components/product/FormatSelector'
-import AuthorSection from '../components/product/AuthorSection'
 import BookExcerpt from '../components/product/BookExcerpt'
 
 /**
@@ -66,7 +65,7 @@ export default function Product() {
           Le produit que vous recherchez n'existe pas ou a ete supprime.
         </p>
         <Link
-          to="/boutique"
+          to="/boutique-demo"
           className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -124,8 +123,8 @@ export default function Product() {
       <section className="py-4 border-b border-neutral-200 dark:border-neutral-800">
         <div className="container-custom">
           <Link
-            to="/boutique"
-            className="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
+            to="/boutique-demo"
+            className="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Retour a la boutique
@@ -152,15 +151,15 @@ export default function Product() {
                   <>
                     <button
                       onClick={prevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 dark:bg-neutral-900/90 flex items-center justify-center hover:bg-white dark:hover:bg-neutral-900 transition-colors shadow-lg"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center hover:bg-cream-200 transition-colors shadow-lg"
                     >
-                      <ChevronLeft className="w-5 h-5" />
+                      <ChevronLeft className="w-5 h-5 text-neutral-900" />
                     </button>
                     <button
                       onClick={nextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 dark:bg-neutral-900/90 flex items-center justify-center hover:bg-white dark:hover:bg-neutral-900 transition-colors shadow-lg"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center hover:bg-cream-200 transition-colors shadow-lg"
                     >
-                      <ChevronRight className="w-5 h-5" />
+                      <ChevronRight className="w-5 h-5 text-neutral-900" />
                     </button>
                   </>
                 )}
@@ -214,12 +213,12 @@ export default function Product() {
               </span>
 
               {/* Title */}
-              <h1 className="text-3xl lg:text-4xl font-bold mb-4">
+              <h1 className="text-3xl lg:text-4xl font-bold mb-4 text-neutral-900">
                 {product.title}
               </h1>
 
               {/* Excerpt */}
-              <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-6">
+              <p className="text-lg text-neutral-700 leading-relaxed mb-8">
                 {product.excerpt}
               </p>
 
@@ -231,8 +230,8 @@ export default function Product() {
               />
 
               {/* Price */}
-              <div className="flex items-baseline gap-4 mb-6">
-                <span className="text-3xl font-bold text-primary-600 dark:text-primary-500">
+              <div className="flex items-baseline gap-4 mb-4">
+                <span className="text-3xl font-bold text-primary-600">
                   {formatPrice(currentPrice)}
                 </span>
                 {currentOriginalPrice && currentOriginalPrice > currentPrice && (
@@ -243,7 +242,7 @@ export default function Product() {
               </div>
 
               {/* Stock Status */}
-              <div className="flex items-center gap-2 mb-6">
+              <div className="flex items-center gap-2 mb-8">
                 {isInStock ? (
                   <>
                     <span className="w-3 h-3 rounded-full bg-green-500" />
@@ -262,15 +261,15 @@ export default function Product() {
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 {/* Add to Cart */}
                 <button
                   onClick={handleAddToCart}
                   disabled={!isInStock}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-medium transition-colors border ${
+                  className={`flex-1 inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-semibold transition-colors border ${
                     isInStock
-                      ? 'border-neutral-900 dark:border-white text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800'
-                      : 'border-neutral-300 dark:border-neutral-700 text-neutral-400 cursor-not-allowed'
+                      ? 'border-primary-600 text-primary-600 hover:bg-primary-50'
+                      : 'border-neutral-300 text-neutral-400 cursor-not-allowed'
                   }`}
                 >
                   <ShoppingBag className="w-5 h-5" />
@@ -281,10 +280,10 @@ export default function Product() {
                 <button
                   onClick={handleBuyNow}
                   disabled={!isInStock || checkoutLoading}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-medium transition-colors shadow-lg ${
+                  className={`flex-1 inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-semibold transition-colors shadow-lg ${
                     isInStock && !checkoutLoading
-                      ? 'bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100'
-                      : 'bg-neutral-300 dark:bg-neutral-700 text-neutral-500 cursor-not-allowed'
+                      ? 'bg-primary-600 text-white hover:bg-primary-700'
+                      : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'
                   }`}
                 >
                   {checkoutLoading ? (
@@ -306,19 +305,19 @@ export default function Product() {
               )}
 
               {/* Features */}
-              <div className="pt-6 border-t border-neutral-200 dark:border-neutral-800">
-                <h3 className="font-semibold mb-4">Inclus avec votre achat</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400">
-                    <Check className="w-5 h-5 text-green-500 shrink-0" />
-                    Livraison gratuite en France metropolitaine
+              <div className="pt-8 mt-2 border-t border-neutral-200">
+                <h3 className="font-semibold text-neutral-900 mb-5">Inclus avec votre achat</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-center gap-3 text-sm text-neutral-700">
+                    <Check className="w-5 h-5 text-green-600 shrink-0" />
+                    Livraison gratuite en Suisse
                   </li>
-                  <li className="flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400">
-                    <Check className="w-5 h-5 text-green-500 shrink-0" />
+                  <li className="flex items-center gap-3 text-sm text-neutral-700">
+                    <Check className="w-5 h-5 text-green-600 shrink-0" />
                     Dedicace personnalisee sur demande
                   </li>
-                  <li className="flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400">
-                    <Check className="w-5 h-5 text-green-500 shrink-0" />
+                  <li className="flex items-center gap-3 text-sm text-neutral-700">
+                    <Check className="w-5 h-5 text-green-600 shrink-0" />
                     Paiement securise par Stripe
                   </li>
                 </ul>
@@ -326,9 +325,6 @@ export default function Product() {
 
               {/* Book Excerpt */}
               <BookExcerpt excerpt={product.excerpt_text} />
-
-              {/* Author Section */}
-              <AuthorSection />
             </div>
           </div>
         </div>
@@ -357,7 +353,7 @@ export default function Product() {
                 </p>
               </div>
               <Link
-                to="/boutique"
+                to="/boutique-demo"
                 className="text-sm font-medium text-primary-600 hover:text-primary-700 hidden sm:block"
               >
                 Voir tous mes produits

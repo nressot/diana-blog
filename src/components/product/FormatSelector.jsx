@@ -20,8 +20,8 @@ export default function FormatSelector({ formats, selectedFormat, onSelect }) {
   }
 
   return (
-    <div className="mb-6">
-      <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-3 block">
+    <div className="mb-8">
+      <label className="text-sm font-semibold text-neutral-900 mb-3 block">
         Format
       </label>
 
@@ -38,31 +38,31 @@ export default function FormatSelector({ formats, selectedFormat, onSelect }) {
               disabled={!isAvailable}
               className={`flex-1 min-w-[140px] p-4 rounded-xl border transition-all ${
                 isSelected
-                  ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20'
+                  ? 'border-primary-600 bg-primary-50'
                   : isAvailable
-                    ? 'border-neutral-200 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-700'
-                    : 'border-neutral-100 dark:border-neutral-800 opacity-50 cursor-not-allowed'
+                    ? 'border-neutral-200 hover:border-primary-300 bg-transparent'
+                    : 'border-neutral-100 opacity-50 cursor-not-allowed bg-transparent'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
                 <span className={`font-medium text-sm ${
                   isSelected
-                    ? 'text-primary-700 dark:text-primary-400'
-                    : 'text-neutral-700 dark:text-neutral-300'
+                    ? 'text-primary-700'
+                    : 'text-neutral-800'
                 }`}>
                   {format.label}
                 </span>
                 <Icon className={`w-4 h-4 ${
                   isSelected
-                    ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-neutral-400'
+                    ? 'text-primary-600'
+                    : 'text-neutral-500'
                 }`} />
               </div>
 
               <p className={`text-lg font-bold ${
                 isSelected
-                  ? 'text-primary-600 dark:text-primary-400'
-                  : 'text-neutral-900 dark:text-white'
+                  ? 'text-primary-600'
+                  : 'text-neutral-900'
               }`}>
                 {formatPrice(format.price)}
               </p>

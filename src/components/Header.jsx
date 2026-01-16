@@ -8,11 +8,12 @@ export default function Header() {
   // Liens cliquables
   const clickableLinks = [
     { name: 'Accueil', path: '/' },
+    { name: 'Blog', path: '/blog' },
     { name: 'Ma boutique', path: '/boutique-demo' },
   ]
 
   // Liens desactives (non cliquables)
-  const disabledLinks = ['Blog', 'A propos', 'Contact']
+  const disabledLinks = ['A propos', 'Contact']
 
   return (
     <header className="sticky top-0 z-50 bg-cream-100/90 backdrop-blur-lg border-b border-neutral-200/50">

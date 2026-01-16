@@ -15,9 +15,9 @@ export default function ProductTabs({ product }) {
   const [activeTab, setActiveTab] = useState('description')
 
   return (
-    <div className="mt-12">
+    <div>
       {/* Tab headers */}
-      <div className="flex border-b border-neutral-200 dark:border-neutral-800 overflow-x-auto">
+      <div className="flex border-b border-neutral-300 overflow-x-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id
@@ -28,8 +28,8 @@ export default function ProductTabs({ product }) {
               onClick={() => setActiveTab(tab.id)}
               className={`relative px-6 py-4 flex items-center gap-2 text-sm font-medium whitespace-nowrap transition-colors ${
                 isActive
-                  ? 'text-primary-600 dark:text-primary-500'
-                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
+                  ? 'text-primary-600'
+                  : 'text-neutral-600 hover:text-neutral-900'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -39,7 +39,7 @@ export default function ProductTabs({ product }) {
               {isActive && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 dark:bg-primary-500"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}

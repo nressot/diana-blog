@@ -8,13 +8,65 @@ import MonDernierLivre from '../components/MonDernierLivre'
 import CssCat from '../components/CssCat'
 import { useArticles, useCategories, useFeaturedArticles, useAuthor } from '../lib/useArticles'
 
+/* Floating Stars Component - SVG stars animated */
+function FloatingStars() {
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      {/* Etoile 4 branches */}
+      <svg className="absolute w-5 h-5 text-primary-400/40 animate-float-slow" style={{ top: '15%', left: '8%' }} viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 0 L9 6 L8 8 L7 6 Z M8 16 L7 10 L8 8 L9 10 Z M0 8 L6 7 L8 8 L6 9 Z M16 8 L10 9 L8 8 L10 7 Z" />
+      </svg>
+      {/* Etoile 5 branches */}
+      <svg className="absolute w-6 h-6 text-primary-400/30 animate-float-medium" style={{ top: '25%', right: '12%' }} viewBox="0 0 20 20" fill="currentColor">
+        <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
+      </svg>
+      {/* Etoile 4 branches petite */}
+      <svg className="absolute w-4 h-4 text-primary-500/45 animate-float-fast" style={{ top: '60%', left: '15%' }} viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 0 L9 6 L8 8 L7 6 Z M8 16 L7 10 L8 8 L9 10 Z M0 8 L6 7 L8 8 L6 9 Z M16 8 L10 9 L8 8 L10 7 Z" />
+      </svg>
+      {/* Etoile 5 branches grande */}
+      <svg className="absolute w-7 h-7 text-primary-400/25 animate-float-slow" style={{ top: '40%', right: '20%' }} viewBox="0 0 20 20" fill="currentColor">
+        <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
+      </svg>
+      {/* Point scintillant */}
+      <svg className="absolute w-3 h-3 text-primary-500/50 animate-twinkle" style={{ top: '70%', right: '8%' }} viewBox="0 0 8 8" fill="currentColor">
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+      {/* Etoile 4 branches moyenne */}
+      <svg className="absolute w-5 h-5 text-primary-400/35 animate-float-medium" style={{ top: '80%', left: '25%' }} viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 0 L9 6 L8 8 L7 6 Z M8 16 L7 10 L8 8 L9 10 Z M0 8 L6 7 L8 8 L6 9 Z M16 8 L10 9 L8 8 L10 7 Z" />
+      </svg>
+      {/* Etoile 5 branches petite */}
+      <svg className="absolute w-4 h-4 text-primary-500/40 animate-float-fast" style={{ top: '20%', left: '45%' }} viewBox="0 0 20 20" fill="currentColor">
+        <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
+      </svg>
+      {/* Point scintillant 2 */}
+      <svg className="absolute w-3 h-3 text-primary-500/45 animate-twinkle-delayed" style={{ top: '50%', left: '60%' }} viewBox="0 0 8 8" fill="currentColor">
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+      {/* Etoile 4 branches */}
+      <svg className="absolute w-6 h-6 text-primary-400/30 animate-float-slow" style={{ top: '35%', left: '75%' }} viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 0 L9 6 L8 8 L7 6 Z M8 16 L7 10 L8 8 L9 10 Z M0 8 L6 7 L8 8 L6 9 Z M16 8 L10 9 L8 8 L10 7 Z" />
+      </svg>
+      {/* Etoile 5 branches supplementaire */}
+      <svg className="absolute w-5 h-5 text-primary-500/35 animate-float-medium" style={{ top: '10%', right: '35%' }} viewBox="0 0 20 20" fill="currentColor">
+        <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
+      </svg>
+      {/* Point scintillant 3 */}
+      <svg className="absolute w-2 h-2 text-primary-500/55 animate-twinkle" style={{ top: '85%', right: '40%' }} viewBox="0 0 8 8" fill="currentColor">
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+    </div>
+  )
+}
+
 const dynamicWords = ['restent', 'inspirent', 'touchent', 'marquent', 'resonnent']
 
 const backgrounds = {
   '1': {
-    class: 'bg-stars-v1',
-    name: 'V1 - Etoiles 4 branches simples',
-    description: 'Motif epure avec etoiles a 4 branches uniquement'
+    class: 'bg-cream-50',
+    name: 'V1 - Etoiles flottantes',
+    description: 'Etoiles SVG animees sur fond neutre'
   },
   '2': {
     class: 'bg-stars-v2',
@@ -52,7 +104,10 @@ export default function BackgroundDemo() {
   const popularArticles = articles?.slice(0, 4) || []
 
   return (
-    <div className={`min-h-screen ${bg.class}`}>
+    <div className={`min-h-screen ${bg.class} relative`}>
+      {/* Floating Stars for V1 */}
+      {version === '1' && <FloatingStars />}
+
       {/* Navigation entre les versions */}
       <div className="fixed top-20 left-4 z-50 bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 max-w-xs">
         <h3 className="font-bold text-sm mb-2">Demo Background</h3>

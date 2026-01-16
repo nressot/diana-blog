@@ -9,17 +9,17 @@ export default function BookExcerpt({ excerpt }) {
   if (!excerpt) return null
 
   return (
-    <section className="py-6 border-t border-neutral-200 dark:border-neutral-800">
+    <section className="py-8 mt-2 border-t border-neutral-200">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between w-full group"
       >
-        <h3 className="font-semibold text-lg flex items-center gap-2 text-neutral-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
+        <h3 className="font-semibold text-lg flex items-center gap-2 text-neutral-900 group-hover:text-primary-600 transition-colors">
           <BookOpen className="w-5 h-5" />
           Lire un extrait
         </h3>
         <ChevronDown
-          className={`w-5 h-5 text-neutral-400 transition-transform duration-300 ${
+          className={`w-5 h-5 text-neutral-500 transition-transform duration-300 ${
             isOpen ? 'rotate-180' : ''
           }`}
         />
@@ -34,11 +34,11 @@ export default function BookExcerpt({ excerpt }) {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="mt-6 p-6 bg-cream-100 dark:bg-neutral-800 rounded-xl">
-              <p className="font-serif text-lg leading-relaxed italic text-neutral-700 dark:text-neutral-300 whitespace-pre-line">
+            <div className="mt-6 p-6 bg-cream-100 rounded-xl border border-cream-200">
+              <p className="font-serif text-lg leading-relaxed italic text-neutral-800 whitespace-pre-line">
                 "{excerpt}"
               </p>
-              <p className="mt-4 text-sm text-neutral-500 dark:text-neutral-400 text-right">
+              <p className="mt-4 text-sm text-neutral-600 text-right">
                 - Extrait du livre
               </p>
             </div>

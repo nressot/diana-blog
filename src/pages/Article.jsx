@@ -19,7 +19,7 @@ export default function Article() {
       <div className="py-16 lg:py-24 text-center">
         <div className="container-custom">
           <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary-600" />
-          <p className="text-neutral-600 dark:text-neutral-400 mt-4">Chargement...</p>
+          <p className="text-neutral-600 mt-4">Chargement...</p>
         </div>
       </div>
     )
@@ -30,7 +30,7 @@ export default function Article() {
       <div className="py-16 lg:py-24 text-center">
         <div className="container-custom">
           <h1 className="text-2xl font-semibold mb-4">Article non trouve</h1>
-          <p className="text-neutral-600 dark:text-neutral-400 mb-8">
+          <p className="text-neutral-600 mb-8">
             L'article que vous recherchez n'existe pas.
           </p>
           <Link
@@ -59,12 +59,12 @@ export default function Article() {
   const author = article.author || {
     name: 'Diana',
     role: 'Ecrivaine & Blogueuse',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face',
+    avatar: '/author-avatar.jpg',
     bio: 'Passionnee par les mots depuis toujours, je partage ici mes reflexions, mes recits et mes decouvertes litteraires.'
   }
 
   return (
-    <div>
+    <div key={slug}>
       {/* Hero Section */}
       <section className="relative">
         <div className="aspect-[21/9] lg:aspect-[3/1]">
@@ -77,48 +77,54 @@ export default function Article() {
         </div>
         <div className="absolute inset-0 flex items-end">
           <div className="container-custom pb-8 lg:pb-12">
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Retour au blog
-            </Link>
-            <span className={`${article.categoryColor || 'bg-neutral-500'} text-white text-sm font-medium px-3 py-1 rounded-full inline-block mb-4`}>
-              {article.category}
-            </span>
-            <h1
-              className="text-4xl lg:text-6xl font-bold text-white max-w-4xl mb-4"
-              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.6), 0 4px 24px rgba(0,0,0,0.4)' }}
-            >
-              {article.title}
-            </h1>
-            <div className="flex flex-wrap items-center gap-4 text-white/80">
-              <div className="flex items-center gap-3">
-                <img
-                  src={author.avatar}
-                  alt={author.name}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-                <span className="font-medium text-white">{author.name}</span>
+            <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
+              <div className="lg:col-span-2">
+                <div className="flex items-center gap-6 mb-4">
+                  <Link
+                    to="/blog"
+                    className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Retour au blog
+                  </Link>
+                  <span className={`${article.categoryColor || 'bg-neutral-500'} text-white text-sm font-medium px-3 py-1 rounded-full`}>
+                    {article.category}
+                  </span>
+                </div>
+                <h1
+                  className="text-4xl lg:text-6xl font-bold text-white mb-4"
+                  style={{ textShadow: '0 2px 12px rgba(0,0,0,0.6), 0 4px 24px rgba(0,0,0,0.4)' }}
+                >
+                  {article.title}
+                </h1>
+                <div className="flex flex-wrap items-center gap-4 text-white/80">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={author.avatar}
+                      alt={author.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <span className="font-medium text-white">{author.name}</span>
+                  </div>
+                  <span>{article.date}</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {article.readTime}
+                  </span>
+                  {article.views > 0 && (
+                    <span className="flex items-center gap-1">
+                      <Eye className="w-4 h-4" />
+                      {article.views} vues
+                    </span>
+                  )}
+                  {article.comments > 0 && (
+                    <span className="flex items-center gap-1">
+                      <MessageCircle className="w-4 h-4" />
+                      {article.comments} commentaires
+                    </span>
+                  )}
+                </div>
               </div>
-              <span>{article.date}</span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-4 h-4" />
-                {article.readTime}
-              </span>
-              {article.views > 0 && (
-                <span className="flex items-center gap-1">
-                  <Eye className="w-4 h-4" />
-                  {article.views} vues
-                </span>
-              )}
-              {article.comments > 0 && (
-                <span className="flex items-center gap-1">
-                  <MessageCircle className="w-4 h-4" />
-                  {article.comments} commentaires
-                </span>
-              )}
             </div>
           </div>
         </div>
@@ -175,7 +181,7 @@ export default function Article() {
               </article>
 
               {/* Share Section */}
-              <div className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
+              <div className="mt-12 pt-8 border-t border-neutral-200">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div className="flex items-center gap-2">
                     <Share2 className="w-5 h-5 text-neutral-500" />
@@ -186,7 +192,7 @@ export default function Article() {
                       href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${article.title}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-cream-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white transition-colors"
+                      className="w-10 h-10 rounded-full bg-cream-200 flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white transition-colors"
                     >
                       <Twitter className="w-4 h-4" />
                     </a>
@@ -194,7 +200,7 @@ export default function Article() {
                       href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-cream-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-[#4267B2] hover:text-white transition-colors"
+                      className="w-10 h-10 rounded-full bg-cream-200 flex items-center justify-center hover:bg-[#4267B2] hover:text-white transition-colors"
                     >
                       <Facebook className="w-4 h-4" />
                     </a>
@@ -202,34 +208,16 @@ export default function Article() {
                       href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${article.title}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-cream-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-[#0077B5] hover:text-white transition-colors"
+                      className="w-10 h-10 rounded-full bg-cream-200 flex items-center justify-center hover:bg-[#0077B5] hover:text-white transition-colors"
                     >
                       <Linkedin className="w-4 h-4" />
                     </a>
                     <button
                       onClick={() => navigator.clipboard.writeText(shareUrl)}
-                      className="w-10 h-10 rounded-full bg-cream-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-cream-300 dark:hover:bg-neutral-700 transition-colors"
+                      className="w-10 h-10 rounded-full bg-cream-200 flex items-center justify-center hover:bg-cream-300 transition-colors"
                     >
                       <LinkIcon className="w-4 h-4" />
                     </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Author Bio */}
-              <div className="mt-8 p-6 bg-cream-200 dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800">
-                <div className="flex items-start gap-4">
-                  <img
-                    src={author.avatar}
-                    alt={author.name}
-                    className="w-16 h-16 rounded-full object-cover"
-                  />
-                  <div>
-                    <h3 className="font-semibold mb-1">{author.name}</h3>
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">{author.role}</p>
-                    <p className="text-neutral-600 dark:text-neutral-400">
-                      {author.bio}
-                    </p>
                   </div>
                 </div>
               </div>
@@ -245,7 +233,7 @@ export default function Article() {
 
                 {/* Related Articles */}
                 {relatedArticles.length > 0 && (
-                  <div className="bg-cream-200 dark:bg-neutral-900 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-800">
+                  <div className="bg-cream-200 rounded-2xl p-6 border border-neutral-200">
                     <h3 className="font-semibold mb-4">Articles similaires</h3>
                     <div className="space-y-4">
                       {relatedArticles.map((relatedArticle) => (
@@ -265,7 +253,7 @@ export default function Article() {
       </section>
 
       {/* More Articles */}
-      <section className="py-8 lg:py-10 bg-cream-200 dark:bg-neutral-900/50">
+      <section className="py-8 lg:py-10 bg-cream-200">
         <div className="container-custom">
           <h2 className="text-2xl font-semibold mb-8">Autres articles</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
