@@ -63,7 +63,7 @@ export default function Footer() {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-neutral-600 text-neutral-400 hover:text-neutral-900 hover:text-white transition-colors"
+                    className="text-neutral-600 text-neutral-400 hover:text-neutral-900 hover:text-primary-500 transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -80,7 +80,7 @@ export default function Footer() {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-neutral-600 text-neutral-400 hover:text-neutral-900 hover:text-white transition-colors"
+                    className="text-neutral-600 text-neutral-400 hover:text-neutral-900 hover:text-primary-500 transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -97,7 +97,7 @@ export default function Footer() {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-neutral-600 text-neutral-400 hover:text-neutral-900 hover:text-white transition-colors"
+                    className="text-neutral-600 text-neutral-400 hover:text-neutral-900 hover:text-primary-500 transition-colors"
                   >
                     {link.name}
                   </Link>

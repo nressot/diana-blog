@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Search, ArrowRight, Loader2, ChevronLeft, ChevronRight, List, LayoutGrid, Columns, Clock, Sparkles } from 'lucide-react'
+import { Search, ArrowRight, Loader2, ChevronLeft, ChevronRight, List, LayoutGrid, Columns, Clock, Sparkles, Sun } from 'lucide-react'
 import { useProducts, useProductCategories, useFeaturedProducts } from '../lib/useProducts'
 
 /* Floating Stars Component - SVG stars inspired by bg-stars-v2 */
@@ -15,6 +15,10 @@ function FloatingStars() {
       <svg className="absolute w-6 h-6 text-white/40 animate-float-medium" style={{ top: '25%', right: '12%' }} viewBox="0 0 20 20" fill="currentColor">
         <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
       </svg>
+      {/* Croissant de lune 1 - haut gauche - fin */}
+      <svg className="absolute w-12 h-12 text-white/30 animate-float-slow" style={{ top: '5%', left: '30%' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
       {/* Etoile 4 branches petite */}
       <svg className="absolute w-4 h-4 text-white/55 animate-float-fast" style={{ top: '60%', left: '15%' }} viewBox="0 0 16 16" fill="currentColor">
         <path d="M8 0 L9 6 L8 8 L7 6 Z M8 16 L7 10 L8 8 L9 10 Z M0 8 L6 7 L8 8 L6 9 Z M16 8 L10 9 L8 8 L10 7 Z" />
@@ -22,6 +26,10 @@ function FloatingStars() {
       {/* Etoile 5 branches grande */}
       <svg className="absolute w-7 h-7 text-white/30 animate-float-slow" style={{ top: '40%', right: '20%' }} viewBox="0 0 20 20" fill="currentColor">
         <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
+      </svg>
+      {/* Croissant de lune 2 - milieu gauche - fin */}
+      <svg className="absolute w-10 h-10 text-white/35 animate-float-medium" style={{ top: '45%', left: '5%' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
       </svg>
       {/* Point scintillant */}
       <svg className="absolute w-3 h-3 text-white/60 animate-twinkle" style={{ top: '70%', right: '8%' }} viewBox="0 0 8 8" fill="currentColor">
@@ -39,6 +47,10 @@ function FloatingStars() {
       <svg className="absolute w-3 h-3 text-white/55 animate-twinkle-delayed" style={{ top: '50%', left: '60%' }} viewBox="0 0 8 8" fill="currentColor">
         <circle cx="4" cy="4" r="2" />
       </svg>
+      {/* Croissant de lune 3 - bas droite - fin */}
+      <svg className="absolute w-11 h-11 text-white/25 animate-float-slow" style={{ top: '75%', right: '25%' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
       {/* Etoile 4 branches */}
       <svg className="absolute w-6 h-6 text-white/35 animate-float-slow" style={{ top: '35%', left: '75%' }} viewBox="0 0 16 16" fill="currentColor">
         <path d="M8 0 L9 6 L8 8 L7 6 Z M8 16 L7 10 L8 8 L9 10 Z M0 8 L6 7 L8 8 L6 9 Z M16 8 L10 9 L8 8 L10 7 Z" />
@@ -46,6 +58,10 @@ function FloatingStars() {
       {/* Etoile 5 branches supplementaire */}
       <svg className="absolute w-5 h-5 text-white/45 animate-float-medium" style={{ top: '10%', right: '35%' }} viewBox="0 0 20 20" fill="currentColor">
         <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
+      </svg>
+      {/* Croissant de lune 4 - bas centre - fin */}
+      <svg className="absolute w-9 h-9 text-white/35 animate-float-medium" style={{ top: '90%', left: '50%' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
       </svg>
       {/* Point scintillant 3 */}
       <svg className="absolute w-2 h-2 text-white/65 animate-twinkle" style={{ top: '85%', right: '40%' }} viewBox="0 0 8 8" fill="currentColor">
@@ -61,15 +77,16 @@ function formatPrice(priceInCents) {
 }
 
 const VARIANTS = [
-  { id: 'editorial', name: 'Editorial Minimal', description: 'Style magazine asymetrique', icon: LayoutGrid },
   { id: 'cards', name: 'Cards & Scroll', description: 'Scroll horizontal, cards epaisses', icon: Columns },
+  { id: 'cards-light', name: 'Cards Light', description: 'A la une sur fond clair', icon: Sun },
+  { id: 'editorial', name: 'Editorial Minimal', description: 'Style magazine asymetrique', icon: LayoutGrid },
   { id: 'list', name: 'List Detail', description: 'Liste detaillee avec descriptions', icon: List },
   { id: 'story', name: 'Story Timeline', description: 'Narration chronologique', icon: Clock },
   { id: 'hybrid', name: 'Hybrid', description: 'Hero compact + grille cards', icon: Sparkles },
 ]
 
 export default function BoutiqueDemo() {
-  const { variant = 'editorial' } = useParams()
+  const { variant = 'cards' } = useParams()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
 
@@ -98,6 +115,20 @@ export default function BoutiqueDemo() {
       case 'cards':
         return (
           <CardsHorizontalLayout
+            products={filteredProducts}
+            categories={categories}
+            featured={featured}
+            featuredProducts={featuredProducts}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            loading={loadingProducts}
+          />
+        )
+      case 'cards-light':
+        return (
+          <CardsLightLayout
             products={filteredProducts}
             categories={categories}
             featured={featured}
@@ -346,126 +377,363 @@ function EditorialCard({ product, large }) {
    VARIANT 2: CARDS & HORIZONTAL SCROLL
    Cards epaisses, scroll horizontal pour featured
    ============================================ */
+function BlinkingDots() {
+  return (
+    <span className="animate-blink-dots">
+      <span className="dot">.</span>
+      <span className="dot">.</span>
+      <span className="dot">.</span>
+    </span>
+  )
+}
+
 function CardsHorizontalLayout({ products, categories, featured, featuredProducts, selectedCategory, setSelectedCategory, searchTerm, setSearchTerm, loading }) {
+  // Categories reorganisees selon demande Diana
+  const orderedCategories = ['Livres', 'Ebooks', 'Goodies']
+  const sortedCategories = (categories || []).sort((a, b) => {
+    const indexA = orderedCategories.indexOf(a.name)
+    const indexB = orderedCategories.indexOf(b.name)
+    if (indexA === -1 && indexB === -1) return 0
+    if (indexA === -1) return 1
+    if (indexB === -1) return -1
+    return indexA - indexB
+  })
+
   return (
     <>
-      {/* Hero compact */}
+      {/* Hero litteraire + A la une - bloc unique */}
       <section className="bg-terracotta-warm text-white">
         <FloatingStars />
-        <div className="container-custom py-12 relative z-10">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-            <div>
-              <p className="text-primary-200 text-sm font-medium tracking-wider uppercase mb-2">Ma collection 2024</p>
-              <h1 className="text-3xl lg:text-4xl font-semibold">La Boutique</h1>
+        <div className="relative z-10">
+          {/* Texte litteraire - plus grand, aligne a gauche */}
+          <div className="container-custom py-20 lg:py-28">
+            <div className="max-w-4xl">
+              <p className="text-xl lg:text-2xl xl:text-3xl text-white/90 leading-relaxed mb-6 font-light">
+                Chaque livre est une étape, une histoire dans mon voyage d'écriture.
+              </p>
+              <p className="text-3xl lg:text-4xl xl:text-5xl font-medium text-white leading-tight">
+                Découvrez mes ouvrages au fil du temps<BlinkingDots />
+              </p>
             </div>
-            <div className="relative w-full lg:w-80">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+          </div>
+
+          {/* À la une - aligne a gauche */}
+          {selectedCategory === 'all' && !searchTerm && featuredProducts?.length > 0 && (
+            <div className="container-custom pb-16">
+              <h2 className="text-xl lg:text-2xl font-semibold mb-8">À la une</h2>
+              <div className="flex gap-6 flex-wrap">
+                {(featuredProducts || []).slice(0, 4).map((product) => (
+                  <FeaturedHorizontalCard key={product.id} product={product} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Categories tabs - style original, position sous À la une - mode light */}
+      <section className="sticky top-20 z-30 bg-cream-50/95 backdrop-blur-sm border-b border-cream-300">
+        <div className="container-custom">
+          <div className="flex items-center justify-between gap-4 py-4">
+            {/* Categories */}
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className={`px-6 py-3 text-sm font-medium rounded-xl transition-all ${
+                  selectedCategory === 'all'
+                    ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
+                    : 'bg-cream-300 hover:bg-cream-400 text-neutral-900'
+                }`}
+              >
+                Tous les produits
+              </button>
+              {sortedCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.name)}
+                  className={`px-6 py-3 text-sm font-medium rounded-xl whitespace-nowrap transition-all ${
+                    selectedCategory === cat.name
+                      ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
+                      : 'bg-cream-300 hover:bg-cream-400 text-neutral-900'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+            {/* Recherche */}
+            <div className="relative shrink-0">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Rechercher un ouvrage..."
+                placeholder="Rechercher..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full h-12 pl-12 pr-4 text-sm text-white placeholder-white/60 border border-white/25 bg-white/15 rounded-xl focus:bg-white/25 focus:border-white/50 outline-none transition-colors"
+                className="w-40 sm:w-48 lg:w-56 h-11 pl-11 pr-4 text-sm text-neutral-900 border border-cream-300 bg-white rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all placeholder:text-neutral-400"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Categories tabs */}
-      <section className="sticky top-20 z-30 bg-cream-50/95 dark:bg-primary-950/95 backdrop-blur-sm border-b border-cream-300 dark:border-primary-800">
-        <div className="container-custom">
-          <div className="flex items-center gap-2 py-4 overflow-x-auto scrollbar-hide">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-6 py-3 text-sm font-medium rounded-xl transition-all ${
-                selectedCategory === 'all'
-                  ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
-                  : 'bg-cream-300 dark:bg-primary-900 hover:bg-cream-400 dark:hover:bg-primary-800'
-              }`}
-              style={{ color: selectedCategory === 'all' ? undefined : '#1c1a17' }}
-            >
-              Tous mes produits
-            </button>
-            {(categories || []).map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.name)}
-                className={`px-6 py-3 text-sm font-medium rounded-xl whitespace-nowrap transition-all ${
-                  selectedCategory === cat.name
-                    ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
-                    : 'bg-cream-300 dark:bg-primary-900 hover:bg-cream-400 dark:hover:bg-primary-800'
-                }`}
-                style={{ color: selectedCategory === cat.name ? undefined : '#1c1a17' }}
-              >
-                {cat.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured horizontal scroll */}
-      {selectedCategory === 'all' && !searchTerm && featuredProducts?.length > 0 && (
-        <section className="py-12 pb-16 bg-terracotta-warm text-white relative overflow-visible">
-          <FloatingStars />
-          <div className="container-custom mb-6 relative z-10">
-            <h2 className="text-xl lg:text-2xl font-semibold text-center">A la une</h2>
-          </div>
-          <div className="container-custom relative z-10">
-            <div className="flex gap-6 justify-center flex-wrap">
-              {(featuredProducts || []).slice(0, 4).map((product) => (
-                <FeaturedHorizontalCard key={product.id} product={product} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Products grid with thick cards */}
-      <section className="py-12">
-        <div className="container-custom">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl lg:text-2xl font-semibold">
-              {selectedCategory === 'all' ? 'Mes ouvrages' : selectedCategory}
-            </h2>
-            <span className="text-sm text-neutral-600 dark:text-neutral-400">{products.length} produits</span>
-          </div>
-
-          {loading ? (
+      {/* Products par categorie */}
+      {loading ? (
+        <section className="py-12">
+          <div className="container-custom">
             <div className="flex items-center justify-center py-24">
               <Loader2 className="w-6 h-6 animate-spin text-primary-500" />
             </div>
-          ) : products.length > 0 ? (
+          </div>
+        </section>
+      ) : selectedCategory === 'all' && !searchTerm ? (
+        /* Affichage par categories */
+        <>
+          {sortedCategories.map((cat) => {
+            const categoryProducts = products.filter(p => p.category === cat.name)
+            if (categoryProducts.length === 0) return null
+            return (
+              <section key={cat.id} className="py-10 first:pt-12">
+                <div className="container-custom">
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-xl lg:text-2xl font-semibold">{cat.name}</h2>
+                    <span className="text-sm text-neutral-600 dark:text-neutral-400">{categoryProducts.length} produit{categoryProducts.length > 1 ? 's' : ''}</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {categoryProducts.map((product) => (
+                      <ThickCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )
+          })}
+        </>
+      ) : products.length > 0 ? (
+        /* Affichage filtre (recherche ou categorie selectionnee) */
+        <section className="py-12">
+          <div className="container-custom">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl lg:text-2xl font-semibold">
+                {searchTerm ? `Résultats pour "${searchTerm}"` : selectedCategory}
+              </h2>
+              <span className="text-sm text-neutral-600 dark:text-neutral-400">{products.length} produit{products.length > 1 ? 's' : ''}</span>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map((product) => (
                 <ThickCard key={product.id} product={product} />
               ))}
             </div>
-          ) : (
+          </div>
+        </section>
+      ) : (
+        <section className="py-12">
+          <div className="container-custom">
             <EmptyState onReset={() => { setSearchTerm(''); setSelectedCategory('all'); }} />
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
     </>
   )
 }
 
 function FeaturedHorizontalCard({ product }) {
   return (
-    <Link to={`/boutique/${product.slug}`} className="group flex-shrink-0 w-full sm:w-[400px] lg:w-[480px] mb-4">
-      <div className="relative bg-cream-50 rounded-3xl overflow-hidden shadow-md shadow-black/8">
-        <div className="grid grid-cols-2">
-          <div className="aspect-[3/4] overflow-hidden">
-            <img src={product.image} alt={product.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+    <Link to={`/boutique/${product.slug}`} className="group flex-shrink-0 w-full sm:w-[540px] lg:w-[580px]">
+      <div className="flex rounded-2xl border border-white/30 overflow-hidden hover:border-white/50 transition-all duration-300">
+        {/* Image a gauche */}
+        <div className="w-[180px] sm:w-[200px] shrink-0 overflow-hidden">
+          <div className="aspect-[3/4] h-full">
+            <img src={product.image} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
           </div>
-          <div className="p-6 flex flex-col justify-center">
-            <p className="text-xs tracking-wider uppercase text-primary-600 dark:text-primary-400 mb-2">{product.category}</p>
-            <h3 className="text-lg font-medium mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">{product.title}</h3>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-3 mb-4">{product.excerpt}</p>
-            <div className="mt-auto">
-              <p className="text-2xl font-light text-primary-600 dark:text-primary-400">{formatPrice(product.price)}</p>
+        </div>
+        {/* Details a droite */}
+        <div className="flex-1 p-7 flex flex-col justify-between">
+          <div>
+            <p className="text-xs tracking-[0.2em] uppercase text-white/60 mb-3">{product.category}</p>
+            <h3 className="text-xl font-semibold text-white mb-3 line-clamp-2 group-hover:text-primary-200 transition-colors">{product.title}</h3>
+            <p className="text-sm text-white/70 line-clamp-3 leading-relaxed">{product.excerpt}</p>
+          </div>
+          <div className="flex items-center justify-between mt-5 pt-5 border-t border-white/20">
+            <p className="text-2xl font-semibold text-white">{formatPrice(product.price)}</p>
+            <span className="flex items-center gap-2 text-sm font-medium text-white/70 group-hover:text-white transition-colors">
+              Decouvrir <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+/* ============================================
+   VARIANT 2B: CARDS LIGHT
+   A la une sur fond creme, cartes adaptees
+   ============================================ */
+function CardsLightLayout({ products, categories, featured, featuredProducts, selectedCategory, setSelectedCategory, searchTerm, setSearchTerm, loading }) {
+  const orderedCategories = ['Livres', 'Ebooks', 'Goodies']
+  const sortedCategories = (categories || []).sort((a, b) => {
+    const indexA = orderedCategories.indexOf(a.name)
+    const indexB = orderedCategories.indexOf(b.name)
+    if (indexA === -1 && indexB === -1) return 0
+    if (indexA === -1) return 1
+    if (indexB === -1) return -1
+    return indexA - indexB
+  })
+
+  return (
+    <div className="bg-cream-100 min-h-screen">
+      {/* Hero litteraire compact */}
+      <section className="bg-terracotta-warm text-white">
+        <FloatingStars />
+        <div className="relative z-10 container-custom py-16 lg:py-20">
+          <div className="max-w-3xl">
+            <p className="text-lg lg:text-xl text-white/90 leading-relaxed mb-4 font-light">
+              Chaque livre est une etape, une histoire dans mon voyage d'ecriture.
+            </p>
+            <p className="text-2xl lg:text-3xl font-medium text-white leading-tight">
+              Decouvrez mes ouvrages au fil du temps<BlinkingDots />
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* A la une - sur fond creme */}
+      {selectedCategory === 'all' && !searchTerm && featuredProducts?.length > 0 && (
+        <section className="py-12 lg:py-16">
+          <div className="container-custom">
+            <h2 className="text-xl lg:text-2xl font-semibold text-neutral-900 mb-8">A la une</h2>
+            <div className="flex gap-6 flex-wrap">
+              {(featuredProducts || []).slice(0, 4).map((product) => (
+                <FeaturedLightCard key={product.id} product={product} />
+              ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Categories tabs */}
+      <section className="sticky top-20 z-30 bg-cream-100/95 backdrop-blur-sm border-y border-cream-300">
+        <div className="container-custom">
+          <div className="flex items-center justify-between gap-4 py-4">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className={`px-6 py-3 text-sm font-medium rounded-xl transition-all ${
+                  selectedCategory === 'all'
+                    ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
+                    : 'bg-cream-200 hover:bg-cream-300 text-neutral-900'
+                }`}
+              >
+                Tous les produits
+              </button>
+              {sortedCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.name)}
+                  className={`px-6 py-3 text-sm font-medium rounded-xl whitespace-nowrap transition-all ${
+                    selectedCategory === cat.name
+                      ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
+                      : 'bg-cream-200 hover:bg-cream-300 text-neutral-900'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+            <div className="relative shrink-0">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-40 sm:w-48 lg:w-56 h-11 pl-11 pr-4 text-sm text-neutral-900 border border-cream-300 bg-white rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all placeholder:text-neutral-400"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Products */}
+      {loading ? (
+        <section className="py-12">
+          <div className="container-custom">
+            <div className="flex items-center justify-center py-24">
+              <Loader2 className="w-6 h-6 animate-spin text-primary-500" />
+            </div>
+          </div>
+        </section>
+      ) : selectedCategory === 'all' && !searchTerm ? (
+        <>
+          {sortedCategories.map((cat) => {
+            const categoryProducts = products.filter(p => p.category === cat.name)
+            if (categoryProducts.length === 0) return null
+            return (
+              <section key={cat.id} className="py-10 first:pt-12">
+                <div className="container-custom">
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-xl lg:text-2xl font-semibold text-neutral-900">{cat.name}</h2>
+                    <span className="text-sm text-neutral-600">{categoryProducts.length} produit{categoryProducts.length > 1 ? 's' : ''}</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {categoryProducts.map((product) => (
+                      <ThickCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )
+          })}
+        </>
+      ) : products.length > 0 ? (
+        <section className="py-12">
+          <div className="container-custom">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl lg:text-2xl font-semibold text-neutral-900">
+                {searchTerm ? `Resultats pour "${searchTerm}"` : selectedCategory}
+              </h2>
+              <span className="text-sm text-neutral-600">{products.length} produit{products.length > 1 ? 's' : ''}</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products.map((product) => (
+                <ThickCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="py-12">
+          <div className="container-custom">
+            <EmptyState onReset={() => { setSearchTerm(''); setSelectedCategory('all'); }} />
+          </div>
+        </section>
+      )}
+    </div>
+  )
+}
+
+function FeaturedLightCard({ product }) {
+  return (
+    <Link to={`/boutique/${product.slug}`} className="group flex-shrink-0 w-full sm:w-[540px] lg:w-[580px]">
+      <div className="flex rounded-2xl border border-neutral-300 bg-white overflow-hidden hover:border-primary-400 hover:shadow-lg hover:shadow-primary-600/10 transition-all duration-300">
+        {/* Image a gauche */}
+        <div className="w-[180px] sm:w-[200px] shrink-0 overflow-hidden">
+          <div className="aspect-[3/4] h-full">
+            <img src={product.image} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          </div>
+        </div>
+        {/* Details a droite */}
+        <div className="flex-1 p-7 flex flex-col justify-between">
+          <div>
+            <p className="text-xs tracking-[0.2em] uppercase text-primary-600 mb-3">{product.category}</p>
+            <h3 className="text-xl font-semibold text-neutral-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">{product.title}</h3>
+            <p className="text-sm text-neutral-600 line-clamp-3 leading-relaxed">{product.excerpt}</p>
+          </div>
+          <div className="flex items-center justify-between mt-5 pt-5 border-t border-neutral-200">
+            <p className="text-2xl font-semibold text-primary-600">{formatPrice(product.price)}</p>
+            <span className="flex items-center gap-2 text-sm font-medium text-neutral-500 group-hover:text-primary-600 transition-colors">
+              Decouvrir <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </span>
           </div>
         </div>
       </div>

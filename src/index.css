@@ -1120,3 +1120,40 @@ body {
   background-color: rgb(127 62 42 / 0.5);
 }
 
+/* ===== BLINKING DOTS ANIMATION ===== */
+@keyframes blink-dots {
+  0%, 20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  80%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-blink-dots {
+  display: inline-block;
+}
+
+.animate-blink-dots .dot {
+  animation: blink-dots 1.8s infinite;
+  opacity: 0;
+}
+
+.animate-blink-dots .dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.animate-blink-dots .dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.animate-blink-dots .dot:nth-child(3) {
+  animation-delay: 0.6s;
+}
+

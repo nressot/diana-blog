@@ -5,6 +5,38 @@ import ArticleCard from '../components/ArticleCard'
 import AuthorCard from '../components/AuthorCard'
 import { useArticles, useCategories, useFeaturedArticles } from '../lib/useArticles'
 
+/* Floating Stars Component - SVG stars inspired by bg-stars-v2 */
+function FloatingStars() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <svg className="absolute w-5 h-5 text-white/50 animate-float-slow" style={{ top: '15%', left: '8%' }} viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 0 L9 6 L8 8 L7 6 Z M8 16 L7 10 L8 8 L9 10 Z M0 8 L6 7 L8 8 L6 9 Z M16 8 L10 9 L8 8 L10 7 Z" />
+      </svg>
+      <svg className="absolute w-6 h-6 text-white/40 animate-float-medium" style={{ top: '25%', right: '12%' }} viewBox="0 0 20 20" fill="currentColor">
+        <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
+      </svg>
+      <svg className="absolute w-4 h-4 text-white/55 animate-float-fast" style={{ top: '60%', left: '15%' }} viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 0 L9 6 L8 8 L7 6 Z M8 16 L7 10 L8 8 L9 10 Z M0 8 L6 7 L8 8 L6 9 Z M16 8 L10 9 L8 8 L10 7 Z" />
+      </svg>
+      <svg className="absolute w-7 h-7 text-white/30 animate-float-slow" style={{ top: '40%', right: '20%' }} viewBox="0 0 20 20" fill="currentColor">
+        <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
+      </svg>
+      <svg className="absolute w-3 h-3 text-white/60 animate-twinkle" style={{ top: '70%', right: '8%' }} viewBox="0 0 8 8" fill="currentColor">
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+      <svg className="absolute w-5 h-5 text-white/45 animate-float-medium" style={{ top: '80%', left: '25%' }} viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 0 L9 6 L8 8 L7 6 Z M8 16 L7 10 L8 8 L9 10 Z M0 8 L6 7 L8 8 L6 9 Z M16 8 L10 9 L8 8 L10 7 Z" />
+      </svg>
+      <svg className="absolute w-4 h-4 text-white/50 animate-float-fast" style={{ top: '20%', left: '45%' }} viewBox="0 0 20 20" fill="currentColor">
+        <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
+      </svg>
+      <svg className="absolute w-3 h-3 text-white/55 animate-twinkle-delayed" style={{ top: '50%', left: '60%' }} viewBox="0 0 8 8" fill="currentColor">
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+    </div>
+  )
+}
+
 /* SignupCTA Component - CTA pour inscription aux commentaires */
 function SignupCTA({ variant = 'default', className = '' }) {
   if (variant === 'editorial') {
@@ -92,19 +124,20 @@ function SignupCTA({ variant = 'default', className = '' }) {
 
   if (variant === 'community') {
     return (
-      <div className={`bg-cream-50 border border-cream-200 rounded-2xl p-6 ${className}`}>
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center shrink-0">
-            <Users className="w-6 h-6 text-primary-600" />
+      <div className={`relative bg-primary-600 rounded-2xl p-6 overflow-hidden ${className}`}>
+        <FloatingStars />
+        <div className="relative z-10 flex items-start gap-4">
+          <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+            <Users className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1">
-            <h4 className="font-semibold mb-1">Rejoignez la discussion</h4>
-            <p className="text-sm text-neutral-600 mb-4">
+            <h4 className="font-semibold mb-1 text-white">Rejoignez la discussion</h4>
+            <p className="text-sm text-white/80 mb-4">
               243 lecteurs participent deja aux echanges
             </p>
             <a
               href="#inscription"
-              className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary-600 text-primary-600 text-sm font-medium rounded-full hover:bg-primary-50 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-primary-600 text-sm font-medium rounded-full hover:bg-cream-100 transition-colors"
             >
               S'inscrire gratuitement
             </a>
@@ -136,16 +169,20 @@ function EmptyState({ onReset }) {
 }
 
 const VARIANTS = [
-  { id: 'classic', name: 'Classique', description: 'Version principale', icon: LayoutGrid },
-  { id: 'editorial', name: 'Editorial Immersif', description: 'Style magazine litteraire', icon: BookOpen },
-  { id: 'bento', name: 'Bento Grid', description: 'Grille moderne Apple', icon: Sparkles },
-  { id: 'minimal', name: 'Reader-First', description: 'Lisibilite maximale', icon: Feather },
-  { id: 'story', name: 'Visual Story', description: 'Scrolling immersif', icon: PenTool },
-  { id: 'community', name: 'Community Hub', description: 'Focus engagement', icon: Users },
+  // Variantes cachees
+  // { id: 'classic', name: 'Classique', description: 'Version principale', icon: LayoutGrid },
+  // { id: 'editorial', name: 'Editorial Immersif', description: 'Style magazine litteraire', icon: BookOpen },
+  // { id: 'bento', name: 'Bento Grid', description: 'Grille moderne Apple', icon: Sparkles },
+  // { id: 'minimal', name: 'Reader-First', description: 'Lisibilite maximale', icon: Feather },
+  // { id: 'story', name: 'Visual Story', description: 'Scrolling immersif', icon: PenTool },
+  // { id: 'community', name: 'Community Hub', description: 'Focus engagement', icon: Users },
+  // Variantes actives
+  { id: 'story-community', name: 'Story + Community', description: 'Visual Story avec sidebar communaute', icon: Heart },
+  { id: 'community-hero', name: 'Community Hero', description: 'Community Hub avec hero article', icon: BookMarked },
 ]
 
 export default function BlogDemo() {
-  const { variant = 'classic' } = useParams()
+  const { variant = 'story-community' } = useParams()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
 
@@ -191,6 +228,10 @@ export default function BlogDemo() {
         return <VisualStoryLayout {...props} />
       case 'community':
         return <CommunityHubLayout {...props} />
+      case 'story-community':
+        return <StoryCommunityLayout {...props} />
+      case 'community-hero':
+        return <CommunityHeroLayout {...props} />
       default:
         return <ClassicLayout {...props} />
     }
@@ -1034,6 +1075,374 @@ function CommunityHubLayout({ articles, allArticles, categories, featuredArticle
                     <p className="text-xs text-neutral-400 mt-1 ml-8">
                       sur {comment.article}
                     </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Author card */}
+            <AuthorCard variant="sidebar" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ============================================
+   VARIANT 0: CLASSIC
+   Version originale du blog
+   - Hero avec recherche
+   - Filtres par categorie
+   - Grille articles + sidebar
+   ============================================ */
+
+/* ============================================
+   VARIANT 6: STORY + COMMUNITY
+   Visual Story layout avec sidebar Community Hub
+   - Articles en alternance gauche/droite
+   - Sidebar avec stats, discussions, categories
+   ============================================ */
+function StoryCommunityLayout({ articles, allArticles, categories, featuredArticles, selectedCategory, setSelectedCategory, searchTerm, setSearchTerm, loading }) {
+  const featured = featuredArticles?.[0]
+  const popularByComments = [...(allArticles || [])].sort((a, b) => (b.comments || 0) - (a.comments || 0)).slice(0, 3)
+  const totalComments = (allArticles || []).reduce((acc, a) => acc + (a.comments || 0), 0)
+
+  // Discussions simulees
+  const recentDiscussions = [
+    { id: 1, author: 'Marie L.', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop', comment: 'Ce texte m\'a profondement touchee...', articleTitle: 'Les murmures du soir' },
+    { id: 2, author: 'Thomas B.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop', comment: 'Votre poeme m\'a inspire...', articleTitle: 'Les saisons de l\'ame' },
+    { id: 3, author: 'Claire D.', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop', comment: 'J\'attends la suite avec impatience !', articleTitle: 'Le gardien des mots' },
+  ]
+
+  return (
+    <div className="bg-cream-50 min-h-screen">
+      {/* Hero compact */}
+      {featured && (
+        <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
+          <img src={featured.image} alt={featured.title} className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/50 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="container-custom pb-10 lg:pb-14">
+              <span className={`${featured.categoryColor || 'bg-neutral-500'} text-white text-xs font-medium px-3 py-1 rounded-full inline-block mb-4`}>
+                {featured.category}
+              </span>
+              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-3 max-w-3xl">{featured.title}</h1>
+              <p className="text-white/80 mb-5 max-w-2xl line-clamp-2 hidden sm:block">{featured.excerpt}</p>
+              <Link to={`/article/${featured.slug}`} className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-medium rounded-full hover:bg-primary-700 transition-colors group">
+                Lire l'article
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Barre de filtres sticky */}
+      <div className="sticky top-20 z-40 bg-cream-50/95 backdrop-blur-sm border-b border-neutral-200">
+        <div className="container-custom py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide flex-1">
+              <button onClick={() => setSelectedCategory('all')} className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === 'all' ? 'bg-neutral-900 text-white' : 'bg-cream-200 hover:bg-cream-300'}`}>
+                Tous
+              </button>
+              {(categories || []).map((cat) => (
+                <button key={cat.id} onClick={() => setSelectedCategory(cat.name)} className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === cat.name ? 'bg-neutral-900 text-white' : 'bg-cream-200 hover:bg-cream-300'}`}>
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+            <div className="relative sm:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+              <input type="text" placeholder="Rechercher..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full h-10 pl-10 pr-4 rounded-full border border-neutral-200 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Section principale */}
+      <section className="py-10 lg:py-14">
+        <div className="container-custom">
+          <div className="grid lg:grid-cols-3 gap-10 lg:gap-12">
+            {/* Colonne articles - Visual Story */}
+            <div className="lg:col-span-2">
+              {loading ? (
+                <div className="flex justify-center py-24">
+                  <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
+                </div>
+              ) : articles.filter(a => a.id !== featured?.id).length > 0 ? (
+                <div className="space-y-12">
+                  {articles.filter(a => a.id !== featured?.id).map((article, index) => (
+                    <Link key={article.id} to={`/article/${article.slug}`} className="group grid md:grid-cols-2 gap-6 items-center">
+                      <div className={`aspect-[4/3] rounded-2xl overflow-hidden img-zoom ${index % 2 === 1 ? 'md:order-2' : ''}`}>
+                        <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+                      </div>
+                      <div className={index % 2 === 1 ? 'md:order-1 md:text-right' : ''}>
+                        <span className="text-xs font-medium uppercase tracking-widest text-primary-600 mb-2 block">{article.category}</span>
+                        <h2 className="text-2xl lg:text-3xl font-bold mb-3 group-hover:text-primary-600 transition-colors">{article.title}</h2>
+                        <p className="text-neutral-600 mb-4 line-clamp-2">{article.excerpt}</p>
+                        <div className={`flex items-center gap-4 text-sm text-neutral-500 ${index % 2 === 1 ? 'md:justify-end' : ''}`}>
+                          <span>{article.date}</span>
+                          <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{article.readTime}</span>
+                          <span className="flex items-center gap-1"><MessageCircle className="w-4 h-4" />{article.comments}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <EmptyState onReset={() => { setSearchTerm(''); setSelectedCategory('all'); }} />
+              )}
+            </div>
+
+            {/* Sidebar Community */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-44 space-y-6">
+                {/* Discussions recentes - style terracotta */}
+                <div className="relative bg-primary-600 rounded-2xl p-6 overflow-hidden">
+                  <FloatingStars />
+                  <div className="relative z-10">
+                    <h3 className="font-semibold mb-4 flex items-center gap-2 text-white">
+                      <MessageCircle className="w-4 h-4 text-white/80" />
+                      Discussions recentes
+                    </h3>
+                    <div className="space-y-4">
+                      {recentDiscussions.map((d) => (
+                        <div key={d.id} className="flex gap-3">
+                          <img src={d.avatar} alt={d.author} className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-white/20" />
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-white">{d.author}</p>
+                            <p className="text-xs text-white/70 line-clamp-2 mb-1">{d.comment}</p>
+                            <p className="text-xs text-white/90 font-medium">{d.articleTitle}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Articles les plus commentes */}
+                <div className="bg-cream-100 rounded-2xl p-6 border border-neutral-200">
+                  <h3 className="font-semibold mb-4 flex items-center gap-2"><Heart className="w-4 h-4 text-primary-600" />Plus commentes</h3>
+                  <div className="space-y-3">
+                    {popularByComments.map((article, index) => (
+                      <Link key={article.id} to={`/article/${article.slug}`} className="flex items-start gap-3 group">
+                        <span className="text-2xl font-bold text-primary-600/30 leading-none">{index + 1}</span>
+                        <div className="min-w-0">
+                          <h4 className="text-sm font-medium line-clamp-2 group-hover:text-primary-600 transition-colors">{article.title}</h4>
+                          <p className="text-xs text-neutral-500 mt-1 flex items-center gap-1"><MessageCircle className="w-3 h-3" />{article.comments} commentaires</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Categories */}
+                <div className="bg-cream-100 rounded-2xl p-6 border border-neutral-200">
+                  <h3 className="font-semibold mb-4">Categories</h3>
+                  <div className="space-y-2">
+                    {(categories || []).map((category) => (
+                      <button key={category.id} onClick={() => setSelectedCategory(category.name)} className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm transition-colors ${selectedCategory === category.name ? 'bg-primary-100 text-primary-700' : 'hover:bg-cream-200'}`}>
+                        <span>{category.name}</span>
+                        <span className={`px-2.5 py-0.5 rounded-full text-xs text-white ${category.color}`}>{category.count}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Banniere Terracotta */}
+      <section className="relative py-20 lg:py-28 bg-primary-600 overflow-hidden">
+        <FloatingStars />
+        <div className="absolute top-0 left-0 w-64 h-64 bg-primary-500 rounded-full blur-3xl opacity-50 -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary-700 rounded-full blur-3xl opacity-40 translate-x-1/3 translate-y-1/3" />
+        <div className="container-custom relative z-10">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Rejoignez la communaute</h2>
+            <p className="text-lg text-white/80 mb-8">Recevez mes derniers articles et reflexions litteraires directement dans votre boite mail.</p>
+            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <div className="relative flex-1">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+                <input type="email" placeholder="Votre adresse email" className="w-full h-14 pl-12 pr-4 rounded-full bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-white/50" />
+              </div>
+              <button type="submit" className="h-14 px-8 bg-neutral-900 text-white font-medium rounded-full hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2">
+                S'inscrire <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+/* ============================================
+   VARIANT 7: COMMUNITY HERO
+   Community Hub avec Hero article en haut
+   - Hero du dernier article au lieu du header "Le Blog"
+   - Layout Community Hub classique en dessous
+   ============================================ */
+function CommunityHeroLayout({ articles, allArticles, categories, featuredArticles, selectedCategory, setSelectedCategory, searchTerm, setSearchTerm, loading }) {
+  const featured = featuredArticles?.[0]
+  const popularByComments = [...(allArticles || [])].sort((a, b) => (b.comments || 0) - (a.comments || 0)).slice(0, 3)
+  const totalComments = (allArticles || []).reduce((acc, a) => acc + (a.comments || 0), 0)
+
+  return (
+    <div className="bg-cream-200 min-h-screen">
+      {/* Hero avec article featured */}
+      {featured && (
+        <section className="relative h-[50vh] min-h-[400px] overflow-hidden group">
+          <img src={featured.image} alt={featured.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/50 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="container-custom pb-10 lg:pb-14">
+              {/* Stats superposees */}
+              <div className="flex items-center gap-6 mb-6">
+                <div className="flex items-center gap-2 text-white/80">
+                  <BookOpen className="w-4 h-4" />
+                  <span className="text-sm font-medium">{allArticles?.length || 0} articles</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/80">
+                  <MessageCircle className="w-4 h-4" />
+                  <span className="text-sm font-medium">{totalComments} commentaires</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/80">
+                  <Users className="w-4 h-4" />
+                  <span className="text-sm font-medium">847 membres</span>
+                </div>
+              </div>
+              <span className={`${featured.categoryColor || 'bg-neutral-500'} text-white text-xs font-medium px-3 py-1 rounded-full inline-block mb-4`}>
+                {featured.category}
+              </span>
+              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-3 max-w-3xl">{featured.title}</h1>
+              <p className="text-white/80 mb-5 max-w-2xl line-clamp-2 hidden sm:block">{featured.excerpt}</p>
+              <Link to={`/article/${featured.slug}`} className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-medium rounded-full hover:bg-primary-700 transition-colors group">
+                Lire l'article
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Categories + Search sticky */}
+      <section className="sticky top-20 z-30 bg-cream-200/95 backdrop-blur-sm border-b border-cream-300">
+        <div className="container-custom py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+              <button onClick={() => setSelectedCategory('all')} className={`px-4 py-2 text-sm font-medium rounded-full transition-all whitespace-nowrap ${selectedCategory === 'all' ? 'bg-primary-600 text-white' : 'bg-cream-200 hover:bg-cream-300'}`}>
+                Tous
+              </button>
+              {(categories || []).map((cat) => (
+                <button key={cat.id} onClick={() => setSelectedCategory(cat.name)} className={`px-4 py-2 text-sm font-medium rounded-full transition-all whitespace-nowrap ${selectedCategory === cat.name ? 'bg-primary-600 text-white' : 'bg-cream-200 hover:bg-cream-300'}`}>
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+            <div className="relative hidden md:block">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+              <input type="text" placeholder="Rechercher..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-56 h-10 pl-10 pr-4 text-sm bg-white border-0 rounded-full focus:ring-2 focus:ring-primary-500 outline-none" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="container-custom py-12">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main content - style Community */}
+          <div className="lg:col-span-2">
+            {loading ? (
+              <div className="flex justify-center py-24">
+                <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
+              </div>
+            ) : articles.filter(a => a.id !== featured?.id).length > 0 ? (
+              <div className="space-y-6">
+                {articles.filter(a => a.id !== featured?.id).map((article) => (
+                  <article key={article.id} className="group bg-white rounded-2xl overflow-hidden border border-cream-300 hover:border-primary-300 transition-all">
+                    <Link to={`/article/${article.slug}`} className="block">
+                      <div className="flex flex-col sm:flex-row">
+                        <div className="sm:w-48 lg:w-56 shrink-0">
+                          <div className="aspect-[16/10] sm:aspect-auto sm:h-full overflow-hidden">
+                            <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                          </div>
+                        </div>
+                        <div className="flex-1 p-5">
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className={`${article.categoryColor} text-white text-xs font-medium px-2.5 py-0.5 rounded-full`}>{article.category}</span>
+                            <span className="text-xs text-neutral-500">{article.date}</span>
+                          </div>
+                          <h3 className="text-lg font-semibold mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">{article.title}</h3>
+                          <p className="text-sm text-neutral-600 line-clamp-2 mb-4">{article.excerpt}</p>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4 text-xs text-neutral-500">
+                              <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{article.readTime}</span>
+                              <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{article.views}</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-primary-600">
+                              <MessageCircle className="w-4 h-4" />
+                              <span className="text-sm font-medium">{article.comments}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <EmptyState onReset={() => { setSearchTerm(''); setSelectedCategory('all'); }} />
+            )}
+          </div>
+
+          {/* Sidebar communaute */}
+          <div className="space-y-6">
+            {/* CTA inscription */}
+            <SignupCTA variant="community" />
+
+            {/* Articles les plus commentes */}
+            <div className="bg-white rounded-2xl p-6 border border-cream-300">
+              <div className="flex items-center gap-2 mb-4">
+                <MessageCircle className="w-5 h-5 text-primary-600" />
+                <h3 className="font-semibold">Les plus commentes</h3>
+              </div>
+              <div className="space-y-4">
+                {popularByComments.map((article, index) => (
+                  <Link key={article.id} to={`/article/${article.slug}`} className="group flex items-start gap-3">
+                    <span className="text-2xl font-bold text-primary-600/30 shrink-0 w-6">{index + 1}</span>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-medium line-clamp-2 group-hover:text-primary-600 transition-colors">{article.title}</h4>
+                      <p className="text-xs text-neutral-500 mt-1">{article.comments} commentaires</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Discussions recentes */}
+            <div className="bg-white rounded-2xl p-6 border border-cream-300">
+              <div className="flex items-center gap-2 mb-4">
+                <Users className="w-5 h-5 text-primary-600" />
+                <h3 className="font-semibold">Discussions recentes</h3>
+              </div>
+              <div className="space-y-4">
+                {[
+                  { user: 'Marie L.', text: 'Magnifique reflexion sur...', article: 'La poesie du quotidien' },
+                  { user: 'Thomas B.', text: 'Je suis completement d\'accord...', article: 'Ecrire en silence' },
+                  { user: 'Claire D.', text: 'Cela me rappelle une lecture...', article: 'Les mots voyageurs' },
+                ].map((comment, index) => (
+                  <div key={index} className="pb-4 border-b border-cream-200 last:border-0 last:pb-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-6 h-6 rounded-full bg-primary-100 flex items-center justify-center">
+                        <span className="text-xs font-medium text-primary-600">{comment.user[0]}</span>
+                      </div>
+                      <span className="text-sm font-medium">{comment.user}</span>
+                    </div>
+                    <p className="text-sm text-neutral-600 line-clamp-2 ml-8">"{comment.text}"</p>
+                    <p className="text-xs text-neutral-400 mt-1 ml-8">sur {comment.article}</p>
                   </div>
                 ))}
               </div>

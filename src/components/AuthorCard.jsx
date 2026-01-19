@@ -5,7 +5,7 @@ import { author } from '../data/articles'
 export default function AuthorCard({ variant = 'default' }) {
   if (variant === 'sidebar') {
     return (
-      <div className="bg-cream-200 rounded-2xl p-6 border border-neutral-200">
+      <div className="bg-cream-200 rounded-2xl p-6 border border-neutral-900">
         <div className="flex items-center gap-4 mb-4">
           <img
             src={author.avatar}
