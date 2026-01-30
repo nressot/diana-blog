@@ -27,9 +27,12 @@ export default function AuthCallback() {
 
         // Check if this is a password recovery
         const type = searchParams.get('type')
-        if (type === 'recovery') {
-          // Redirect to password reset page (could be implemented later)
-          navigate('/connexion?reset=true')
+        const hashParams = new URLSearchParams(window.location.hash.substring(1))
+        const hashType = hashParams.get('type')
+
+        if (type === 'recovery' || hashType === 'recovery') {
+          // Redirect to new password page
+          navigate('/nouveau-mot-de-passe')
           return
         }
 

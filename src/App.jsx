@@ -22,6 +22,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import AuthCallback from './pages/AuthCallback'
 import ResetPassword from './pages/ResetPassword'
+import NewPassword from './pages/NewPassword'
 import Profile from './pages/Profile'
 import MyComments from './pages/MyComments'
 
@@ -99,6 +100,7 @@ function App() {
               <Route path="/inscription" element={<Signup />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/mot-de-passe-oublie" element={<ResetPassword />} />
+              <Route path="/nouveau-mot-de-passe" element={<NewPassword />} />
               <Route path="/profil" element={<Profile />} />
               <Route path="/mes-commentaires" element={<MyComments />} />
             </Routes>

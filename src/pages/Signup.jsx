@@ -58,7 +58,7 @@ export default function Signup() {
     }
 
     try {
-      const { data } = await signUpWithEmail(email, password, displayName)
+      const data = await signUpWithEmail(email, password, displayName)
 
       // Check if email confirmation is required
       if (data?.user && !data?.session) {
