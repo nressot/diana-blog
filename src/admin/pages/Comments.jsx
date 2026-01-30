@@ -168,11 +168,19 @@ export default function Comments() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center">
-                        <span className="text-primary-700 font-medium">
-                          {comment.author_name[0].toUpperCase()}
-                        </span>
-                      </div>
+                      {comment.author_avatar ? (
+                        <img
+                          src={comment.author_avatar}
+                          alt={comment.author_name}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center">
+                          <span className="text-primary-700 font-medium">
+                            {comment.author_name[0].toUpperCase()}
+                          </span>
+                        </div>
+                      )}
                       <div>
                         <p className="font-medium text-gray-900">
                           {comment.author_name}

@@ -29,7 +29,7 @@ const navigation = [
 ]
 
 export default function AdminNav() {
-  const { user, signOut } = useAuth()
+  const { user, signOut, avatarUrl, displayName } = useAuth()
   const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
@@ -125,14 +125,22 @@ export default function AdminNav() {
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
               >
-                <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
-                  <span className="text-primary-700 font-medium">
-                    {user?.email?.[0]?.toUpperCase() || 'A'}
-                  </span>
-                </div>
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt={displayName || 'Admin'}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
+                    <span className="text-primary-700 font-medium">
+                      {user?.email?.[0]?.toUpperCase() || 'A'}
+                    </span>
+                  </div>
+                )}
                 <div className="flex-1 text-left">
                   <p className="font-medium text-gray-900 truncate">
-                    {user?.email?.split('@')[0] || 'Admin'}
+                    {displayName || user?.email?.split('@')[0] || 'Admin'}
                   </p>
                   <p className="text-xs text-gray-500 truncate">{user?.email}</p>
                 </div>
