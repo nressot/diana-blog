@@ -36,7 +36,7 @@ exports.handler = async (event, context) => {
   const stripeClient = stripe(process.env.STRIPE_SECRET_KEY)
 
   try {
-    const { priceId, productId, productName } = JSON.parse(event.body || '{}')
+    const { priceId, productId, productName, productType } = JSON.parse(event.body || '{}')
 
     if (!priceId) {
       return {
@@ -54,7 +54,8 @@ exports.handler = async (event, context) => {
       line_items: [{ price: priceId, quantity: 1 }],
       metadata: {
         productId: productId || '',
-        productName: productName || ''
+        productName: productName || '',
+        productType: productType || ''
       },
       success_url: `${siteUrl}/boutique?success=true`,
       cancel_url: `${siteUrl}/boutique?canceled=true`,

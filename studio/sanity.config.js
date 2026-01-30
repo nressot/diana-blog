@@ -2,16 +2,21 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemas'
+import {deskStructure} from './deskStructure'
 
 export default defineConfig({
   name: 'default',
-  title: 'Writer Blog Studio',
+  title: 'Diana - Blog Litteraire',
 
-  // IMPORTANT: Remplace ces valeurs apres avoir cree ton projet sur sanity.io
-  projectId: 'YOUR_PROJECT_ID',
+  projectId: 'cilcs3mk',
   dataset: 'production',
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool({
+      structure: deskStructure,
+    }),
+    visionTool(),
+  ],
 
   schema: {
     types: schemaTypes,

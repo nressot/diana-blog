@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Heart, Twitter, Instagram, Linkedin, Mail } from 'lucide-react'
+import { Twitter, Instagram, Linkedin, Mail, Candy } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -112,7 +112,7 @@ export default function Footer() {
       <div className="border-t border-neutral-200 border-neutral-800">
         <div className="container-custom py-6">
           <p className="text-center text-sm text-neutral-600 text-neutral-400">
-            {currentYear} Fait avec <Heart className="w-4 h-4 inline text-rose-500" /> et beaucoup de cafe.
+            {currentYear} Fait <a href="https://byneals.com" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:text-red-600 font-medium transition-colors">By Neals</a> et avec beaucoup de bonbons <Candy className="w-4 h-4 inline text-pink-500" />
           </p>
         </div>
       </div>

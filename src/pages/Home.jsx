@@ -1,20 +1,26 @@
 import { ArrowRight, BookOpen, PenLine } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import ArticleCard from '../components/ArticleCard'
 import CategoryCard from '../components/CategoryCard'
 import AuthorCard from '../components/AuthorCard'
 import TypewriterEffect from '../components/TypewriterEffect'
 import MonDernierLivre from '../components/MonDernierLivre'
 import CssCat from '../components/CssCat'
-import { useArticles, useCategories, useFeaturedArticles, useAuthor } from '../lib/useArticles'
-
-const dynamicWords = ['restent', 'inspirent', 'touchent', 'marquent', 'resonnent']
+import { useSupabaseArticles, useSupabaseCategories, useSupabaseFeaturedArticle, useSupabaseAuthor } from '../lib/useSupabaseArticles'
+import { useHomePage } from '../lib/usePages'
 
 export default function Home() {
-  // Fetch depuis Sanity avec fallback vers donnees statiques
-  const { data: articles } = useArticles()
-  const { data: categories } = useCategories()
-  const { data: featuredArticles } = useFeaturedArticles()
-  const { data: author } = useAuthor()
+  // Fetch depuis Supabase avec fallback vers donnees statiques
+  const { data: articles } = useSupabaseArticles()
+  const { data: categories } = useSupabaseCategories()
+  const { data: featuredArticles } = useSupabaseFeaturedArticle()
+  const { data: author } = useSupabaseAuthor()
+  const { data: pageContent } = useHomePage()
+
+  // Extraire le contenu de la page avec valeurs par defaut
+  const hero = pageContent?.hero || {}
+  const sections = pageContent?.sections || {}
+  const newsletter = pageContent?.newsletter || {}
   return (
     <div className="bg-terracotta-pattern">
       {/* Hero Section */}
@@ -25,12 +31,12 @@ export default function Home() {
             <div className="max-w-xl">
               {/* Title */}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight mb-6 leading-tight">
-                <span className="block">Des mots qui</span>
-                <span className="block">voyagent,</span>
-                <span className="block">des histoires qui</span>
+                <span className="block">{hero.titleLine1 || 'Des mots qui'}</span>
+                <span className="block">{hero.titleLine2 || 'voyagent,'}</span>
+                <span className="block">{hero.titleLine3 || 'des histoires qui'}</span>
                 <span className="block text-primary-600 dark:text-primary-500 italic">
                   <TypewriterEffect
-                    words={dynamicWords}
+                    words={hero.typewriterWords || ['restent', 'inspirent', 'touchent', 'marquent', 'resonnent']}
                     typingSpeed={120}
                     deletingSpeed={60}
                     pauseTime={2500}
@@ -40,26 +46,26 @@ export default function Home() {
 
               {/* Subtitle */}
               <p className="text-lg lg:text-xl text-neutral-600 dark:text-neutral-400 mb-8 leading-relaxed">
-                Bienvenue dans mon univers littéraire. Je suis {author?.name || 'Diana'}, et ici je partage mes réflexions, mes récits et mes découvertes au fil de la plume.
+                {hero.subtitle || `Bienvenue dans mon univers littéraire. Je suis ${author?.name || 'Diana'}, et ici je partage mes réflexions, mes récits et mes découvertes au fil de la plume.`}
               </p>
 
-              {/* CTA Buttons - style preserve, no navigation */}
+              {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  type="button"
-                  className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-neutral-900 text-white font-medium hover:bg-neutral-800 transition-colors shadow-lg shadow-neutral-900/10 cursor-pointer"
+                <Link
+                  to={hero.primaryCta?.link || '/blog'}
+                  className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-neutral-900 text-white font-medium hover:bg-neutral-800 transition-colors shadow-lg shadow-neutral-900/10"
                 >
                   <BookOpen className="w-5 h-5" />
-                  Lire mes articles
-                </button>
-                <button
-                  type="button"
-                  className="btn-outline-arrow inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full font-medium border hover:bg-cream-200 transition-colors cursor-pointer"
+                  {hero.primaryCta?.text || 'Lire mes articles'}
+                </Link>
+                <Link
+                  to={hero.secondaryCta?.link || '/about'}
+                  className="btn-outline-arrow inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full font-medium border hover:bg-cream-200 transition-colors"
                   style={{ borderColor: '#1c1a17' }}
                 >
-                  Qui suis-je ?
+                  {hero.secondaryCta?.text || 'Qui suis-je ?'}
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </Link>
               </div>
 
               {/* Ligne decorative */}
@@ -86,11 +92,13 @@ export default function Home() {
           <div className="container-custom">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-2xl lg:text-3xl font-semibold">À la une</h2>
-                <p className="text-neutral-500 dark:text-neutral-400 mt-1">Ma dernière pensée</p>
+                <h2 className="text-2xl lg:text-3xl font-semibold">
+                  {sections.featured?.title || 'A la une'}
+                </h2>
+                <p className="text-neutral-500 dark:text-neutral-400 mt-1">{sections.featured?.subtitle || 'Ma dernière pensée'}</p>
               </div>
             </div>
-            <ArticleCard article={featuredArticles[0]} variant="featured" disabled />
+            <ArticleCard article={featuredArticles[0]} variant="featured" />
           </div>
         </section>
       )}
@@ -100,8 +108,10 @@ export default function Home() {
         <div className="container-custom">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl lg:text-3xl font-semibold">Catégories</h2>
-              <p className="text-neutral-500 dark:text-neutral-400 mt-1">Explorez par thème</p>
+              <h2 className="text-2xl lg:text-3xl font-semibold">
+                {sections.categories?.title || 'Catégories'}
+              </h2>
+              <p className="text-neutral-500 dark:text-neutral-400 mt-1">{sections.categories?.subtitle || 'Explorez par thème'}</p>
             </div>
             <button type="button" className="text-sm font-medium text-primary-600 hover:text-primary-700 flex items-center gap-1 cursor-pointer">
               Tout voir <ArrowRight className="w-4 h-4" />
@@ -109,7 +119,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {(categories || []).map((category) => (
-              <CategoryCard key={category.id} category={category} disabled />
+              <CategoryCard key={category.id} category={category} />
             ))}
           </div>
         </div>
@@ -120,8 +130,10 @@ export default function Home() {
         <div className="container-custom">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl lg:text-3xl font-semibold">Derniers articles</h2>
-              <p className="text-neutral-500 dark:text-neutral-400 mt-1">Mes écrits les plus récents</p>
+              <h2 className="text-2xl lg:text-3xl font-semibold">
+                {sections.latestArticles?.title || 'Derniers articles'}
+              </h2>
+              <p className="text-neutral-500 dark:text-neutral-400 mt-1">{sections.latestArticles?.subtitle || 'Mes écrits les plus récents'}</p>
             </div>
             <button type="button" className="text-sm font-medium text-primary-600 hover:text-primary-700 flex items-center gap-1 cursor-pointer">
               Tout voir <ArrowRight className="w-4 h-4" />
@@ -129,7 +141,7 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {(articles || []).slice(0, 6).map((article) => (
-              <ArticleCard key={article.id} article={article} disabled />
+              <ArticleCard key={article.id} article={article} />
             ))}
           </div>
         </div>
@@ -144,8 +156,10 @@ export default function Home() {
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-2xl lg:text-3xl font-semibold">Qui je suis</h2>
-                <p className="text-neutral-500 dark:text-neutral-400 mt-1">Quelques mots sur moi</p>
+                <h2 className="text-2xl lg:text-3xl font-semibold">
+                  {sections.author?.title || 'Qui je suis'}
+                </h2>
+                <p className="text-neutral-500 dark:text-neutral-400 mt-1">{sections.author?.subtitle || 'Quelques mots sur moi'}</p>
               </div>
             </div>
             <div className="bg-cream-50 dark:bg-neutral-900 rounded-3xl p-8 lg:p-12 border border-neutral-200 dark:border-neutral-800 shadow-sm">
@@ -165,19 +179,19 @@ export default function Home() {
             <div className="relative z-10 max-w-2xl mx-auto text-center">
               <PenLine className="w-12 h-12 mx-auto mb-6 opacity-80" />
               <h2 className="text-3xl lg:text-4xl font-semibold mb-4">
-                Restez connecté à mes écrits
+                {newsletter.title || 'Restez connecté à mes écrits'}
               </h2>
               <p className="text-primary-100 mb-8 text-lg">
-                Une newsletter mensuelle avec mes réflexions, nouveaux textes et découvertes littéraires. Pas de spam, promis.
+                {newsletter.description || 'Une newsletter mensuelle avec mes réflexions, nouveaux textes et découvertes littéraires. Pas de spam, promis.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
                 <input
                   type="email"
-                  placeholder="votre@email.com"
+                  placeholder={newsletter.placeholder || 'votre@email.com'}
                   className="flex-1 h-14 px-6 rounded-full bg-white/15 border border-white/25 placeholder-white/60 focus:bg-white/25 focus:border-white/50 outline-none transition-all text-white"
                 />
                 <button className="h-14 px-8 rounded-full bg-white text-primary-700 font-semibold hover:bg-primary-50 transition-colors shadow-lg">
-                  S'abonner
+                  {newsletter.buttonText || 'S\'abonner'}
                 </button>
               </div>
             </div>

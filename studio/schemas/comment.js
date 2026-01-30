@@ -37,6 +37,20 @@ export default defineType({
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
     }),
+    defineField({
+      name: 'status',
+      title: 'Statut',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Publie', value: 'approved'},
+          {title: 'Spam', value: 'spam'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'approved',
+      description: 'Les commentaires sont publies automatiquement. Changez en "Spam" pour masquer.',
+    }),
   ],
   orderings: [
     {
@@ -55,12 +69,17 @@ export default defineType({
       title: 'name',
       articleTitle: 'article.title',
       createdAt: 'createdAt',
+      status: 'status',
+      content: 'content',
     },
-    prepare({title, articleTitle, createdAt}) {
+    prepare({title, articleTitle, createdAt, status, content}) {
       const date = createdAt ? new Date(createdAt).toLocaleDateString('fr-FR') : 'Date inconnue'
+      const statusIcon = status === 'spam' ? '! ' : ''
+      const preview = content ? content.substring(0, 50) + '...' : ''
       return {
-        title: title || 'Commentaire anonyme',
+        title: `${statusIcon}${title || 'Commentaire anonyme'}`,
         subtitle: `${articleTitle || 'Article inconnu'} | ${date}`,
+        description: preview,
       }
     },
   },

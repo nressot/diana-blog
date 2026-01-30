@@ -4,14 +4,13 @@ import { PortableText } from '@portabletext/react'
 import ArticleCard from '../components/ArticleCard'
 import AuthorCard from '../components/AuthorCard'
 import CommentSection from '../components/CommentSection'
-import { useArticle, useArticles } from '../lib/useArticles'
+import { useSupabaseArticle, useSupabaseArticles } from '../lib/useSupabaseArticles'
 import { portableTextComponents } from '../lib/PortableTextComponents'
-import { urlFor } from '../lib/sanity'
 
 export default function Article() {
   const { slug } = useParams()
-  const { article, loading, usingSanity } = useArticle(slug)
-  const { data: allArticles } = useArticles()
+  const { article, loading } = useSupabaseArticle(slug)
+  const { data: allArticles } = useSupabaseArticles()
 
   // Affichage de chargement
   if (loading) {
@@ -46,8 +45,12 @@ export default function Article() {
   }
 
   // Articles lies (meme categorie)
+  const articleCategoryId = article.category?.id || article.category
   const relatedArticles = (allArticles || [])
-    .filter((a) => a.id !== article.id && a.category === article.category)
+    .filter((a) => {
+      const aCategoryId = a.category?.id || a.category
+      return a.id !== article.id && aCategoryId === articleCategoryId
+    })
     .slice(0, 3)
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
@@ -137,13 +140,16 @@ export default function Article() {
             {/* Main Content */}
             <div className="lg:col-span-2">
               <article className="prose-content text-lg max-w-none">
-                {/* Rendu du contenu - Portable Text (Sanity) ou texte brut (statique) */}
-                {usingSanity && Array.isArray(article.content) ? (
+                {/* Rendu du contenu - Portable Text, HTML ou Markdown */}
+                {Array.isArray(article.content) ? (
                   <PortableText value={article.content} components={portableTextComponents} />
+                ) : typeof article.content === 'string' && article.content.trim().startsWith('<') ? (
+                  // Contenu HTML (provenant de l'editeur TipTap)
+                  <div dangerouslySetInnerHTML={{ __html: article.content }} />
                 ) : (
-                  // Fallback pour le contenu statique (texte brut avec parsing basique)
+                  // Contenu Markdown avec parsing basique
                   <div>
-                    {(article.content || article._raw?.content || '').split('\n\n').map((paragraph, index) => {
+                    {(article.content || '').split('\n\n').map((paragraph, index) => {
                       if (paragraph.startsWith('## ')) {
                         return <h2 key={index}>{paragraph.replace('## ', '')}</h2>
                       }

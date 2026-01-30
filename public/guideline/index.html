@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Coven de Diana - Brand Guidelines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Primary - Terracotta */
+      --primary-50: #fdf8f6;
+      --primary-100: #f9ece6;
+      --primary-200: #f3d5c7;
+      --primary-300: #e9b8a0;
+      --primary-400: #db9373;
+      --primary-500: #c97550;
+      --primary-600: #b85d3a;
+      --primary-700: #9a4a2f;
+      --primary-800: #7f3e2a;
+      --primary-900: #693627;
+
+      /* Cream */
+      --cream-50: #FDFCFA;
+      --cream-100: #FAF6F2;
+      --cream-200: #F9F4F0;
+      --cream-300: #F3EBE4;
+
+      /* Neutral */
+      --neutral-100: #f5f3ef;
+      --neutral-200: #e8e4dc;
+      --neutral-300: #d6d0c4;
+      --neutral-400: #a8a196;
+      --neutral-500: #78726a;
+      --neutral-600: #5c5650;
+      --neutral-700: #45403b;
+      --neutral-800: #2d2a26;
+      --neutral-900: #1c1a17;
+      --neutral-950: #0f0e0c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--cream-100);
+      color: var(--neutral-900);
+      line-height: 1.6;
+    }
+
+    .serif {
+      font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(250, 246, 242, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 28px;
+      width: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--neutral-600);
+      text-decoration: none;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-600);
+    }
+
+    /* Hero / Cover */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem;
+      background: linear-gradient(180deg, var(--cream-50) 0%, var(--cream-200) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 44 L50.8 49 L50 50 L49.2 49 Z M50 56 L49.2 51 L50 50 L50.8 51 Z M44 50 L49 49.2 L50 50 L49 50.8 Z M56 50 L51 50.8 L50 50 L51 49.2 Z' fill='%23d6d0c4' opacity='0.5'/%3E%3C/svg%3E");
+      background-size: 150px 150px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-logo {
+      width: 280px;
+      height: 280px;
+      margin-bottom: 3rem;
+      filter: drop-shadow(0 10px 40px rgba(0,0,0,0.08));
+    }
+
+    .hero-title {
+      font-family: Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      color: var(--neutral-900);
+    }
+
+    .hero-subtitle {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--primary-600);
+      margin-bottom: 3rem;
+    }
+
+    .hero-version {
+      font-size: 0.75rem;
+      color: var(--neutral-500);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* Sections */
+    .section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 8rem 2rem;
+    }
+
+    .section-header {
+      margin-bottom: 4rem;
+    }
+
+    .section-number {
+      font-size: 0.75rem;
+      color: var(--primary-500);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .section-title {
+      font-family: Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      color: var(--neutral-900);
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      font-size: 1.125rem;
+      color: var(--neutral-600);
+      max-width: 600px;
+      line-height: 1.8;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neutral-300), transparent);
+      margin: 0 auto;
+      max-width: 1200px;
+    }
+
+    /* Brand Story */
+    .brand-story {
+      background: var(--neutral-900);
+      color: var(--cream-100);
+      padding: 8rem 2rem;
+    }
+
+    .brand-story .section-number {
+      color: var(--primary-400);
+    }
+
+    .brand-story .section-title {
+      color: var(--cream-100);
+    }
+
+    .brand-story .section-desc {
+      color: var(--neutral-400);
+    }
+
+    .brand-values {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 3rem;
+      margin-top: 4rem;
+    }
+
+    .value-card {
+      padding: 2rem;
+      border: 1px solid var(--neutral-700);
+      border-radius: 4px;
+    }
+
+    .value-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1.5rem;
+      color: var(--primary-400);
+    }
+
+    .value-title {
+      font-family: Georgia, serif;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--cream-100);
+    }
+
+    .value-text {
+      font-size: 0.9375rem;
+      color: var(--neutral-400);
+      line-height: 1.7;
+    }
+
+    /* Logo Section */
+    .logo-section {
+      background: var(--cream-50);
+    }
+
+    .logo-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .logo-box {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      padding: 3rem;
+    }
+
+    .logo-box.light {
+      background: var(--cream-100);
+      border: 1px solid var(--neutral-200);
+    }
+
+    .logo-box.dark {
+      background: var(--neutral-900);
+    }
+
+    .logo-box img {
+      max-width: 200px;
+      max-height: 200px;
+    }
+
+    .logo-variants {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .logo-variant {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .logo-variant::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: -2rem;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--neutral-500);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Clear Space */
+    .clearspace {
+      margin: 6rem 0;
+    }
+
+    .clearspace-demo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem;
+      background: var(--cream-200);
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .clearspace-box {
+      position: relative;
+      padding: 40px;
+      border: 2px dashed var(--primary-400);
+    }
+
+    .clearspace-box img {
+      width: 160px;
+      height: auto;
+    }
+
+    .clearspace-label {
+      position: absolute;
+      font-size: 0.625rem;
+      color: var(--primary-600);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .clearspace-label.top {
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .clearspace-label.bottom {
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .clearspace-label.left {
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+    }
+
+    .clearspace-label.right {
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+    }
+
+    /* Minimum Size */
+    .min-size {
+      display: flex;
+      align-items: flex-end;
+      gap: 4rem;
+      justify-content: center;
+      margin: 4rem 0;
+      padding: 3rem;
+      background: var(--cream-200);
+      border-radius: 8px;
+    }
+
+    .min-size-item {
+      text-align: center;
+    }
+
+    .min-size-logo {
+      margin-bottom: 1rem;
+    }
+
+    .min-size-label {
+      font-size: 0.75rem;
+      color: var(--neutral-600);
+    }
+
+    /* Color Palette */
+    .color-section {
+      background: white;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+
+    .color-group-title {
+      font-family: Georgia, serif;
+      font-size: 1.5rem;
+      margin: 3rem 0 1.5rem;
+      color: var(--neutral-800);
+    }
+
+    .color-card {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--neutral-200);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .color-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .color-swatch {
+      height: 140px;
+    }
+
+    .color-info {
+      padding: 1.25rem;
+      background: white;
+    }
+
+    .color-name {
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      color: var(--neutral-900);
+    }
+
+    .color-hex {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.75rem;
+      color: var(--neutral-500);
+      margin-bottom: 0.25rem;
+    }
+
+    .color-rgb {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.75rem;
+      color: var(--neutral-400);
+    }
+
+    /* Primary Color Hero */
+    .primary-color-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .primary-swatch {
+      padding: 4rem;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .primary-swatch.terracotta {
+      background: var(--primary-600);
+      color: white;
+    }
+
+    .primary-swatch.cream {
+      background: var(--cream-100);
+      color: var(--neutral-900);
+      border: 1px solid var(--neutral-200);
+    }
+
+    .primary-swatch-name {
+      font-family: Georgia, serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .primary-swatch-hex {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.875rem;
+      opacity: 0.8;
+    }
+
+    /* Typography */
+    .type-section {
+      background: var(--cream-50);
+    }
+
+    .type-showcase {
+      margin: 4rem 0;
+    }
+
+    .type-family {
+      padding: 3rem;
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      border: 1px solid var(--neutral-200);
+    }
+
+    .type-family-name {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--primary-600);
+      margin-bottom: 2rem;
+    }
+
+    .type-sample {
+      font-size: clamp(3rem, 8vw, 5rem);
+      line-height: 1.1;
+      margin-bottom: 2rem;
+      color: var(--neutral-900);
+    }
+
+    .type-sample.serif {
+      font-family: Georgia, serif;
+      font-weight: 400;
+    }
+
+    .type-sample.sans {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-weight: 500;
+    }
+
+    .type-characters {
+      font-size: 1.25rem;
+      color: var(--neutral-600);
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+      word-break: break-all;
+    }
+
+    .type-weights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .type-weight {
+      text-align: center;
+    }
+
+    .type-weight-sample {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .type-weight-name {
+      font-size: 0.75rem;
+      color: var(--neutral-500);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Type Scale */
+    .type-scale {
+      margin: 4rem 0;
+    }
+
+    .type-scale-item {
+      display: flex;
+      align-items: baseline;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+
+    .type-scale-label {
+      width: 120px;
+      font-size: 0.75rem;
+      color: var(--neutral-500);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .type-scale-size {
+      width: 80px;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.75rem;
+      color: var(--primary-600);
+    }
+
+    .type-scale-sample {
+      flex: 1;
+      color: var(--neutral-900);
+    }
+
+    /* Graphic Elements */
+    .elements-section {
+      background: var(--neutral-900);
+      color: var(--cream-100);
+    }
+
+    .elements-section .section-number {
+      color: var(--primary-400);
+    }
+
+    .elements-section .section-title {
+      color: var(--cream-100);
+    }
+
+    .elements-section .section-desc {
+      color: var(--neutral-400);
+    }
+
+    .elements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .element-card {
+      background: var(--neutral-800);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .element-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .element-name {
+      font-family: Georgia, serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: var(--cream-100);
+    }
+
+    .element-desc {
+      font-size: 0.875rem;
+      color: var(--neutral-400);
+      line-height: 1.6;
+    }
+
+    /* Moon Phases SVG */
+    .moon-phases {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      margin: 4rem 0;
+      padding: 3rem;
+      background: var(--neutral-800);
+      border-radius: 12px;
+    }
+
+    .moon-phase {
+      text-align: center;
+    }
+
+    .moon-phase svg {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 0.75rem;
+    }
+
+    .moon-phase-name {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--neutral-400);
+    }
+
+    /* Stars SVG */
+    .stars-showcase {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      margin: 4rem 0;
+      padding: 3rem;
+      background: var(--neutral-800);
+      border-radius: 12px;
+    }
+
+    .star-item {
+      text-align: center;
+    }
+
+    .star-item svg {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+    }
+
+    .star-name {
+      font-size: 0.75rem;
+      color: var(--neutral-400);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Usage Examples */
+    .usage-section {
+      background: var(--cream-100);
+    }
+
+    .usage-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .usage-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--neutral-200);
+    }
+
+    .usage-card.do {
+      border-color: #22c55e;
+    }
+
+    .usage-card.dont {
+      border-color: #ef4444;
+    }
+
+    .usage-preview {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--cream-50);
+    }
+
+    .usage-preview img {
+      max-width: 120px;
+      max-height: 120px;
+    }
+
+    .usage-label {
+      padding: 1rem 1.5rem;
+      background: white;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .usage-label.do {
+      color: #22c55e;
+    }
+
+    .usage-label.dont {
+      color: #ef4444;
+    }
+
+    .usage-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .usage-text {
+      font-size: 0.875rem;
+      color: var(--neutral-700);
+    }
+
+    /* Applications */
+    .applications-section {
+      background: white;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .app-card {
+      background: var(--cream-50);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--neutral-200);
+    }
+
+    .app-preview {
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--cream-100) 0%, var(--cream-200) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-preview::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 44 L50.8 49 L50 50 L49.2 49 Z M50 56 L49.2 51 L50 50 L50.8 51 Z M44 50 L49 49.2 L50 50 L49 50.8 Z M56 50 L51 50.8 L50 50 L51 49.2 Z' fill='%23d6d0c4' opacity='0.3'/%3E%3C/svg%3E");
+      background-size: 80px 80px;
+    }
+
+    .app-info {
+      padding: 1.5rem;
+    }
+
+    .app-name {
+      font-family: Georgia, serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--neutral-900);
+    }
+
+    .app-desc {
+      font-size: 0.875rem;
+      color: var(--neutral-600);
+    }
+
+    /* Social Preview Mockup */
+    .social-preview {
+      width: 200px;
+      height: 200px;
+      background: var(--primary-600);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .social-preview img {
+      width: 120px;
+      height: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    /* Business Card Mockup */
+    .business-card {
+      width: 280px;
+      height: 160px;
+      background: var(--cream-100);
+      border-radius: 8px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .business-card img {
+      width: 60px;
+      height: auto;
+    }
+
+    .business-card-info {
+      font-size: 0.625rem;
+      color: var(--neutral-600);
+      line-height: 1.6;
+    }
+
+    /* Website Mockup */
+    .website-mockup {
+      width: 320px;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .website-header {
+      height: 8px;
+      background: var(--neutral-200);
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 4px;
+    }
+
+    .website-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--neutral-300);
+    }
+
+    .website-content {
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .website-content img {
+      width: 60px;
+      margin-bottom: 1rem;
+    }
+
+    .website-title {
+      font-family: Georgia, serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      color: var(--neutral-900);
+    }
+
+    .website-text {
+      font-size: 0.625rem;
+      color: var(--neutral-500);
+    }
+
+    /* Contact / Footer */
+    .footer {
+      background: var(--neutral-900);
+      color: var(--cream-100);
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      margin: 0 auto 2rem;
+      filter: brightness(0) invert(1);
+    }
+
+    .footer-title {
+      font-family: Georgia, serif;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-text {
+      font-size: 0.875rem;
+      color: var(--neutral-400);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-copyright {
+      margin-top: 4rem;
+      font-size: 0.75rem;
+      color: var(--neutral-600);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-logo {
+        width: 200px;
+        height: 200px;
+      }
+
+      .logo-showcase {
+        grid-template-columns: 1fr;
+      }
+
+      .logo-variants {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .primary-color-hero {
+        grid-template-columns: 1fr;
+      }
+
+      .usage-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .moon-phases {
+        flex-wrap: wrap;
+      }
+
+      .stars-showcase {
+        flex-wrap: wrap;
+      }
+    }
+
+    /* Print styles */
+    @media print {
+      .nav {
+        display: none;
+      }
+
+      .section {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="assets/brand/logo-simple-light.svg" alt="Le Coven de Diana">
+      </a>
+      <ul class="nav-links">
+        <li><a href="#brand-story">Histoire</a></li>
+        <li><a href="#logo">Logo Principal</a></li>
+        <li><a href="#logo-simple">Logo Simple</a></li>
+        <li><a href="#colors">Couleurs</a></li>
+        <li><a href="#typography">Typographie</a></li>
+        <li><a href="#elements">Elements</a></li>
+        <li><a href="#usage">Usage</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <img src="assets/brand/logo-principal-dark.svg" alt="Le Coven de Diana Logo" class="hero-logo">
+      <h1 class="hero-title">Brand Guidelines</h1>
+      <p class="hero-subtitle">Guide d'identite visuelle</p>
+      <p class="hero-version">Version 1.0 - Janvier 2026</p>
+    </div>
+  </section>
+
+  <!-- Brand Story -->
+  <section class="brand-story" id="brand-story">
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">01 / Histoire de la marque</span>
+        <h2 class="section-title">L'univers litteraire de Diana</h2>
+        <p class="section-desc">
+          Le Coven de Diana est un espace de creation litteraire ou la magie des mots rencontre
+          les mysteres des etoiles. Un sanctuaire pour les ames en quete de sens, guidees par les constellations et les cycles lunaires.
+        </p>
+      </div>
+
+      <div class="brand-values">
+        <div class="value-card">
+          <svg class="value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
+          </svg>
+          <h3 class="value-title">Litterature</h3>
+          <p class="value-text">
+            Un amour profond pour les mots, les histoires et la beaute de l'ecriture
+            sous toutes ses formes.
+          </p>
+        </div>
+
+        <div class="value-card">
+          <svg class="value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>
+          </svg>
+          <h3 class="value-title">Magie</h3>
+          <p class="value-text">
+            L'enchantement des mots, les mysteres celestes et la magie
+            des constellations qui guident nos chemins.
+          </p>
+        </div>
+
+        <div class="value-card">
+          <svg class="value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/>
+          </svg>
+          <h3 class="value-title">Mystere</h3>
+          <p class="value-text">
+            L'attrait pour l'inconnu, les phases de la lune et les secrets
+            caches entre les lignes.
+          </p>
+        </div>
+
+        <div class="value-card">
+          <svg class="value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z"/>
+            <path d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z"/>
+          </svg>
+          <h3 class="value-title">Chaleur</h3>
+          <p class="value-text">
+            L'accueil bienveillant d'une communaute passionnee, comme un foyer
+            ou chacun trouve sa place.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Logo Principal Section -->
+  <section class="section logo-section" id="logo">
+    <div class="section-header">
+      <span class="section-number">02 / Logo Principal</span>
+      <h2 class="section-title">Notre embleme</h2>
+      <p class="section-desc">
+        Le logo principal du Coven de Diana combine un livre ouvert symbolisant la litterature,
+        entoure d'etoiles et de phases lunaires evoquant la magie et le mystere.
+        Ce logo est utilise pour les grandes surfaces et supports ou le detail est apprecie.
+      </p>
+    </div>
+
+    <!-- Logo Hierarchy Notice -->
+    <div style="background: var(--primary-100); border-left: 4px solid var(--primary-600); padding: 1.5rem; border-radius: 0 8px 8px 0; margin-bottom: 3rem;">
+      <h4 style="font-family: Georgia, serif; font-size: 1.125rem; margin-bottom: 0.5rem; color: var(--neutral-900);">Hierarchie des logos</h4>
+      <p style="font-size: 0.9375rem; color: var(--neutral-700); line-height: 1.7; margin: 0;">
+        <strong>Logo Principal:</strong> Utiliser pour les grandes surfaces (hero sections, affiches, couvertures de livres).
+        Du fait de ses nombreux details, ce logo n'est pas adapte aux petites tailles.<br><br>
+        <strong>Logo Simple:</strong> Utiliser pour les petits formats (header du site, favicon, reseaux sociaux en petit format).
+        Voir la section "Logo Simple" ci-dessous.
+      </p>
+    </div>
+
+    <div class="logo-showcase">
+      <div class="logo-box light">
+        <img src="assets/brand/logo-principal-dark.svg" alt="Logo Principal - Mode Clair" style="max-width: 180px; max-height: 180px;">
+      </div>
+      <div class="logo-box dark">
+        <img src="assets/brand/logo-principal-light.svg" alt="Logo Principal - Mode Sombre" style="max-width: 180px; max-height: 180px;">
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 0.5rem;">
+      <p style="text-align: center; font-size: 0.75rem; color: var(--neutral-500); text-transform: uppercase; letter-spacing: 0.1em;">Mode Clair (Light Mode)</p>
+      <p style="text-align: center; font-size: 0.75rem; color: var(--neutral-500); text-transform: uppercase; letter-spacing: 0.1em;">Mode Sombre (Dark Mode)</p>
+    </div>
+
+    <!-- Clear Space -->
+    <div class="clearspace">
+      <h3 style="font-family: Georgia, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Zone de protection</h3>
+      <p style="color: var(--neutral-600); margin-bottom: 2rem; max-width: 500px;">
+        Toujours maintenir un espace minimum autour du logo egal a la hauteur
+        de la lettre "D" de Diana pour garantir sa lisibilite.
+      </p>
+      <div class="clearspace-demo">
+        <div class="clearspace-box">
+          <span class="clearspace-label top">X</span>
+          <span class="clearspace-label bottom">X</span>
+          <span class="clearspace-label left">X</span>
+          <span class="clearspace-label right">X</span>
+          <img src="assets/brand/logo-principal-dark.svg" alt="Zone de protection" style="width: 140px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Minimum Size for Principal Logo -->
+    <div>
+      <h3 style="font-family: Georgia, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Taille minimale</h3>
+      <p style="color: var(--neutral-600); margin-bottom: 2rem; max-width: 600px;">
+        Le logo principal necessite une taille minimale importante pour rester lisible.
+        <strong>En dessous de ces dimensions, utiliser le Logo Simple.</strong>
+      </p>
+      <div class="min-size">
+        <div class="min-size-item">
+          <div class="min-size-logo">
+            <img src="assets/brand/logo-principal-dark.svg" alt="Logo digital" style="width: 120px;">
+          </div>
+          <p class="min-size-label">Digital: 120px minimum</p>
+        </div>
+        <div class="min-size-item">
+          <div class="min-size-logo">
+            <img src="assets/brand/logo-principal-dark.svg" alt="Logo print" style="width: 140px;">
+          </div>
+          <p class="min-size-label">Print: 35mm minimum</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Logo Simple Section -->
+  <section class="section logo-section" id="logo-simple" style="background: white;">
+    <div class="section-header">
+      <span class="section-number">02.5 / Logo Simple</span>
+      <h2 class="section-title">Version simplifiee</h2>
+      <p class="section-desc">
+        Le logo simple est une version horizontale epuree, concue pour les petits formats
+        ou le logo principal perdrait en lisibilite. Ideal pour le header du site,
+        les favicons, et les avatars sur les reseaux sociaux.
+      </p>
+    </div>
+
+    <!-- When to use -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 4rem;">
+      <div style="background: #dcfce7; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="font-family: Georgia, serif; font-size: 1.125rem; margin-bottom: 1rem; color: #166534;">Utiliser le Logo Simple pour:</h4>
+        <ul style="font-size: 0.9375rem; color: #166534; line-height: 1.8; margin: 0; padding-left: 1.25rem;">
+          <li>Header / Navigation du site web</li>
+          <li>Favicon (icone navigateur)</li>
+          <li>Avatar reseaux sociaux (petit format)</li>
+          <li>Signature email</li>
+          <li>Tampons et cachets</li>
+          <li>Toute utilisation &lt; 120px</li>
+        </ul>
+      </div>
+      <div style="background: #fef2f2; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="font-family: Georgia, serif; font-size: 1.125rem; margin-bottom: 1rem; color: #991b1b;">Utiliser le Logo Principal pour:</h4>
+        <ul style="font-size: 0.9375rem; color: #991b1b; line-height: 1.8; margin: 0; padding-left: 1.25rem;">
+          <li>Hero sections et bannieres</li>
+          <li>Couvertures de livres</li>
+          <li>Affiches et posters</li>
+          <li>Cartes de visite (logo principal)</li>
+          <li>Merchandise grand format</li>
+          <li>Toute utilisation &gt; 120px</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Simple Logo Showcase -->
+    <h3 style="font-family: Georgia, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Versions du Logo Simple</h3>
+    <div class="logo-showcase">
+      <div class="logo-box light" style="aspect-ratio: 2/1;">
+        <img src="assets/brand/logo-simple-light.svg" alt="Logo Simple - Mode Clair" style="max-width: 280px; max-height: 80px;">
+      </div>
+      <div class="logo-box dark" style="aspect-ratio: 2/1;">
+        <img src="assets/brand/logo-simple-dark.png" alt="Logo Simple - Mode Sombre" style="max-width: 280px; max-height: 80px;">
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 0.5rem; margin-bottom: 3rem;">
+      <p style="text-align: center; font-size: 0.75rem; color: var(--neutral-500); text-transform: uppercase; letter-spacing: 0.1em;">Mode Clair (Light Mode) - Texte fonce</p>
+      <p style="text-align: center; font-size: 0.75rem; color: var(--neutral-500); text-transform: uppercase; letter-spacing: 0.1em;">Mode Sombre (Dark Mode) - Texte clair</p>
+    </div>
+
+    <!-- Dark Mode Explanation -->
+    <div style="background: var(--neutral-900); border-radius: 12px; padding: 2.5rem; margin-bottom: 3rem;">
+      <h4 style="font-family: Georgia, serif; font-size: 1.25rem; margin-bottom: 1rem; color: var(--cream-100);">Support du Mode Sombre</h4>
+      <p style="font-size: 0.9375rem; color: var(--neutral-400); line-height: 1.8; margin-bottom: 1.5rem;">
+        Le site web supporte le mode sombre (dark mode). Les logos sont disponibles en deux versions:
+      </p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <div style="border: 1px solid var(--neutral-700); border-radius: 8px; padding: 1.5rem;">
+          <p style="font-size: 0.75rem; color: var(--primary-400); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.75rem;">Fond Clair</p>
+          <p style="font-size: 0.875rem; color: var(--neutral-400); line-height: 1.6; margin: 0;">
+            Utiliser les fichiers <code style="background: var(--neutral-800); padding: 0.125rem 0.375rem; border-radius: 3px; font-size: 0.75rem;">*-dark.svg</code> (texte sombre)
+          </p>
+        </div>
+        <div style="border: 1px solid var(--neutral-700); border-radius: 8px; padding: 1.5rem;">
+          <p style="font-size: 0.75rem; color: var(--primary-400); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.75rem;">Fond Sombre</p>
+          <p style="font-size: 0.875rem; color: var(--neutral-400); line-height: 1.6; margin: 0;">
+            Utiliser les fichiers <code style="background: var(--neutral-800); padding: 0.125rem 0.375rem; border-radius: 3px; font-size: 0.75rem;">*-light.svg</code> (texte clair)
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Files Reference -->
+    <h3 style="font-family: Georgia, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Fichiers disponibles</h3>
+    <div style="background: var(--cream-200); border-radius: 8px; padding: 2rem; font-family: 'SF Mono', Monaco, monospace; font-size: 0.8125rem;">
+      <p style="margin: 0 0 0.75rem 0; color: var(--neutral-600);">assets/brand/</p>
+      <div style="padding-left: 1.5rem; color: var(--neutral-800);">
+        <p style="margin: 0.375rem 0;"><a href="assets/brand/logo-principal-dark.svg" download style="color: var(--primary-600); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--primary-700)'; this.style.textDecoration='underline';" onmouseout="this.style.color='var(--primary-600)'; this.style.textDecoration='none';">logo-principal-dark.svg</a> - Logo principal, mode clair (fond clair)</p>
+        <p style="margin: 0.375rem 0;"><a href="assets/brand/logo-principal-light.svg" download style="color: var(--primary-600); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--primary-700)'; this.style.textDecoration='underline';" onmouseout="this.style.color='var(--primary-600)'; this.style.textDecoration='none';">logo-principal-light.svg</a> - Logo principal, mode sombre (fond sombre)</p>
+        <p style="margin: 0.375rem 0;"><a href="assets/brand/logo-principal-full.png" download style="color: var(--primary-600); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--primary-700)'; this.style.textDecoration='underline';" onmouseout="this.style.color='var(--primary-600)'; this.style.textDecoration='none';">logo-principal-full.png</a> - Logo principal, haute resolution</p>
+        <p style="margin: 0.375rem 0;"><a href="assets/brand/logo-simple-dark.png" download style="color: var(--primary-600); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--primary-700)'; this.style.textDecoration='underline';" onmouseout="this.style.color='var(--primary-600)'; this.style.textDecoration='none';">logo-simple-dark.png</a> - Logo simple, mode sombre (fond sombre)</p>
+        <p style="margin: 0.375rem 0;"><a href="assets/brand/logo-simple-light.svg" download style="color: var(--primary-600); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--primary-700)'; this.style.textDecoration='underline';" onmouseout="this.style.color='var(--primary-600)'; this.style.textDecoration='none';">logo-simple-light.svg</a> - Logo simple, mode clair (fond clair)</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Colors -->
+  <section class="section color-section" id="colors">
+    <div class="section-header">
+      <span class="section-number">03 / Palette de couleurs</span>
+      <h2 class="section-title">Nos couleurs</h2>
+      <p class="section-desc">
+        Une palette chaude et accueillante, inspiree par les tons terracotta
+        et les nuances cremees d'un interieur cosy.
+      </p>
+    </div>
+
+    <!-- Primary Colors Hero -->
+    <div class="primary-color-hero">
+      <div class="primary-swatch terracotta">
+        <div class="primary-swatch-name">Terracotta</div>
+        <div class="primary-swatch-hex">#B85D3A</div>
+      </div>
+      <div class="primary-swatch cream">
+        <div class="primary-swatch-name">Creme</div>
+        <div class="primary-swatch-hex">#FAF6F2</div>
+      </div>
+    </div>
+
+    <h3 class="color-group-title">Palette Primaire - Terracotta</h3>
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background: #fdf8f6;"></div>
+        <div class="color-info">
+          <div class="color-name">Primary 50</div>
+          <div class="color-hex">#FDF8F6</div>
+          <div class="color-rgb">RGB 253, 248, 246</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #f9ece6;"></div>
+        <div class="color-info">
+          <div class="color-name">Primary 100</div>
+          <div class="color-hex">#F9ECE6</div>
+          <div class="color-rgb">RGB 249, 236, 230</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #f3d5c7;"></div>
+        <div class="color-info">
+          <div class="color-name">Primary 200</div>
+          <div class="color-hex">#F3D5C7</div>
+          <div class="color-rgb">RGB 243, 213, 199</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #e9b8a0;"></div>
+        <div class="color-info">
+          <div class="color-name">Primary 300</div>
+          <div class="color-hex">#E9B8A0</div>
+          <div class="color-rgb">RGB 233, 184, 160</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #db9373;"></div>
+        <div class="color-info">
+          <div class="color-name">Primary 400</div>
+          <div class="color-hex">#DB9373</div>
+          <div class="color-rgb">RGB 219, 147, 115</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #c97550;"></div>
+        <div class="color-info">
+          <div class="color-name">Primary 500</div>
+          <div class="color-hex">#C97550</div>
+          <div class="color-rgb">RGB 201, 117, 80</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #b85d3a;"></div>
+        <div class="color-info">
+          <div class="color-name">Primary 600</div>
+          <div class="color-hex">#B85D3A</div>
+          <div class="color-rgb">RGB 184, 93, 58</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #9a4a2f;"></div>
+        <div class="color-info">
+          <div class="color-name">Primary 700</div>
+          <div class="color-hex">#9A4A2F</div>
+          <div class="color-rgb">RGB 154, 74, 47</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="color-group-title">Palette Secondaire - Creme</h3>
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background: #FDFCFA;"></div>
+        <div class="color-info">
+          <div class="color-name">Cream 50</div>
+          <div class="color-hex">#FDFCFA</div>
+          <div class="color-rgb">RGB 253, 252, 250</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #FAF6F2;"></div>
+        <div class="color-info">
+          <div class="color-name">Cream 100</div>
+          <div class="color-hex">#FAF6F2</div>
+          <div class="color-rgb">RGB 250, 246, 242</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #F9F4F0;"></div>
+        <div class="color-info">
+          <div class="color-name">Cream 200</div>
+          <div class="color-hex">#F9F4F0</div>
+          <div class="color-rgb">RGB 249, 244, 240</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #F3EBE4;"></div>
+        <div class="color-info">
+          <div class="color-name">Cream 300</div>
+          <div class="color-hex">#F3EBE4</div>
+          <div class="color-rgb">RGB 243, 235, 228</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="color-group-title">Neutres</h3>
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background: #f5f3ef;"></div>
+        <div class="color-info">
+          <div class="color-name">Neutral 100</div>
+          <div class="color-hex">#F5F3EF</div>
+          <div class="color-rgb">RGB 245, 243, 239</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #d6d0c4;"></div>
+        <div class="color-info">
+          <div class="color-name">Neutral 300</div>
+          <div class="color-hex">#D6D0C4</div>
+          <div class="color-rgb">RGB 214, 208, 196</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #78726a;"></div>
+        <div class="color-info">
+          <div class="color-name">Neutral 500</div>
+          <div class="color-hex">#78726A</div>
+          <div class="color-rgb">RGB 120, 114, 106</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #1c1a17; border: 1px solid #e8e4dc;"></div>
+        <div class="color-info">
+          <div class="color-name">Neutral 900</div>
+          <div class="color-hex">#1C1A17</div>
+          <div class="color-rgb">RGB 28, 26, 23</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Typography -->
+  <section class="section type-section" id="typography">
+    <div class="section-header">
+      <span class="section-number">04 / Typographie</span>
+      <h2 class="section-title">Nos polices</h2>
+      <p class="section-desc">
+        Be Vietnam Pro comme police principale pour sa lisibilite moderne,
+        accompagnee de Georgia (systeme) pour les accents editoriaux et titres.
+      </p>
+    </div>
+
+    <div class="type-showcase">
+      <!-- Primary Font - Be Vietnam Pro -->
+      <div class="type-family">
+        <div class="type-family-name">Police Principale</div>
+        <div class="type-sample sans">Be Vietnam Pro</div>
+        <div class="type-characters">
+          ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
+          abcdefghijklmnopqrstuvwxyz<br>
+          0123456789 !@#$%&amp;*()
+        </div>
+        <div class="type-weights">
+          <div class="type-weight">
+            <div class="type-weight-sample" style="font-weight: 400;">Aa</div>
+            <div class="type-weight-name">Regular 400</div>
+          </div>
+          <div class="type-weight">
+            <div class="type-weight-sample" style="font-weight: 500;">Aa</div>
+            <div class="type-weight-name">Medium 500</div>
+          </div>
+          <div class="type-weight">
+            <div class="type-weight-sample" style="font-weight: 600;">Aa</div>
+            <div class="type-weight-name">SemiBold 600</div>
+          </div>
+          <div class="type-weight">
+            <div class="type-weight-sample" style="font-weight: 700;">Aa</div>
+            <div class="type-weight-name">Bold 700</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary Font - Georgia (System) -->
+      <div class="type-family">
+        <div class="type-family-name">Police Secondaire - Titres & Accents (Systeme)</div>
+        <div class="type-sample serif">Georgia</div>
+        <div class="type-characters serif">
+          ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
+          abcdefghijklmnopqrstuvwxyz<br>
+          0123456789 !@#$%&amp;*()
+        </div>
+        <p style="margin-top: 1.5rem; color: var(--neutral-600); font-size: 0.875rem; max-width: 500px;">
+          Police systeme utilisee pour les titres et elements editoriaux.
+          Fallback: Cambria, Times New Roman, Times, serif.
+        </p>
+        <div class="type-weights" style="margin-top: 1.5rem;">
+          <div class="type-weight">
+            <div class="type-weight-sample serif" style="font-weight: 400;">Aa</div>
+            <div class="type-weight-name">Regular</div>
+          </div>
+          <div class="type-weight">
+            <div class="type-weight-sample serif" style="font-weight: 700;">Aa</div>
+            <div class="type-weight-name">Bold</div>
+          </div>
+          <div class="type-weight">
+            <div class="type-weight-sample serif" style="font-style: italic;">Aa</div>
+            <div class="type-weight-name">Italic</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Type Scale -->
+    <h3 style="font-family: Georgia, serif; font-size: 1.5rem; margin: 3rem 0 1.5rem;">Echelle typographique</h3>
+    <div class="type-scale">
+      <div class="type-scale-item">
+        <div class="type-scale-label">Display</div>
+        <div class="type-scale-size">48px</div>
+        <div class="type-scale-sample serif" style="font-size: 3rem;">Le Coven de Diana</div>
+      </div>
+      <div class="type-scale-item">
+        <div class="type-scale-label">H1</div>
+        <div class="type-scale-size">36px</div>
+        <div class="type-scale-sample serif" style="font-size: 2.25rem;">Titre Principal</div>
+      </div>
+      <div class="type-scale-item">
+        <div class="type-scale-label">H2</div>
+        <div class="type-scale-size">28px</div>
+        <div class="type-scale-sample serif" style="font-size: 1.75rem;">Titre de Section</div>
+      </div>
+      <div class="type-scale-item">
+        <div class="type-scale-label">H3</div>
+        <div class="type-scale-size">22px</div>
+        <div class="type-scale-sample serif" style="font-size: 1.375rem;">Sous-titre</div>
+      </div>
+      <div class="type-scale-item">
+        <div class="type-scale-label">Body Large</div>
+        <div class="type-scale-size">18px</div>
+        <div class="type-scale-sample" style="font-size: 1.125rem;">Texte d'introduction ou mise en avant</div>
+      </div>
+      <div class="type-scale-item">
+        <div class="type-scale-label">Body</div>
+        <div class="type-scale-size">16px</div>
+        <div class="type-scale-sample" style="font-size: 1rem;">Texte courant pour les articles et descriptions</div>
+      </div>
+      <div class="type-scale-item">
+        <div class="type-scale-label">Small</div>
+        <div class="type-scale-size">14px</div>
+        <div class="type-scale-sample" style="font-size: 0.875rem;">Notes et informations secondaires</div>
+      </div>
+      <div class="type-scale-item">
+        <div class="type-scale-label">Caption</div>
+        <div class="type-scale-size">12px</div>
+        <div class="type-scale-sample" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;">Labels et categories</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Graphic Elements -->
+  <section class="elements-section" id="elements">
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">05 / Elements graphiques</span>
+        <h2 class="section-title">Notre univers visuel</h2>
+        <p class="section-desc">
+          Des elements celestes et litteraires qui enrichissent notre identite
+          et creent une atmosphere mystique, inspiree des constellations et des cycles lunaires.
+        </p>
+      </div>
+
+      <div class="elements-grid">
+        <div class="element-card">
+          <div class="element-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#db9373" stroke-width="1.5">
+              <path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
+            </svg>
+          </div>
+          <h4 class="element-name">Livre ouvert</h4>
+          <p class="element-desc">
+            Symbole central de notre identite, representant la litterature,
+            le savoir et l'imagination.
+          </p>
+        </div>
+
+        <div class="element-card">
+          <div class="element-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#db9373" stroke-width="1.5">
+              <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
+            </svg>
+          </div>
+          <h4 class="element-name">Etoiles</h4>
+          <p class="element-desc">
+            Elements de ponctuation visuelle evoquant la magie, l'inspiration
+            et la reverie nocturne.
+          </p>
+        </div>
+
+        <div class="element-card">
+          <div class="element-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#db9373" stroke-width="1.5">
+              <path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/>
+            </svg>
+          </div>
+          <h4 class="element-name">Phases lunaires</h4>
+          <p class="element-desc">
+            Cycle de la lune symbolisant le mystere, la transformation
+            et le passage du temps.
+          </p>
+        </div>
+
+        <div class="element-card">
+          <div class="element-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#db9373" stroke-width="1.5">
+              <circle cx="12" cy="12" r="1.5"/>
+              <circle cx="12" cy="12" r="4" stroke-dasharray="2 2"/>
+              <circle cx="12" cy="12" r="7" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+          <h4 class="element-name">Points & Cercles</h4>
+          <p class="element-desc">
+            Details subtils qui ajoutent rythme et respiration
+            a nos compositions visuelles.
+          </p>
+        </div>
+      </div>
+
+      <!-- Moon Phases -->
+      <h3 style="font-family: Georgia, serif; font-size: 1.5rem; margin: 4rem 0 1.5rem; color: var(--cream-100);">Phases de la lune</h3>
+      <div class="moon-phases">
+        <div class="moon-phase">
+          <svg viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="12" fill="#db9373"/>
+          </svg>
+          <div class="moon-phase-name">Pleine</div>
+        </div>
+        <div class="moon-phase">
+          <svg viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="12" fill="#db9373"/>
+            <circle cx="24" cy="20" r="10" fill="#2d2a26"/>
+          </svg>
+          <div class="moon-phase-name">Gibbeuse</div>
+        </div>
+        <div class="moon-phase">
+          <svg viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="12" fill="#db9373"/>
+            <circle cx="20" cy="20" r="10" fill="#2d2a26"/>
+          </svg>
+          <div class="moon-phase-name">Demi</div>
+        </div>
+        <div class="moon-phase">
+          <svg viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="12" fill="#db9373"/>
+            <circle cx="16" cy="20" r="10" fill="#2d2a26"/>
+          </svg>
+          <div class="moon-phase-name">Croissant</div>
+        </div>
+        <div class="moon-phase">
+          <svg viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="12" stroke="#db9373" stroke-width="1.5" fill="none"/>
+          </svg>
+          <div class="moon-phase-name">Nouvelle</div>
+        </div>
+      </div>
+
+      <!-- Stars -->
+      <h3 style="font-family: Georgia, serif; font-size: 1.5rem; margin: 4rem 0 1.5rem; color: var(--cream-100);">Types d'etoiles</h3>
+      <div class="stars-showcase">
+        <div class="star-item">
+          <svg viewBox="0 0 60 60" fill="none">
+            <path d="M30 10 L32 28 L30 30 L28 28 Z M30 50 L28 32 L30 30 L32 32 Z M10 30 L28 28 L30 30 L28 32 Z M50 30 L32 32 L30 30 L32 28 Z" fill="#db9373"/>
+          </svg>
+          <div class="star-name">4 branches</div>
+        </div>
+        <div class="star-item">
+          <svg viewBox="0 0 60 60" fill="none">
+            <polygon points="30,8 33,24 48,24 36,33 40,48 30,39 20,48 24,33 12,24 27,24" fill="#db9373"/>
+          </svg>
+          <div class="star-name">5 branches</div>
+        </div>
+        <div class="star-item">
+          <svg viewBox="0 0 60 60" fill="none">
+            <path d="M30 10 L32 28 L30 30 L28 28 Z M30 50 L28 32 L30 30 L32 32 Z M10 30 L28 28 L30 30 L28 32 Z M50 30 L32 32 L30 30 L32 28 Z M16 16 L28 28 L30 30 L28 28 Z M44 44 L32 32 L30 30 L32 32 Z M16 44 L28 32 L30 30 L28 32 Z M44 16 L32 28 L30 30 L32 28 Z" fill="#db9373"/>
+          </svg>
+          <div class="star-name">8 branches</div>
+        </div>
+        <div class="star-item">
+          <svg viewBox="0 0 60 60" fill="none">
+            <circle cx="30" cy="30" r="3" fill="#db9373"/>
+          </svg>
+          <div class="star-name">Point</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Usage Guidelines -->
+  <section class="section usage-section" id="usage">
+    <div class="section-header">
+      <span class="section-number">06 / Bonnes pratiques</span>
+      <h2 class="section-title">Utilisation du logo</h2>
+      <p class="section-desc">
+        Pour maintenir la coherence de notre identite, voici les regles
+        d'utilisation du logo a respecter.
+      </p>
+    </div>
+
+    <div class="usage-grid">
+      <div class="usage-card do">
+        <div class="usage-preview" style="background: var(--cream-100);">
+          <img src="assets/brand/logo-principal-dark.svg" alt="Correct usage">
+        </div>
+        <div class="usage-label do">
+          <svg class="usage-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 13l4 4L19 7"/>
+          </svg>
+          <span class="usage-text">Utiliser sur fond clair uni</span>
+        </div>
+      </div>
+
+      <div class="usage-card do">
+        <div class="usage-preview" style="background: var(--neutral-900);">
+          <img src="assets/brand/logo-principal-light.svg" alt="Correct usage">
+        </div>
+        <div class="usage-label do">
+          <svg class="usage-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 13l4 4L19 7"/>
+          </svg>
+          <span class="usage-text">Version claire sur fond sombre</span>
+        </div>
+      </div>
+
+      <div class="usage-card dont">
+        <div class="usage-preview" style="background: linear-gradient(45deg, #ff6b6b, #feca57);">
+          <img src="assets/brand/logo-principal-dark.svg" alt="Incorrect usage" style="opacity: 0.7;">
+        </div>
+        <div class="usage-label dont">
+          <svg class="usage-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <span class="usage-text">Eviter les fonds colores trop vifs</span>
+        </div>
+      </div>
+
+      <div class="usage-card dont">
+        <div class="usage-preview">
+          <img src="assets/brand/logo-principal-dark.svg" alt="Incorrect usage" style="transform: rotate(15deg); opacity: 0.7;">
+        </div>
+        <div class="usage-label dont">
+          <svg class="usage-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <span class="usage-text">Ne pas incliner ou deformer</span>
+        </div>
+      </div>
+
+      <div class="usage-card dont">
+        <div class="usage-preview">
+          <img src="assets/brand/logo-principal-dark.svg" alt="Incorrect usage" style="filter: hue-rotate(90deg); opacity: 0.7;">
+        </div>
+        <div class="usage-label dont">
+          <svg class="usage-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <span class="usage-text">Ne pas modifier les couleurs</span>
+        </div>
+      </div>
+
+      <div class="usage-card dont">
+        <div class="usage-preview">
+          <img src="assets/brand/logo-principal-dark.svg" alt="Incorrect usage" style="filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.5)); opacity: 0.7;">
+        </div>
+        <div class="usage-label dont">
+          <svg class="usage-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <span class="usage-text">Eviter les effets d'ombre portee</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Applications -->
+  <section class="section applications-section" id="applications">
+    <div class="section-header">
+      <span class="section-number">07 / Applications</span>
+      <h2 class="section-title">Mise en application</h2>
+      <p class="section-desc">
+        Exemples d'utilisation de notre identite visuelle
+        sur differents supports.
+      </p>
+    </div>
+
+    <div class="app-grid">
+      <div class="app-card">
+        <div class="app-preview">
+          <div class="social-preview">
+            <img src="assets/brand/logo-principal-dark.svg" alt="Social preview">
+          </div>
+        </div>
+        <div class="app-info">
+          <h4 class="app-name">Reseaux sociaux</h4>
+          <p class="app-desc">Photo de profil et posts pour Instagram, Facebook et autres plateformes.</p>
+        </div>
+      </div>
+
+      <div class="app-card">
+        <div class="app-preview">
+          <div class="business-card">
+            <img src="assets/brand/logo-principal-dark.svg" alt="Business card">
+            <div class="business-card-info">
+              Diana<br>
+              Ecrivaine & Blogueuse<br>
+              contact@lecovendediana.fr
+            </div>
+          </div>
+        </div>
+        <div class="app-info">
+          <h4 class="app-name">Carte de visite</h4>
+          <p class="app-desc">Support imprime pour les rencontres professionnelles et salons litteraires.</p>
+        </div>
+      </div>
+
+      <div class="app-card">
+        <div class="app-preview">
+          <div class="website-mockup">
+            <div class="website-header">
+              <div class="website-dot"></div>
+              <div class="website-dot"></div>
+              <div class="website-dot"></div>
+            </div>
+            <div class="website-content">
+              <img src="assets/brand/logo-principal-dark.svg" alt="Website">
+              <div class="website-title">Le Coven de Diana</div>
+              <div class="website-text">Blog litteraire & Boutique</div>
+            </div>
+          </div>
+        </div>
+        <div class="app-info">
+          <h4 class="app-name">Site web</h4>
+          <p class="app-desc">Integration dans l'en-tete du site et pages de destination.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <img src="assets/brand/logo-simple-dark.png" alt="Le Coven de Diana" class="footer-logo" style="width: 200px; height: auto; filter: none;">
+    <p class="footer-text">Un espace de creation litteraire</p>
+    <p class="footer-text">ou la magie des mots rencontre les mysteres des etoiles.</p>
+    <p class="footer-copyright">Brand Guidelines v1.0 - Janvier 2026</p>
+  </footer>
+
+</body>
+</html>

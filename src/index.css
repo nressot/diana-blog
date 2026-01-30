@@ -88,6 +88,10 @@ body {
   --tw-gradient-to: #FAF6F2 var(--tw-gradient-to-position);
 }
 
+.hover\:bg-cream-200:hover {
+  background-color: var(--color-cream-200);
+}
+
 .hover\:bg-cream-300:hover {
   background-color: var(--color-cream-300);
 }

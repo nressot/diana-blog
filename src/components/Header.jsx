@@ -1,29 +1,31 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
+import logoSimple from '../assets/brand/logo-simple-dark.svg'
+import UserMenu from './UserMenu'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  // Liens cliquables
-  const clickableLinks = [
+  const navLinks = [
     { name: 'Accueil', path: '/' },
     { name: 'Blog', path: '/blog' },
     { name: 'Ma boutique', path: '/boutique-demo' },
+    { name: 'A propos', path: '/about' },
+    { name: 'Contact', path: '/contact' },
   ]
-
-  // Liens desactives (non cliquables)
-  const disabledLinks = ['A propos', 'Contact']
 
   return (
     <header className="sticky top-0 z-50 bg-cream-100/90 backdrop-blur-lg border-b border-neutral-200/50">
       <div className="container-custom">
         <div className="flex h-20 items-center justify-between">
-          <div></div>
+          <Link to="/" className="flex items-center">
+            <img src={logoSimple} alt="Le Coven de Diana" className="h-7" />
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
-            {clickableLinks.map((link) => (
+            {navLinks.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
@@ -39,18 +41,15 @@ export default function Header() {
                 {link.name}
               </NavLink>
             ))}
-            {disabledLinks.map((name) => (
-              <span
-                key={name}
-                className="text-sm font-medium uppercase tracking-wide text-neutral-400 cursor-not-allowed"
-              >
-                {name}
-              </span>
-            ))}
           </nav>
 
-          {/* Actions - vide */}
+          {/* Actions */}
           <div className="flex items-center gap-2">
+            {/* User Menu - Desktop */}
+            <div className="hidden lg:block">
+              <UserMenu />
+            </div>
+
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -70,7 +69,7 @@ export default function Header() {
         {isMenuOpen && (
           <nav className="py-4 border-t border-neutral-200 lg:hidden">
             <div className="flex flex-col gap-2">
-              {clickableLinks.map((link) => (
+              {navLinks.map((link) => (
                 <NavLink
                   key={link.path}
                   to={link.path}
@@ -86,14 +85,10 @@ export default function Header() {
                   {link.name}
                 </NavLink>
               ))}
-              {disabledLinks.map((name) => (
-                <span
-                  key={name}
-                  className="px-4 py-3 rounded-xl text-base font-medium text-neutral-400 cursor-not-allowed"
-                >
-                  {name}
-                </span>
-              ))}
+              {/* User Menu - Mobile */}
+              <div className="pt-2 mt-2 border-t border-neutral-200">
+                <UserMenu />
+              </div>
             </div>
           </nav>
         )}

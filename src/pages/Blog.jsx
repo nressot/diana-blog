@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, Clock, MessageCircle, ArrowRight, BookOpen, Users, FileText } from 'lucide-react'
 import CommunityBanner from '../components/CommunityBanner'
-import { useArticles, useCategories } from '../lib/useArticles'
+import { useSupabaseArticles, useSupabaseCategories, useSupabaseFeaturedArticle } from '../lib/useSupabaseArticles'
 
 // Donnees simulees pour les discussions recentes
 const recentDiscussions = [
@@ -36,18 +36,26 @@ export default function Blog() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
 
-  const { data: articles } = useArticles()
-  const { data: categories } = useCategories()
+  const { data: articles } = useSupabaseArticles()
+  const { data: categories } = useSupabaseCategories()
+  const { data: featuredArticles, loading: featuredLoading } = useSupabaseFeaturedArticle()
 
-  // Article featured pour le hero
-  const featuredArticle = (articles || []).find(a => a.featured) || (articles || [])[0]
+  // Article featured pour le hero (utilise l'article en vedette de Supabase)
+  // Ne pas utiliser de fallback pendant le chargement
+  const featuredArticle = featuredArticles?.[0]
+
+  // Debug
+  console.log('Blog - featuredArticles:', featuredArticles)
+  console.log('Blog - featuredArticle:', featuredArticle?.title)
+  console.log('Blog - loading:', featuredLoading)
 
   // Filtrer les articles
   const filteredArticles = (articles || []).filter((article) => {
     const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         article.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
+                         (article.excerpt || '').toLowerCase().includes(searchTerm.toLowerCase())
+    const categoryName = article.category || ''
     const matchesCategory = selectedCategory === 'all' ||
-                           article.category.toLowerCase() === selectedCategory.toLowerCase()
+                           categoryName.toLowerCase() === selectedCategory.toLowerCase()
     return matchesSearch && matchesCategory
   })
 
@@ -61,19 +69,33 @@ export default function Blog() {
   const totalComments = (articles || []).reduce((acc, a) => acc + (a.comments || 0), 0)
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section - Article Featured */}
+    <div className="min-h-screen bg-cream-200">
+      {/* Hero avec article featured et stats */}
       {featuredArticle && (
-        <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
+        <section className="relative h-[50vh] min-h-[400px] overflow-hidden group">
           <img
             src={featuredArticle.image}
             alt={featuredArticle.title}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/50 to-transparent" />
-
-          <div className="absolute inset-0 flex items-end">
+          <div className="absolute inset-x-0 bottom-0">
             <div className="container-custom pb-10 lg:pb-14">
+              {/* Stats superposees */}
+              <div className="flex items-center gap-6 mb-6">
+                <div className="flex items-center gap-2 text-white/80">
+                  <BookOpen className="w-4 h-4" />
+                  <span className="text-sm font-medium">{totalArticles} articles</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/80">
+                  <MessageCircle className="w-4 h-4" />
+                  <span className="text-sm font-medium">{totalComments} commentaires</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/80">
+                  <Users className="w-4 h-4" />
+                  <span className="text-sm font-medium">847 membres</span>
+                </div>
+              </div>
               <span className={`${featuredArticle.categoryColor || 'bg-neutral-500'} text-white text-xs font-medium px-3 py-1 rounded-full inline-block mb-4`}>
                 {featuredArticle.category}
               </span>
@@ -96,50 +118,47 @@ export default function Blog() {
       )}
 
       {/* Barre de filtres sticky */}
-      <div className="sticky top-20 z-40 bg-cream-50/95 backdrop-blur-sm border-b border-neutral-200">
+      <section className="sticky top-20 z-30 bg-cream-200/95 backdrop-blur-sm border-b border-cream-300">
         <div className="container-custom py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            {/* Categories */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide flex-1">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
               <button
                 onClick={() => setSelectedCategory('all')}
-                className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`px-4 py-2 text-sm font-medium rounded-full transition-all whitespace-nowrap ${
                   selectedCategory === 'all'
-                    ? 'bg-neutral-900 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'bg-cream-200 hover:bg-cream-300'
                 }`}
               >
                 Tous
               </button>
-              {(categories || []).map((category) => (
+              {(categories || []).map((cat) => (
                 <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.name)}
-                  className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === category.name
-                      ? 'bg-neutral-900 text-white'
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.name)}
+                  className={`px-4 py-2 text-sm font-medium rounded-full transition-all whitespace-nowrap ${
+                    selectedCategory === cat.name
+                      ? 'bg-primary-600 text-white'
                       : 'bg-cream-200 hover:bg-cream-300'
                   }`}
                 >
-                  {category.name}
+                  {cat.name}
                 </button>
               ))}
             </div>
-
-            {/* Recherche */}
-            <div className="relative sm:w-64">
+            <div className="relative hidden md:block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
               <input
                 type="text"
                 placeholder="Rechercher..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full h-10 pl-10 pr-4 rounded-full border border-neutral-200 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm"
+                className="w-56 h-10 pl-10 pr-4 text-sm bg-white border-0 rounded-full focus:ring-2 focus:ring-primary-500 outline-none"
               />
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Section principale */}
       <section className="py-10 lg:py-14">

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Search, ChevronLeft, ChevronRight, BookOpen, Feather, Users, Sparkles, PenTool, Loader2, ArrowRight, Clock, Eye, MessageCircle, UserPlus, Quote, BookMarked, Mail, Heart, LayoutGrid, Filter } from 'lucide-react'
+import { Search, BookOpen, Feather, Users, Sparkles, PenTool, Loader2, ArrowRight, Clock, Eye, MessageCircle, UserPlus, Quote, BookMarked, Mail, Heart, LayoutGrid, Filter } from 'lucide-react'
 import ArticleCard from '../components/ArticleCard'
 import AuthorCard from '../components/AuthorCard'
-import { useArticles, useCategories, useFeaturedArticles } from '../lib/useArticles'
+import { useSupabaseArticles, useSupabaseCategories, useSupabaseFeaturedArticle } from '../lib/useSupabaseArticles'
 
 /* Floating Stars Component - SVG stars inspired by bg-stars-v2 */
 function FloatingStars() {
@@ -46,7 +46,7 @@ function SignupCTA({ variant = 'default', className = '' }) {
           <Mail className="w-8 h-8 text-primary-600 mx-auto mb-4" />
           <h3 className="text-2xl font-serif mb-3">Rejoignez les lecteurs</h3>
           <p className="text-neutral-600 mb-6 leading-relaxed">
-            Inscrivez-vous pour commenter les articles et recevoir mes reflexions litteraires.
+            Inscrivez-vous pour commenter les articles et recevoir mes réflexions littéraires.
           </p>
           <a
             href="#inscription"
@@ -68,7 +68,7 @@ function SignupCTA({ variant = 'default', className = '' }) {
           </div>
           <h3 className="text-xl font-semibold mb-2">Participez</h3>
           <p className="text-primary-100 text-sm leading-relaxed">
-            Rejoignez la communaute pour commenter et echanger.
+            Rejoignez la communauté pour commenter et échanger.
           </p>
         </div>
         <a
@@ -186,9 +186,9 @@ export default function BlogDemo() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
 
-  const { data: articles, loading: loadingArticles } = useArticles()
-  const { data: categories } = useCategories()
-  const { data: featuredArticles } = useFeaturedArticles()
+  const { data: articles, loading: loadingArticles } = useSupabaseArticles()
+  const { data: categories } = useSupabaseCategories()
+  const { data: featuredArticles } = useSupabaseFeaturedArticle()
 
   const filteredArticles = (articles || []).filter((article) => {
     const matchesSearch =
@@ -199,10 +199,6 @@ export default function BlogDemo() {
       article.category.toLowerCase() === selectedCategory.toLowerCase()
     return matchesSearch && matchesCategory
   })
-
-  const currentIndex = VARIANTS.findIndex(v => v.id === variant)
-  const prevVariant = VARIANTS[currentIndex - 1]
-  const nextVariant = VARIANTS[currentIndex + 1]
 
   const renderVariant = () => {
     const props = {
@@ -239,46 +235,6 @@ export default function BlogDemo() {
 
   return (
     <div className="min-h-screen">
-      {/* Floating Variant Selector */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-cream-50/95 backdrop-blur-sm rounded-full shadow-lg border border-cream-300 px-2 py-2">
-        <div className="flex items-center gap-1">
-          {prevVariant && (
-            <Link
-              to={`/blog/${prevVariant.id}`}
-              className="p-2 rounded-full text-neutral-400 hover:text-primary-600 hover:bg-cream-200 transition-all"
-              title={prevVariant.name}
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </Link>
-          )}
-
-          {VARIANTS.map((v) => (
-            <Link
-              key={v.id}
-              to={`/blog/${v.id}`}
-              className={`p-2.5 rounded-full transition-all ${
-                v.id === variant
-                  ? 'bg-primary-600 text-white shadow-md'
-                  : 'text-neutral-500 hover:text-primary-600 hover:bg-cream-200'
-              }`}
-              title={v.name}
-            >
-              <v.icon className="w-4 h-4" />
-            </Link>
-          ))}
-
-          {nextVariant && (
-            <Link
-              to={`/blog/${nextVariant.id}`}
-              className="p-2 rounded-full text-neutral-400 hover:text-primary-600 hover:bg-cream-200 transition-all"
-              title={nextVariant.name}
-            >
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          )}
-        </div>
-      </div>
-
       {renderVariant()}
     </div>
   )
@@ -1116,14 +1072,29 @@ function StoryCommunityLayout({ articles, allArticles, categories, featuredArtic
   ]
 
   return (
-    <div className="bg-cream-50 min-h-screen">
-      {/* Hero compact */}
+    <div className="bg-cream-200 min-h-screen">
+      {/* Hero avec article featured */}
       {featured && (
-        <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
-          <img src={featured.image} alt={featured.title} className="absolute inset-0 w-full h-full object-cover" />
+        <section className="relative h-[50vh] min-h-[400px] overflow-hidden group">
+          <img src={featured.image} alt={featured.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/50 to-transparent" />
           <div className="absolute inset-x-0 bottom-0">
             <div className="container-custom pb-10 lg:pb-14">
+              {/* Stats superposees */}
+              <div className="flex items-center gap-6 mb-6">
+                <div className="flex items-center gap-2 text-white/80">
+                  <BookOpen className="w-4 h-4" />
+                  <span className="text-sm font-medium">{allArticles?.length || 0} articles</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/80">
+                  <MessageCircle className="w-4 h-4" />
+                  <span className="text-sm font-medium">{totalComments} commentaires</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/80">
+                  <Users className="w-4 h-4" />
+                  <span className="text-sm font-medium">847 membres</span>
+                </div>
+              </div>
               <span className={`${featured.categoryColor || 'bg-neutral-500'} text-white text-xs font-medium px-3 py-1 rounded-full inline-block mb-4`}>
                 {featured.category}
               </span>
@@ -1138,27 +1109,27 @@ function StoryCommunityLayout({ articles, allArticles, categories, featuredArtic
         </section>
       )}
 
-      {/* Barre de filtres sticky */}
-      <div className="sticky top-20 z-40 bg-cream-50/95 backdrop-blur-sm border-b border-neutral-200">
+      {/* Categories + Search sticky */}
+      <section className="sticky top-20 z-30 bg-cream-200/95 backdrop-blur-sm border-b border-cream-300">
         <div className="container-custom py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide flex-1">
-              <button onClick={() => setSelectedCategory('all')} className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === 'all' ? 'bg-neutral-900 text-white' : 'bg-cream-200 hover:bg-cream-300'}`}>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+              <button onClick={() => setSelectedCategory('all')} className={`px-4 py-2 text-sm font-medium rounded-full transition-all whitespace-nowrap ${selectedCategory === 'all' ? 'bg-primary-600 text-white' : 'bg-cream-200 hover:bg-cream-300'}`}>
                 Tous
               </button>
               {(categories || []).map((cat) => (
-                <button key={cat.id} onClick={() => setSelectedCategory(cat.name)} className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === cat.name ? 'bg-neutral-900 text-white' : 'bg-cream-200 hover:bg-cream-300'}`}>
+                <button key={cat.id} onClick={() => setSelectedCategory(cat.name)} className={`px-4 py-2 text-sm font-medium rounded-full transition-all whitespace-nowrap ${selectedCategory === cat.name ? 'bg-primary-600 text-white' : 'bg-cream-200 hover:bg-cream-300'}`}>
                   {cat.name}
                 </button>
               ))}
             </div>
-            <div className="relative sm:w-64">
+            <div className="relative hidden md:block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-              <input type="text" placeholder="Rechercher..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full h-10 pl-10 pr-4 rounded-full border border-neutral-200 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm" />
+              <input type="text" placeholder="Rechercher..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-56 h-10 pl-10 pr-4 text-sm bg-white border-0 rounded-full focus:ring-2 focus:ring-primary-500 outline-none" />
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Section principale */}
       <section className="py-10 lg:py-14">
@@ -1262,8 +1233,8 @@ function StoryCommunityLayout({ articles, allArticles, categories, featuredArtic
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary-700 rounded-full blur-3xl opacity-40 translate-x-1/3 translate-y-1/3" />
         <div className="container-custom relative z-10">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Rejoignez la communaute</h2>
-            <p className="text-lg text-white/80 mb-8">Recevez mes derniers articles et reflexions litteraires directement dans votre boite mail.</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Rejoignez la communauté</h2>
+            <p className="text-lg text-white/80 mb-8">Recevez mes derniers articles et réflexions littéraires directement dans votre boîte mail.</p>
             <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <div className="relative flex-1">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />

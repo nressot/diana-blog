@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Twitter, Instagram, Linkedin } from 'lucide-react'
+import { Instagram } from 'lucide-react'
 import { author } from '../data/articles'
 
 export default function AuthorCard({ variant = 'default' }) {
@@ -63,25 +63,11 @@ export default function AuthorCard({ variant = 'default' }) {
         {/* Social Links */}
         <div className="flex justify-center lg:justify-start gap-3">
           <a
-            href={author.social.twitter}
-            className="w-10 h-10 rounded-full bg-cream-200 flex items-center justify-center hover:bg-primary-600 hover:text-white transition-colors"
-            aria-label="Twitter"
-          >
-            <Twitter className="w-4 h-4" />
-          </a>
-          <a
             href={author.social.instagram}
             className="w-10 h-10 rounded-full bg-cream-200 flex items-center justify-center hover:bg-primary-600 hover:text-white transition-colors"
             aria-label="Instagram"
           >
             <Instagram className="w-4 h-4" />
-          </a>
-          <a
-            href={author.social.linkedin}
-            className="w-10 h-10 rounded-full bg-cream-200 flex items-center justify-center hover:bg-primary-600 hover:text-white transition-colors"
-            aria-label="LinkedIn"
-          >
-            <Linkedin className="w-4 h-4" />
           </a>
         </div>
       </div>

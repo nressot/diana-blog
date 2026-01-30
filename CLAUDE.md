@@ -148,3 +148,43 @@ Sanity CMS -> useSanityWithFallback -> dataAdapter -> Components
   "lucide-react": "^0.562.0"
 }
 ```
+
+## Verification Obligatoire (CRITIQUE)
+
+> "Give Claude a way to verify its work. If Claude has that feedback loop, it will 2-3x the quality of the final result." - Boris Cherny, createur Claude Code
+
+**AVANT de marquer une tache comme terminee, TOUJOURS verifier:**
+
+| Type de changement | Verification requise |
+|--------------------|---------------------|
+| Code TypeScript/JS | `npm run build` ou `tsc --noEmit` (zero erreurs) |
+| API Route | `curl` ou test avec reponse attendue |
+| Composant UI | Verifier dans browser + responsive + dark mode |
+| Hook/Service | Test unitaire ou script de validation |
+| Base de donnees | Query pour confirmer donnees persistees |
+| Style/CSS | Inspection visuelle light + dark mode |
+| Config/Env | Redemarrer serveur et verifier comportement |
+
+### Workflow Verification
+
+1. **Implementer** le changement
+2. **Executer** la commande de verification appropriee
+3. **Confirmer** le resultat attendu (pas d'erreur, output correct)
+4. **Documenter** la verification effectuee dans la reponse
+
+### Commandes de Verification
+
+```bash
+npm run build              # Build complet
+npm run lint               # Linting
+npm run test               # Tests unitaires
+curl -X GET/POST localhost:PORT/api/...  # Test API
+```
+
+Ne JAMAIS marquer termine sans avoir:
+
+- Execute la commande de verification
+- Confirme zero erreurs ou resultat attendu
+- Mentionne la verification dans la reponse
+
+Adapte le port (5173 pour dev, 4000 pour API) selon le contexte.

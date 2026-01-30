@@ -163,13 +163,82 @@ export const authorQuery = `*[_type == "author"][0] {
 // Recuperer tous les slugs d'articles (pour SSG/ISR)
 export const articleSlugsQuery = `*[_type == "article" && defined(slug.current)][].slug.current`
 
-// Recuperer les commentaires d'un article
-export const commentsQuery = `*[_type == "comment" && article._ref == $articleId] | order(createdAt desc) {
+// Recuperer les commentaires d'un article (uniquement les approuves)
+export const commentsQuery = `*[_type == "comment" && article._ref == $articleId && (status == "approved" || !defined(status))] | order(createdAt desc) {
   _id,
   name,
   content,
   createdAt
 }`
 
-// Compter les commentaires d'un article
-export const commentCountQuery = `count(*[_type == "comment" && article._ref == $articleId])`
+// Compter les commentaires d'un article (uniquement les approuves)
+export const commentCountQuery = `count(*[_type == "comment" && article._ref == $articleId && (status == "approved" || !defined(status))])`
+
+// ==========================================
+// QUERIES PAGES SINGLETON
+// ==========================================
+
+// Page Accueil
+export const homePageQuery = `*[_type == "homePage"][0] {
+  hero {
+    titleLine1,
+    titleLine2,
+    titleLine3,
+    typewriterWords,
+    subtitle,
+    primaryCta,
+    secondaryCta,
+    heroImage
+  },
+  sections {
+    featured,
+    categories,
+    latestArticles,
+    author
+  },
+  newsletter
+}`
+
+// Page A Propos
+export const aboutPageQuery = `*[_type == "aboutPage"][0] {
+  hero,
+  story {
+    title,
+    paragraphs
+  },
+  valuesSection {
+    title,
+    values
+  },
+  milestonesSection {
+    title,
+    milestones
+  },
+  cta
+}`
+
+// Page Contact
+export const contactPageQuery = `*[_type == "contactPage"][0] {
+  hero,
+  contactInfo,
+  socialSection {
+    title,
+    links
+  },
+  form,
+  faqSection {
+    title,
+    items
+  }
+}`
+
+// Section Livre (Home)
+export const bookSectionQuery = `*[_type == "bookSection"][0] {
+  title,
+  bookTitle,
+  description,
+  ctaText,
+  ctaLink,
+  bookCover,
+  geometricShape
+}`

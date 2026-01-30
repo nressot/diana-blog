@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { Search, ArrowRight, Loader2, ChevronLeft, ChevronRight, List, LayoutGrid, Columns, Clock, Sparkles, Sun } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Search, ArrowRight, Loader2 } from 'lucide-react'
 import { useProducts, useProductCategories, useFeaturedProducts } from '../lib/useProducts'
 
 /* Floating Stars Component - SVG stars inspired by bg-stars-v2 */
@@ -15,7 +15,7 @@ function FloatingStars() {
       <svg className="absolute w-6 h-6 text-white/40 animate-float-medium" style={{ top: '25%', right: '12%' }} viewBox="0 0 20 20" fill="currentColor">
         <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
       </svg>
-      {/* Croissant de lune 1 - haut gauche - fin */}
+      {/* Croissant de lune 1 - haut gauche */}
       <svg className="absolute w-12 h-12 text-white/30 animate-float-slow" style={{ top: '5%', left: '30%' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
       </svg>
@@ -26,10 +26,6 @@ function FloatingStars() {
       {/* Etoile 5 branches grande */}
       <svg className="absolute w-7 h-7 text-white/30 animate-float-slow" style={{ top: '40%', right: '20%' }} viewBox="0 0 20 20" fill="currentColor">
         <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
-      </svg>
-      {/* Croissant de lune 2 - milieu gauche - fin */}
-      <svg className="absolute w-10 h-10 text-white/35 animate-float-medium" style={{ top: '45%', left: '5%' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
       </svg>
       {/* Point scintillant */}
       <svg className="absolute w-3 h-3 text-white/60 animate-twinkle" style={{ top: '70%', right: '8%' }} viewBox="0 0 8 8" fill="currentColor">
@@ -47,8 +43,8 @@ function FloatingStars() {
       <svg className="absolute w-3 h-3 text-white/55 animate-twinkle-delayed" style={{ top: '50%', left: '60%' }} viewBox="0 0 8 8" fill="currentColor">
         <circle cx="4" cy="4" r="2" />
       </svg>
-      {/* Croissant de lune 3 - bas droite - fin */}
-      <svg className="absolute w-11 h-11 text-white/25 animate-float-slow" style={{ top: '75%', right: '25%' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+      {/* Croissant de lune 2 - bas droite */}
+      <svg className="absolute w-10 h-10 text-white/25 animate-float-medium" style={{ top: '75%', right: '25%' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
       </svg>
       {/* Etoile 4 branches */}
@@ -58,10 +54,6 @@ function FloatingStars() {
       {/* Etoile 5 branches supplementaire */}
       <svg className="absolute w-5 h-5 text-white/45 animate-float-medium" style={{ top: '10%', right: '35%' }} viewBox="0 0 20 20" fill="currentColor">
         <polygon points="10,0 12,7 20,7 14,11 16,19 10,14 4,19 6,11 0,7 8,7" />
-      </svg>
-      {/* Croissant de lune 4 - bas centre - fin */}
-      <svg className="absolute w-9 h-9 text-white/35 animate-float-medium" style={{ top: '90%', left: '50%' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
       </svg>
       {/* Point scintillant 3 */}
       <svg className="absolute w-2 h-2 text-white/65 animate-twinkle" style={{ top: '85%', right: '40%' }} viewBox="0 0 8 8" fill="currentColor">
@@ -76,17 +68,7 @@ function formatPrice(priceInCents) {
   return `CHF ${francs}`
 }
 
-const VARIANTS = [
-  { id: 'cards', name: 'Cards & Scroll', description: 'Scroll horizontal, cards epaisses', icon: Columns },
-  { id: 'cards-light', name: 'Cards Light', description: 'A la une sur fond clair', icon: Sun },
-  { id: 'editorial', name: 'Editorial Minimal', description: 'Style magazine asymetrique', icon: LayoutGrid },
-  { id: 'list', name: 'List Detail', description: 'Liste detaillee avec descriptions', icon: List },
-  { id: 'story', name: 'Story Timeline', description: 'Narration chronologique', icon: Clock },
-  { id: 'hybrid', name: 'Hybrid', description: 'Hero compact + grille cards', icon: Sparkles },
-]
-
 export default function BoutiqueDemo() {
-  const { variant = 'cards' } = useParams()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
 
@@ -104,142 +86,18 @@ export default function BoutiqueDemo() {
     return matchesSearch && matchesCategory
   })
 
-  const featured = featuredProducts?.[0]
-  const currentIndex = VARIANTS.findIndex(v => v.id === variant)
-  const prevVariant = VARIANTS[currentIndex - 1]
-  const nextVariant = VARIANTS[currentIndex + 1]
-  const currentVariant = VARIANTS[currentIndex] || VARIANTS[0]
-
-  const renderVariant = () => {
-    switch (variant) {
-      case 'cards':
-        return (
-          <CardsHorizontalLayout
-            products={filteredProducts}
-            categories={categories}
-            featured={featured}
-            featuredProducts={featuredProducts}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            loading={loadingProducts}
-          />
-        )
-      case 'cards-light':
-        return (
-          <CardsLightLayout
-            products={filteredProducts}
-            categories={categories}
-            featured={featured}
-            featuredProducts={featuredProducts}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            loading={loadingProducts}
-          />
-        )
-      case 'list':
-        return (
-          <ListDetailLayout
-            products={filteredProducts}
-            categories={categories}
-            featured={featured}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            loading={loadingProducts}
-          />
-        )
-      case 'story':
-        return (
-          <StoryTimelineLayout
-            products={filteredProducts}
-            categories={categories}
-            featured={featured}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            loading={loadingProducts}
-          />
-        )
-      case 'hybrid':
-        return (
-          <HybridLayout
-            products={filteredProducts}
-            categories={categories}
-            featured={featured}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            loading={loadingProducts}
-          />
-        )
-      default:
-        return (
-          <EditorialMinimalLayout
-            products={filteredProducts}
-            categories={categories}
-            featured={featured}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            loading={loadingProducts}
-          />
-        )
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-terracotta-pattern">
-      {/* Floating Variant Selector */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-cream-50/95 dark:bg-primary-950/95 backdrop-blur-sm rounded-full shadow-lg border border-cream-300 dark:border-primary-800 px-2 py-2">
-        <div className="flex items-center gap-1">
-          {prevVariant && (
-            <Link
-              to={`/boutique-demo/${prevVariant.id}`}
-              className="p-2 rounded-full text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-cream-200 dark:hover:bg-primary-900 transition-all"
-              title={prevVariant.name}
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </Link>
-          )}
-
-          {VARIANTS.map((v) => (
-            <Link
-              key={v.id}
-              to={`/boutique-demo/${v.id}`}
-              className={`p-2.5 rounded-full transition-all ${
-                v.id === variant
-                  ? 'bg-primary-600 text-white shadow-md'
-                  : 'text-neutral-500 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-cream-200 dark:hover:bg-primary-900'
-              }`}
-              title={v.name}
-            >
-              <v.icon className="w-4 h-4" />
-            </Link>
-          ))}
-
-          {nextVariant && (
-            <Link
-              to={`/boutique-demo/${nextVariant.id}`}
-              className="p-2 rounded-full text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-cream-200 dark:hover:bg-primary-900 transition-all"
-              title={nextVariant.name}
-            >
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          )}
-        </div>
-      </div>
-
-      {/* Render selected variant */}
-      {renderVariant()}
-    </div>
+    <CardsLightLayout
+      products={filteredProducts}
+      categories={categories}
+      featured={featuredProducts?.[0]}
+      featuredProducts={featuredProducts}
+      selectedCategory={selectedCategory}
+      setSelectedCategory={setSelectedCategory}
+      searchTerm={searchTerm}
+      setSearchTerm={setSearchTerm}
+      loading={loadingProducts}
+    />
   )
 }
 
