@@ -131,6 +131,15 @@ export default function ArticleEdit() {
 
   const handleSubmit = async (e, publishNow = false) => {
     e?.preventDefault()
+
+    // Avertissement si publication sans categorie
+    if (publishNow && !formData.category_id) {
+      const confirmPublish = confirm(
+        'Attention : Aucune categorie selectionnee !\n\nPublier sans categorie peut affecter la visibilite de l\'article.\n\nVoulez-vous continuer ?'
+      )
+      if (!confirmPublish) return
+    }
+
     setSaving(true)
 
     try {
