@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase, uploadImage } from '../../lib/supabase'
 import { prepareForEditor } from '../../lib/contentConverter'
+import { useAuth } from '../../context/AuthContext'
 import RichTextEditor from '../components/RichTextEditor'
 import ImageUpload from '../components/ImageUpload'
 import {
@@ -15,12 +16,13 @@ import {
 export default function ArticleEdit() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { user, profile } = useAuth()
   const isNew = id === 'new'
 
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
   const [categories, setCategories] = useState([])
-  const [authors, setAuthors] = useState([])
+  const [currentAuthor, setCurrentAuthor] = useState(null)
 
   const [formData, setFormData] = useState({
     title: '',
@@ -37,17 +39,23 @@ export default function ArticleEdit() {
 
   useEffect(() => {
     fetchCategories()
-    fetchAuthors()
     if (!isNew) {
       fetchArticle()
+    } else if (user) {
+      // Pour un nouvel article, l'auteur est automatiquement l'utilisateur connecte
+      setFormData(prev => ({ ...prev, author_id: user.id }))
+      fetchAuthorInfo(user.id)
     }
-  }, [id])
+  }, [id, user])
 
   const fetchArticle = async () => {
     try {
       const { data, error } = await supabase
         .from('articles')
-        .select('*')
+        .select(`
+          *,
+          author:authors(id, name, avatar_url, role)
+        `)
         .eq('id', id)
         .single()
 
@@ -65,6 +73,12 @@ export default function ArticleEdit() {
           featured: data.featured || false,
           status: data.status || 'draft'
         })
+        // Recuperer les infos de l'auteur de l'article
+        if (data.author) {
+          setCurrentAuthor(data.author)
+        } else if (data.author_id) {
+          fetchAuthorInfo(data.author_id)
+        }
       }
     } catch (error) {
       console.error('Error fetching article:', error)
@@ -84,14 +98,16 @@ export default function ArticleEdit() {
     setCategories(data || [])
   }
 
-  const fetchAuthors = async () => {
+  const fetchAuthorInfo = async (authorId) => {
+    if (!authorId) return
     const { data } = await supabase
       .from('authors')
-      .select('id, name')
+      .select('id, name, avatar_url, role')
+      .eq('id', authorId)
+      .single()
 
-    setAuthors(data || [])
-    if (data?.length > 0 && !formData.author_id) {
-      setFormData(prev => ({ ...prev, author_id: data[0].id }))
+    if (data) {
+      setCurrentAuthor(data)
     }
   }
 
@@ -303,18 +319,27 @@ export default function ArticleEdit() {
               </select>
             </div>
 
-            {/* Author */}
+            {/* Author - Affiche l'auteur (admin connecte) */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
               <label className="block text-xs font-medium text-gray-500 mb-2">Auteur</label>
-              <select
-                value={formData.author_id}
-                onChange={(e) => setFormData(prev => ({ ...prev, author_id: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
-              >
-                {authors.map(author => (
-                  <option key={author.id} value={author.id}>{author.name}</option>
-                ))}
-              </select>
+              <div className="flex items-center gap-3">
+                {currentAuthor?.avatar_url ? (
+                  <img
+                    src={currentAuthor.avatar_url}
+                    alt={currentAuthor.name}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
+                    <span className="text-primary-600 text-sm font-medium">
+                      {(currentAuthor?.name || profile?.display_name || 'A')[0].toUpperCase()}
+                    </span>
+                  </div>
+                )}
+                <span className="text-sm font-medium text-gray-900">
+                  {currentAuthor?.name || profile?.display_name || 'Chargement...'}
+                </span>
+              </div>
             </div>
 
             {/* Status */}

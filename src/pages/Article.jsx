@@ -235,7 +235,7 @@ export default function Article() {
             {/* Sidebar */}
             <div className="lg:col-span-1">
               <div className="sticky top-28 space-y-8">
-                <AuthorCard variant="sidebar" />
+                <AuthorCard variant="sidebar" author={author} />
 
                 {/* Related Articles */}
                 {relatedArticles.length > 0 && (
