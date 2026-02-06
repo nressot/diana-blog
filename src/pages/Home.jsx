@@ -74,11 +74,11 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Sketch illustration */}
-            <div className="hidden lg:flex items-end justify-center translate-y-12">
+            {/* Logo principal */}
+            <div className="hidden lg:flex items-center justify-center">
               <img
-                src="/hero-illustration.png"
-                alt="Illustration livre et ampoule"
+                src="/guideline/assets/brand/logo-principal-dark.svg"
+                alt="Logo Diana"
                 className="w-full max-w-lg h-auto dark:opacity-80"
               />
             </div>

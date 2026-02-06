@@ -11,7 +11,7 @@ export const author = {
   name: 'Diana',
   role: 'Écrivaine & Blogueuse',
   bio: 'Passionnée par les mots depuis toujours, je partage ici mes réflexions, mes récits et mes découvertes littéraires. Chaque texte est une invitation au voyage intérieur.',
-  avatar: '/author-avatar.jpg',
+  avatar: '/author-avatar.png',
   stats: {
     articles: 52,
     readers: '12.5k',

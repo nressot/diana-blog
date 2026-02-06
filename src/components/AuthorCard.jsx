@@ -7,7 +7,7 @@ export default function AuthorCard({ variant = 'default', author: authorProp }) 
   const author = authorProp || defaultAuthor
 
   // Normaliser l'avatar (peut etre avatar ou avatar_url selon la source)
-  const avatarUrl = author.avatar || author.avatar_url || '/author-avatar.jpg'
+  const avatarUrl = author.avatar || author.avatar_url || '/author-avatar.png'
 
   if (variant === 'sidebar') {
     return (
