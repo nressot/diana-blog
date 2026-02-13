@@ -30,6 +30,7 @@ export default function ArticleEdit() {
     excerpt: '',
     content: '',
     image_url: '',
+    image_position: 'center',
     category_id: '',
     author_id: '',
     read_time: 5,
@@ -41,10 +42,9 @@ export default function ArticleEdit() {
     fetchCategories()
     if (!isNew) {
       fetchArticle()
-    } else if (user) {
-      // Pour un nouvel article, l'auteur est automatiquement l'utilisateur connecte
-      setFormData(prev => ({ ...prev, author_id: user.id }))
-      fetchAuthorInfo(user.id)
+    } else {
+      // Pour un nouvel article, recuperer l'auteur principal du blog
+      fetchDefaultAuthor()
     }
   }, [id, user])
 
@@ -67,6 +67,7 @@ export default function ArticleEdit() {
           excerpt: data.excerpt || '',
           content: prepareForEditor(data.content || ''),
           image_url: data.image_url || '',
+          image_position: data.image_position || 'center',
           category_id: data.category_id || '',
           author_id: data.author_id || '',
           read_time: data.read_time || 5,
@@ -108,6 +109,20 @@ export default function ArticleEdit() {
 
     if (data) {
       setCurrentAuthor(data)
+    }
+  }
+
+  // Recuperer l'auteur principal du blog pour les nouveaux articles
+  const fetchDefaultAuthor = async () => {
+    const { data } = await supabase
+      .from('authors')
+      .select('id, name, avatar_url, role')
+      .limit(1)
+
+    if (data && data.length > 0) {
+      const author = data[0]
+      setCurrentAuthor(author)
+      setFormData(prev => ({ ...prev, author_id: author.id }))
     }
   }
 
@@ -308,6 +323,8 @@ export default function ArticleEdit() {
               currentImage={formData.image_url}
               onUpload={handleImageUpload}
               onRemove={() => setFormData(prev => ({ ...prev, image_url: '' }))}
+              imagePosition={formData.image_position}
+              onPositionChange={(pos) => setFormData(prev => ({ ...prev, image_position: pos }))}
             />
           </div>
 

@@ -11,6 +11,7 @@ import Superscript from '@tiptap/extension-superscript'
 import CharacterCount from '@tiptap/extension-character-count'
 import Youtube from '@tiptap/extension-youtube'
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { uploadImage } from '../../lib/supabase'
 import {
   Bold,
   Italic,
@@ -35,7 +36,8 @@ import {
   Minus,
   Youtube as YoutubeIcon,
   Type,
-  ChevronDown
+  ChevronDown,
+  Upload
 } from 'lucide-react'
 
 // Bouton de menu simple - utilise onMouseDown pour garder le focus dans l'editeur
@@ -123,11 +125,13 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
   const [showImageModal, setShowImageModal] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
   const [imageAlt, setImageAlt] = useState('')
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
   const [showVideoModal, setShowVideoModal] = useState(false)
   const [videoUrl, setVideoUrl] = useState('')
   const lastReadTimeRef = useRef(null)
   const onReadTimeChangeRef = useRef(onReadTimeChange)
   const savedSelectionRef = useRef(null)
+  const fileInputRef = useRef(null)
 
   // Garder la ref a jour
   useEffect(() => {
@@ -265,6 +269,39 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
     setImageUrl('')
     setImageAlt('')
   }, [editor, imageUrl, imageAlt])
+
+  // Upload d'image depuis l'ordinateur
+  const handleFileUpload = useCallback(async (file) => {
+    if (!file || !file.type.startsWith('image/')) {
+      alert('Veuillez selectionner une image valide')
+      return
+    }
+
+    setIsUploadingImage(true)
+    try {
+      const url = await uploadImage(file, 'articles')
+      if (url) {
+        editor.chain().focus().setImage({ src: url, alt: imageAlt || file.name }).run()
+        setShowImageModal(false)
+        setImageUrl('')
+        setImageAlt('')
+      }
+    } catch (error) {
+      console.error('Erreur upload image:', error)
+      alert('Erreur lors de l\'upload de l\'image')
+    } finally {
+      setIsUploadingImage(false)
+    }
+  }, [editor, imageAlt])
+
+  const handleFileInputChange = useCallback((e) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      handleFileUpload(file)
+    }
+    // Reset input pour permettre de re-selectionner le meme fichier
+    e.target.value = ''
+  }, [handleFileUpload])
 
   // Gestion des videos
   const handleAddVideo = useCallback(() => {
@@ -622,6 +659,54 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowImageModal(false)}>
           <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
             <h3 className="text-lg font-semibold mb-4">Inserer une image</h3>
+
+            {/* Input fichier cache */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileInputChange}
+              className="hidden"
+            />
+
+            {/* Zone d'upload */}
+            <div
+              className={`border-2 border-dashed rounded-lg p-6 text-center mb-4 transition-colors cursor-pointer ${
+                isUploadingImage
+                  ? 'border-primary-400 bg-primary-50'
+                  : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
+              }`}
+              onClick={() => !isUploadingImage && fileInputRef.current?.click()}
+              onDragOver={(e) => { e.preventDefault(); e.stopPropagation() }}
+              onDrop={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                const file = e.dataTransfer.files?.[0]
+                if (file) handleFileUpload(file)
+              }}
+            >
+              {isUploadingImage ? (
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-sm text-gray-600">Upload en cours...</span>
+                </div>
+              ) : (
+                <>
+                  <Upload className="w-10 h-10 mx-auto text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-600 mb-1">
+                    Glissez une image ici ou <span className="text-primary-600 font-medium">parcourir</span>
+                  </p>
+                  <p className="text-xs text-gray-400">PNG, JPG, GIF jusqu'a 10MB</p>
+                </>
+              )}
+            </div>
+
+            <div className="relative flex items-center gap-3 mb-4">
+              <div className="flex-1 h-px bg-gray-200" />
+              <span className="text-sm text-gray-400">ou</span>
+              <div className="flex-1 h-px bg-gray-200" />
+            </div>
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">URL de l'image</label>
@@ -631,7 +716,7 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
                   onChange={(e) => setImageUrl(e.target.value)}
                   placeholder="https://exemple.com/image.jpg"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  autoFocus
+                  disabled={isUploadingImage}
                 />
               </div>
               <div>
@@ -642,6 +727,7 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
                   onChange={(e) => setImageAlt(e.target.value)}
                   placeholder="Description de l'image"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  disabled={isUploadingImage}
                 />
               </div>
             </div>
@@ -650,15 +736,17 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
                 type="button"
                 onClick={() => setShowImageModal(false)}
                 className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                disabled={isUploadingImage}
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleAddImage}
-                className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                disabled={isUploadingImage || !imageUrl}
+                className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Inserer
+                Inserer via URL
               </button>
             </div>
           </div>

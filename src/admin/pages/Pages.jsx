@@ -46,11 +46,15 @@ export default function Pages() {
       const { data, error } = await supabase
         .from('authors')
         .select('*')
-        .single()
+        .limit(1)
 
       if (error) throw error
-      setAuthor(data)
-      setEditedAuthor(data)
+
+      // Prendre le premier auteur s'il existe
+      if (data && data.length > 0) {
+        setAuthor(data[0])
+        setEditedAuthor(data[0])
+      }
     } catch (error) {
       console.error('Error fetching author:', error)
     }

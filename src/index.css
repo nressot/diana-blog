@@ -215,7 +215,11 @@ body {
 }
 
 .prose-content p {
-  margin-bottom: 1rem;
+  margin-bottom: 0.625rem;
+}
+
+.prose-content p:last-child {
+  margin-bottom: 0;
 }
 
 .prose-content a {
@@ -1159,5 +1163,70 @@ body {
 
 .animate-blink-dots .dot:nth-child(3) {
   animation-delay: 0.6s;
+}
+
+/* Cart subtotal price - explicit color for light/dark mode */
+.subtotal-price {
+  color: #1c1a17 !important;
+}
+
+.dark .subtotal-price {
+  color: #f5f3ef !important;
+}
+
+/* Order confirmation - item card background */
+.order-item-card {
+  background-color: #F9F4F0 !important;
+}
+
+.dark .order-item-card {
+  background-color: #2d2a26 !important;
+}
+
+/* Order confirmation - item title text color */
+.order-item-title {
+  color: #1c1a17 !important;
+}
+
+.dark .order-item-title {
+  color: #f5f3ef !important;
+}
+
+/* Order confirmation - banner background */
+.order-banner {
+  background-color: #FAF6F2 !important;
+  border-color: #F9F4F0 !important;
+}
+
+.dark .order-banner {
+  background-color: #2d2a26 !important;
+  border-color: #45403b !important;
+}
+
+/* Order confirmation - banner icon background */
+.order-banner-icon {
+  background-color: #F9F4F0 !important;
+}
+
+.dark .order-banner-icon {
+  background-color: #45403b !important;
+}
+
+/* Order confirmation - main container */
+.order-container {
+  background-color: #ffffff !important;
+}
+
+.dark .order-container {
+  background-color: #1c1a17 !important;
+}
+
+/* Order confirmation - secondary text color */
+.order-text-secondary {
+  color: #5c5650 !important;
+}
+
+.dark .order-text-secondary {
+  color: #a8a196 !important;
 }
 

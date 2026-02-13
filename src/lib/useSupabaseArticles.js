@@ -35,6 +35,7 @@ function normalizeArticle(article) {
     excerpt: article.excerpt,
     content: article.content,
     image: article.image_url,
+    imagePosition: article.image_position || 'center',
     publishedAt: article.published_at,
     date: formatDate(article.published_at),
     readTime: article.read_time,

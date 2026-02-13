@@ -1,9 +1,22 @@
 import { useState, useRef } from 'react'
-import { Upload, X, Image as ImageIcon } from 'lucide-react'
+import { Upload, X, Move } from 'lucide-react'
 
-export default function ImageUpload({ currentImage, onUpload, onRemove }) {
+const POSITION_OPTIONS = [
+  { value: 'top', label: 'Haut' },
+  { value: 'center', label: 'Centre' },
+  { value: 'bottom', label: 'Bas' }
+]
+
+export default function ImageUpload({
+  currentImage,
+  onUpload,
+  onRemove,
+  imagePosition = 'center',
+  onPositionChange
+}) {
   const [isDragging, setIsDragging] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const [showPositionSelector, setShowPositionSelector] = useState(false)
   const fileInputRef = useRef(null)
 
   const handleDragOver = (e) => {
@@ -44,19 +57,61 @@ export default function ImageUpload({ currentImage, onUpload, onRemove }) {
 
   if (currentImage) {
     return (
-      <div className="relative">
-        <img
-          src={currentImage}
-          alt="Cover"
-          className="w-full h-48 object-cover rounded-lg"
-        />
-        <button
-          type="button"
-          onClick={onRemove}
-          className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-        >
-          <X size={16} />
-        </button>
+      <div className="space-y-3">
+        <div className="relative group">
+          <img
+            src={currentImage}
+            alt="Cover"
+            className="w-full h-48 object-cover rounded-lg transition-all"
+            style={{ objectPosition: imagePosition }}
+          />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-lg" />
+
+          {/* Boutons d'action */}
+          <div className="absolute top-2 right-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => setShowPositionSelector(!showPositionSelector)}
+              className="p-1.5 bg-white/90 text-gray-700 rounded-full hover:bg-white transition-colors shadow-sm"
+              title="Ajuster le cadrage"
+            >
+              <Move size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={onRemove}
+              className="p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+              title="Supprimer l'image"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Selecteur de position */}
+        {showPositionSelector && onPositionChange && (
+          <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+            <span className="text-sm text-gray-600 mr-2">Cadrage vertical :</span>
+            <div className="flex gap-1">
+              {POSITION_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => onPositionChange(option.value)}
+                  className={`
+                    px-3 py-1.5 text-sm rounded-md transition-colors
+                    ${imagePosition === option.value
+                      ? 'bg-primary-600 text-white'
+                      : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                    }
+                  `}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     )
   }

@@ -57,6 +57,7 @@ export default function Article() {
 
   // Determiner l'image a afficher
   const imageUrl = article.image || 'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=600&fit=crop'
+  const imagePosition = article.imagePosition || 'center'
 
   // Determiner l'auteur a afficher
   const author = article.author || {
@@ -75,6 +76,7 @@ export default function Article() {
             src={imageUrl}
             alt={article.title}
             className="w-full h-full object-cover"
+            style={{ objectPosition: imagePosition }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
