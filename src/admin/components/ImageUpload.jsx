@@ -1,11 +1,5 @@
-import { useState, useRef } from 'react'
-import { Upload, X, Move } from 'lucide-react'
-
-const POSITION_OPTIONS = [
-  { value: 'top', label: 'Haut' },
-  { value: 'center', label: 'Centre' },
-  { value: 'bottom', label: 'Bas' }
-]
+import { useState, useRef, useCallback } from 'react'
+import { Upload, X, Move, Check } from 'lucide-react'
 
 export default function ImageUpload({
   currentImage,
@@ -16,8 +10,30 @@ export default function ImageUpload({
 }) {
   const [isDragging, setIsDragging] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
-  const [showPositionSelector, setShowPositionSelector] = useState(false)
+  const [isPositioning, setIsPositioning] = useState(false)
+  const [tempPosition, setTempPosition] = useState(50)
   const fileInputRef = useRef(null)
+  const imageContainerRef = useRef(null)
+
+  // Convertir la position stockee en pourcentage
+  const getPositionPercent = useCallback((pos) => {
+    if (!pos) return 50
+    if (pos === 'top') return 0
+    if (pos === 'center') return 50
+    if (pos === 'bottom') return 100
+    // Format "center XX%"
+    const match = pos.match(/(\d+)%/)
+    if (match) return parseInt(match[1])
+    return 50
+  }, [])
+
+  // Convertir le pourcentage en valeur CSS
+  const getPositionCSS = useCallback((percent) => {
+    if (percent === 0) return 'top'
+    if (percent === 50) return 'center'
+    if (percent === 100) return 'bottom'
+    return `center ${percent}%`
+  }, [])
 
   const handleDragOver = (e) => {
     e.preventDefault()
@@ -55,7 +71,100 @@ export default function ImageUpload({
     }
   }
 
+  // Gestion du positionnement par clic/drag
+  const handlePositionStart = () => {
+    setTempPosition(getPositionPercent(imagePosition))
+    setIsPositioning(true)
+  }
+
+  const handlePositionMove = (e) => {
+    if (!imageContainerRef.current) return
+
+    const rect = imageContainerRef.current.getBoundingClientRect()
+    const y = e.clientY - rect.top
+    const percent = Math.max(0, Math.min(100, (y / rect.height) * 100))
+    setTempPosition(Math.round(percent))
+  }
+
+  const handlePositionClick = (e) => {
+    handlePositionMove(e)
+  }
+
+  const handlePositionConfirm = () => {
+    if (onPositionChange) {
+      onPositionChange(getPositionCSS(tempPosition))
+    }
+    setIsPositioning(false)
+  }
+
+  const handlePositionCancel = () => {
+    setIsPositioning(false)
+  }
+
   if (currentImage) {
+    // Mode positionnement
+    if (isPositioning) {
+      return (
+        <div className="space-y-3">
+          <div className="text-sm text-gray-600 mb-2">
+            Cliquez sur l'image pour definir le point focal vertical
+          </div>
+          <div
+            ref={imageContainerRef}
+            className="relative cursor-crosshair rounded-lg overflow-hidden border-2 border-primary-500"
+            style={{ height: '300px' }}
+            onClick={handlePositionClick}
+            onMouseMove={(e) => e.buttons === 1 && handlePositionMove(e)}
+          >
+            <img
+              src={currentImage}
+              alt="Cover"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: `center ${tempPosition}%` }}
+              draggable={false}
+            />
+
+            {/* Ligne de reference */}
+            <div
+              className="absolute left-0 right-0 h-0.5 bg-primary-500 pointer-events-none"
+              style={{ top: `${tempPosition}%` }}
+            >
+              <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary-500 text-white text-xs px-2 py-0.5 rounded-full whitespace-nowrap">
+                {tempPosition}%
+              </div>
+            </div>
+
+            {/* Indicateurs haut/centre/bas */}
+            <div className="absolute left-2 top-0 bottom-0 flex flex-col justify-between py-2 pointer-events-none">
+              <span className="text-xs bg-black/50 text-white px-1.5 py-0.5 rounded">Haut</span>
+              <span className="text-xs bg-black/50 text-white px-1.5 py-0.5 rounded">Centre</span>
+              <span className="text-xs bg-black/50 text-white px-1.5 py-0.5 rounded">Bas</span>
+            </div>
+          </div>
+
+          {/* Boutons de confirmation */}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={handlePositionConfirm}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              <Check size={16} />
+              Appliquer
+            </button>
+            <button
+              type="button"
+              onClick={handlePositionCancel}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
+      )
+    }
+
+    // Mode normal avec apercu
     return (
       <div className="space-y-3">
         <div className="relative group">
@@ -69,14 +178,16 @@ export default function ImageUpload({
 
           {/* Boutons d'action */}
           <div className="absolute top-2 right-2 flex gap-2">
-            <button
-              type="button"
-              onClick={() => setShowPositionSelector(!showPositionSelector)}
-              className="p-1.5 bg-white/90 text-gray-700 rounded-full hover:bg-white transition-colors shadow-sm"
-              title="Ajuster le cadrage"
-            >
-              <Move size={16} />
-            </button>
+            {onPositionChange && (
+              <button
+                type="button"
+                onClick={handlePositionStart}
+                className="p-1.5 bg-white/90 text-gray-700 rounded-full hover:bg-white transition-colors shadow-sm"
+                title="Ajuster le cadrage"
+              >
+                <Move size={16} />
+              </button>
+            )}
             <button
               type="button"
               onClick={onRemove}
@@ -86,32 +197,14 @@ export default function ImageUpload({
               <X size={16} />
             </button>
           </div>
-        </div>
 
-        {/* Selecteur de position */}
-        {showPositionSelector && onPositionChange && (
-          <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-            <span className="text-sm text-gray-600 mr-2">Cadrage vertical :</span>
-            <div className="flex gap-1">
-              {POSITION_OPTIONS.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => onPositionChange(option.value)}
-                  className={`
-                    px-3 py-1.5 text-sm rounded-md transition-colors
-                    ${imagePosition === option.value
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-                    }
-                  `}
-                >
-                  {option.label}
-                </button>
-              ))}
+          {/* Indicateur de position actuel */}
+          {onPositionChange && (
+            <div className="absolute bottom-2 left-2 text-xs bg-black/60 text-white px-2 py-1 rounded">
+              Position: {imagePosition || 'center'}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     )
   }

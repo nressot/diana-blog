@@ -158,12 +158,8 @@ export default function ArticleEdit() {
     setSaving(true)
 
     try {
-      // Exclure image_position temporairement - executer add-image-position.sql dans Supabase SQL Editor
-      // puis remettre image_position dans dataToSave
-      const { image_position, ...formDataWithoutPosition } = formData
       const dataToSave = {
-        ...formDataWithoutPosition,
-        // image_position, // Decommenter apres avoir execute le SQL
+        ...formData,
         // Convertir les chaines vides en null pour les UUID
         category_id: formData.category_id || null,
         author_id: formData.author_id || null,
