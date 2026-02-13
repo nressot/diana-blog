@@ -164,6 +164,9 @@ export default function ArticleEdit() {
       const dataToSave = {
         ...formDataWithoutPosition,
         // image_position, // Decommenter apres avoir execute le SQL
+        // Convertir les chaines vides en null pour les UUID
+        category_id: formData.category_id || null,
+        author_id: formData.author_id || null,
         status: publishNow ? 'published' : formData.status,
         published_at: publishNow ? new Date().toISOString() : formData.published_at
       }
