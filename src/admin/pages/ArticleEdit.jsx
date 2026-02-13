@@ -158,8 +158,12 @@ export default function ArticleEdit() {
     setSaving(true)
 
     try {
+      // Exclure image_position temporairement - executer add-image-position.sql dans Supabase SQL Editor
+      // puis remettre image_position dans dataToSave
+      const { image_position, ...formDataWithoutPosition } = formData
       const dataToSave = {
-        ...formData,
+        ...formDataWithoutPosition,
+        // image_position, // Decommenter apres avoir execute le SQL
         status: publishNow ? 'published' : formData.status,
         published_at: publishNow ? new Date().toISOString() : formData.published_at
       }
