@@ -56,15 +56,15 @@ body {
   color: var(--color-neutral-900);
 }
 
-/* Text selection styling */
+/* Text selection styling - black text on beige background */
 ::selection {
-  background-color: var(--color-cream-300);
-  color: var(--color-neutral-900);
+  background-color: var(--color-cream-300) !important;
+  color: #1c1a17 !important;
 }
 
 ::-moz-selection {
-  background-color: var(--color-cream-300);
-  color: var(--color-neutral-900);
+  background-color: var(--color-cream-300) !important;
+  color: #1c1a17 !important;
 }
 
 .dark body {
@@ -133,10 +133,7 @@ body {
   @apply bg-neutral-400 dark:bg-neutral-500;
 }
 
-/* Selection */
-::selection {
-  @apply bg-primary-500/20 text-primary-900 dark:text-primary-100;
-}
+/* Selection - handled above with explicit colors */
 
 /* Focus styles */
 *:focus-visible {
