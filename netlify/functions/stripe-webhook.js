@@ -156,10 +156,36 @@ async function handleCheckoutComplete(supabase, stripeClient, session) {
       }
     : null
 
-  // Get product info from metadata
-  const productId = session.metadata?.productId || null
-  const productTitle = session.metadata?.productName || 'Produit inconnu'
-  const productType = session.metadata?.productType || null
+  // Get product info from metadata (cart_items is a JSON string)
+  let cartItems = []
+  let productId = null
+  let productTitle = 'Produit inconnu'
+  let productType = null
+
+  try {
+    if (session.metadata?.cart_items) {
+      cartItems = JSON.parse(session.metadata.cart_items)
+      if (cartItems.length > 0) {
+        // For single item, use its details
+        if (cartItems.length === 1) {
+          productId = cartItems[0].product_id || null
+          productTitle = cartItems[0].product_title || 'Produit'
+          productType = cartItems[0].format_type || null
+        } else {
+          // For multiple items, create a summary
+          productTitle = cartItems.map(item => item.product_title).join(', ')
+        }
+      }
+    }
+    // Fallback to old metadata format
+    if (productTitle === 'Produit inconnu' && session.metadata?.productName) {
+      productId = session.metadata.productId || null
+      productTitle = session.metadata.productName
+      productType = session.metadata.productType || null
+    }
+  } catch (e) {
+    console.error('Error parsing cart_items:', e)
+  }
 
   // Check if order already exists (idempotency)
   const { data: existingOrder } = await supabase
