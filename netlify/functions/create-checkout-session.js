@@ -35,7 +35,7 @@ exports.handler = async (event, context) => {
 
   try {
     const body = JSON.parse(event.body || '{}')
-    const { items, singleProduct } = body
+    const { items, singleProduct, customerEmail } = body
 
     let lineItems = []
     let cartItemsMetadata = []
@@ -117,7 +117,7 @@ exports.handler = async (event, context) => {
 
     const siteUrl = process.env.URL || process.env.SITE_URL || 'https://le-coven-de-diana.netlify.app'
 
-    const session = await stripeClient.checkout.sessions.create({
+    const sessionConfig = {
       mode: 'payment',
       payment_method_types: ['card'],
       line_items: lineItems,
@@ -137,7 +137,14 @@ exports.handler = async (event, context) => {
       invoice_creation: {
         enabled: true
       }
-    })
+    }
+
+    // Pre-fill customer email if provided (from logged-in user)
+    if (customerEmail) {
+      sessionConfig.customer_email = customerEmail
+    }
+
+    const session = await stripeClient.checkout.sessions.create(sessionConfig)
 
     return {
       statusCode: 200,

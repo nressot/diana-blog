@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 
 export function useCheckout() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const { user } = useAuth()
 
   // Checkout pour un seul produit (achat direct)
   const checkoutSingleProduct = async (product) => {
@@ -29,7 +31,8 @@ export function useCheckout() {
               formatType: selectedFormat?.type,
               formatLabel: selectedFormat?.label,
               quantity: 1,
-            }]
+            }],
+            customerEmail: user?.email
           }),
         })
 
@@ -57,7 +60,8 @@ export function useCheckout() {
             productId: product.id,
             productName: product.title,
             quantity: 1,
-          }
+          },
+          customerEmail: user?.email
         }),
       })
 
@@ -111,7 +115,7 @@ export function useCheckout() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ items }),
+        body: JSON.stringify({ items, customerEmail: user?.email }),
       })
 
       if (!response.ok) {
