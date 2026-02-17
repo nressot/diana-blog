@@ -151,35 +151,49 @@ export default function OrderDetail() {
         return (
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-green-600 text-white">
             <CheckCircle size={16} />
-            Paiement complété
+            Confirmée
+          </span>
+        )
+      case 'shipped':
+        return (
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-blue-600 text-white">
+            <Truck size={16} />
+            Expédiée
+          </span>
+        )
+      case 'delivered':
+        return (
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-emerald-600 text-white">
+            <CheckCircle size={16} />
+            Livrée
           </span>
         )
       case 'pending':
         return (
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-amber-500 text-white">
             <Clock size={16} />
-            En attente de paiement
+            En attente
           </span>
         )
       case 'failed':
         return (
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-red-600 text-white">
             <XCircle size={16} />
-            Paiement échoué
+            Échouée
           </span>
         )
       case 'refunded':
         return (
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-purple-600 text-white">
             <RefreshCw size={16} />
-            Remboursé
+            Remboursée
           </span>
         )
       case 'canceled':
         return (
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-gray-500 text-white">
             <XCircle size={16} />
-            Annulé
+            Annulée
           </span>
         )
       default:

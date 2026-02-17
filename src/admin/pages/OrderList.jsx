@@ -75,7 +75,21 @@ export default function OrderList() {
         return (
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-green-600 text-white">
             <CheckCircle size={12} />
-            Complete
+            Confirmée
+          </span>
+        )
+      case 'shipped':
+        return (
+          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-600 text-white">
+            <Package size={12} />
+            Expédiée
+          </span>
+        )
+      case 'delivered':
+        return (
+          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-600 text-white">
+            <CheckCircle size={12} />
+            Livrée
           </span>
         )
       case 'pending':
@@ -89,21 +103,21 @@ export default function OrderList() {
         return (
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-red-600 text-white">
             <XCircle size={12} />
-            Echoue
+            Échouée
           </span>
         )
       case 'refunded':
         return (
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-purple-600 text-white">
             <RefreshCw size={12} />
-            Rembourse
+            Remboursée
           </span>
         )
       case 'canceled':
         return (
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-500 text-white">
             <XCircle size={12} />
-            Annule
+            Annulée
           </span>
         )
       default:
@@ -204,8 +218,8 @@ export default function OrderList() {
           />
         </div>
 
-        <div className="flex gap-2">
-          {['all', 'completed', 'pending', 'failed', 'refunded'].map((status) => (
+        <div className="flex gap-2 flex-wrap">
+          {['all', 'completed', 'shipped', 'pending', 'refunded', 'canceled'].map((status) => (
             <button
               key={status}
               onClick={() => {
@@ -223,10 +237,11 @@ export default function OrderList() {
               }`}
             >
               {status === 'all' && 'Toutes'}
-              {status === 'completed' && 'Completees'}
+              {status === 'completed' && 'Confirmées'}
+              {status === 'shipped' && 'Expédiées'}
               {status === 'pending' && 'En attente'}
-              {status === 'failed' && 'Echouees'}
-              {status === 'refunded' && 'Remboursees'}
+              {status === 'refunded' && 'Remboursées'}
+              {status === 'canceled' && 'Annulées'}
             </button>
           ))}
         </div>
