@@ -116,7 +116,7 @@ export default function Product() {
   // Acheter maintenant
   const handleBuyNow = () => {
     const productForCheckout = selectedFormat
-      ? { ...product, price: selectedFormat.price, stripePriceId: selectedFormat.stripePriceId }
+      ? { ...product, price: selectedFormat.price, selectedFormat, stripe_price_id: selectedFormat.stripe_price_id }
       : product
     checkout(productForCheckout)
   }

@@ -11,7 +11,7 @@ export function useCheckout() {
 
     try {
       const selectedFormat = product.selectedFormat || product.formats?.[0]
-      const priceId = selectedFormat?.stripePriceId || product.stripePriceId
+      const priceId = selectedFormat?.stripe_price_id || selectedFormat?.stripePriceId || product.stripe_price_id || product.stripePriceId
 
       if (!priceId) {
         // Fallback: utiliser price_data si pas de stripePriceId
@@ -99,7 +99,7 @@ export function useCheckout() {
           productId: product.id,
           title: product.title,
           price: selectedFormat?.price || product.price,
-          stripePriceId: selectedFormat?.stripePriceId || product.stripePriceId,
+          stripePriceId: selectedFormat?.stripe_price_id || selectedFormat?.stripePriceId || product.stripe_price_id || product.stripePriceId,
           formatType: selectedFormat?.type,
           formatLabel: selectedFormat?.label,
           quantity: item.quantity,
