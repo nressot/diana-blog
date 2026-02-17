@@ -156,6 +156,9 @@ async function handleCheckoutComplete(supabase, stripeClient, session) {
       }
     : null
 
+  // Use billing address as shipping if no shipping address provided
+  const finalShippingAddress = shippingAddress || billingAddress
+
   // Get product info from metadata (cart_items is a JSON string)
   let cartItems = []
   let productId = null
@@ -210,7 +213,7 @@ async function handleCheckoutComplete(supabase, stripeClient, session) {
     stripe_payment_intent: session.payment_intent,
     customer_email: customerEmail,
     customer_name: customerName,
-    shipping_address: shippingAddress,
+    shipping_address: finalShippingAddress,
     billing_address: billingAddress,
     product_id: productId,
     product_title: productTitle,
@@ -277,16 +280,16 @@ async function sendConfirmationEmail(orderData, session) {
         </div>
       </div>
 
-      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Commande confirmee !</h2>
+      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Commande confirmée !</h2>
       <p style="color: #666; text-align: center; margin: 0 0 32px 0;">
         Bonjour ${orderData.customer_name || 'cher client'},<br>
-        Votre commande a bien ete enregistree.
+        Votre commande a bien été enregistrée.
       </p>
 
       <!-- Order Details -->
       <div style="background: #faf9f6; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-          <span style="color: #666;">Reference</span>
+          <span style="color: #666;">Référence</span>
           <span style="color: #1a1a1a; font-weight: 600; font-family: monospace;">#${orderReference}</span>
         </div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
@@ -301,14 +304,14 @@ async function sendConfirmationEmail(orderData, session) {
 
       <!-- Next Steps -->
       <div style="margin-bottom: 24px;">
-        <h3 style="color: #1a1a1a; font-size: 16px; margin: 0 0 16px 0;">Prochaines etapes</h3>
+        <h3 style="color: #1a1a1a; font-size: 16px; margin: 0 0 16px 0;">Prochaines étapes</h3>
         <div style="display: flex; align-items: flex-start; margin-bottom: 12px;">
           <div style="width: 24px; height: 24px; background: #d4a574; border-radius: 50%; color: white; text-align: center; line-height: 24px; font-size: 12px; margin-right: 12px; flex-shrink: 0;">1</div>
-          <p style="margin: 0; color: #666; line-height: 24px;">Votre commande sera preparee sous 1-2 jours ouvrables.</p>
+          <p style="margin: 0; color: #666; line-height: 24px;">Votre commande sera préparée sous 1-2 jours ouvrables.</p>
         </div>
         <div style="display: flex; align-items: flex-start; margin-bottom: 12px;">
           <div style="width: 24px; height: 24px; background: #d4a574; border-radius: 50%; color: white; text-align: center; line-height: 24px; font-size: 12px; margin-right: 12px; flex-shrink: 0;">2</div>
-          <p style="margin: 0; color: #666; line-height: 24px;">Vous recevrez un email avec le suivi d'expedition.</p>
+          <p style="margin: 0; color: #666; line-height: 24px;">Vous recevrez un email avec le suivi d'éxpédition.</p>
         </div>
       </div>
 
@@ -390,7 +393,7 @@ async function sendCancellationEmail(order, session) {
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: order.customer_email,
-      subject: `Commande annulee #${orderReference} - Le Coven de Diana`,
+      subject: `Commande annulée #${orderReference} - Le Coven de Diana`,
       html: `
 <!DOCTYPE html>
 <html>
@@ -414,16 +417,16 @@ async function sendCancellationEmail(order, session) {
         </div>
       </div>
 
-      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Commande annulee</h2>
+      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Commande annulée</h2>
       <p style="color: #666; text-align: center; margin: 0 0 32px 0;">
         Bonjour ${order.customer_name || 'cher client'},<br>
-        Votre commande n'a pas pu etre finalisee.
+        Votre commande n'a pas pu être finalisée.
       </p>
 
       <!-- Order Details -->
       <div style="background: #faf9f6; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-          <span style="color: #666;">Reference</span>
+          <span style="color: #666;">Référence</span>
           <span style="color: #1a1a1a; font-weight: 600; font-family: monospace;">#${orderReference}</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
@@ -439,7 +442,7 @@ async function sendCancellationEmail(order, session) {
       <!-- CTA Button -->
       <div style="text-align: center;">
         <a href="https://le-coven-de-diana.netlify.app/boutique" style="display: inline-block; background: #d4a574; color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600;">
-          Retourner a la boutique
+          Retourner à la boutique
         </a>
       </div>
     </div>
@@ -513,7 +516,7 @@ async function sendRefundEmail(order, charge) {
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: order.customer_email,
-      subject: `Remboursement confirme #${orderReference} - Le Coven de Diana`,
+      subject: `Remboursement confirmé #${orderReference} - Le Coven de Diana`,
       html: `
 <!DOCTYPE html>
 <html>
@@ -537,16 +540,16 @@ async function sendRefundEmail(order, charge) {
         </div>
       </div>
 
-      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Remboursement confirme</h2>
+      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Remboursement confirmé</h2>
       <p style="color: #666; text-align: center; margin: 0 0 32px 0;">
         Bonjour ${order.customer_name || 'cher client'},<br>
-        Votre remboursement a ete effectue avec succes.
+        Votre remboursement a été effectué avec succès.
       </p>
 
       <!-- Order Details -->
       <div style="background: #faf9f6; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-          <span style="color: #666;">Reference</span>
+          <span style="color: #666;">Référence</span>
           <span style="color: #1a1a1a; font-weight: 600; font-family: monospace;">#${orderReference}</span>
         </div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
@@ -554,13 +557,13 @@ async function sendRefundEmail(order, charge) {
           <span style="color: #1a1a1a; font-weight: 500;">${order.product_title || 'Produit'}</span>
         </div>
         <div style="display: flex; justify-content: space-between; border-top: 1px solid #e5e5e5; padding-top: 12px; margin-top: 12px;">
-          <span style="color: #1a1a1a; font-weight: 600;">Montant rembourse</span>
+          <span style="color: #1a1a1a; font-weight: 600;">Montant remboursé</span>
           <span style="color: #3b82f6; font-weight: 700; font-size: 18px;">CHF ${refundAmount}</span>
         </div>
       </div>
 
       <p style="color: #666; text-align: center; margin: 0 0 24px 0;">
-        Le remboursement apparaitra sur votre compte dans un delai de 5 a 10 jours ouvrables selon votre banque.
+        Le remboursement apparaîtra sur votre compte dans un délai de 5 à 10 jours ouvrables selon votre banque.
       </p>
 
       <!-- CTA Button -->
