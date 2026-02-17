@@ -298,7 +298,7 @@ async function sendConfirmationEmail(orderData, session) {
     <div style="text-align: center; margin-top: 32px; color: #999; font-size: 14px;">
       <p style="margin: 0 0 8px 0;">Des questions ? Contactez-nous</p>
       <a href="mailto:contact@covendediana.ch" style="color: #d4a574; text-decoration: none;">contact@covendediana.ch</a>
-      <p style="margin: 24px 0 0 0; font-size: 12px;">Le Coven de Diana - Litterature et Magie</p>
+      <p style="margin: 24px 0 0 0; font-size: 12px;">Diana - Le Coven de Diana</p>
     </div>
   </div>
 </body>
@@ -323,6 +323,13 @@ async function sendConfirmationEmail(orderData, session) {
 async function handleCheckoutExpired(supabase, session) {
   console.log('Processing checkout.session.expired:', session.id)
 
+  // Get order info before updating
+  const { data: order } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('stripe_session_id', session.id)
+    .single()
+
   // Update existing order to canceled if exists
   const { error } = await supabase
     .from('orders')
@@ -332,6 +339,105 @@ async function handleCheckoutExpired(supabase, session) {
   if (error) {
     console.error('Error updating expired session:', error)
   }
+
+  // Send cancellation email if order existed
+  if (order) {
+    await sendCancellationEmail(order, session)
+  }
+}
+
+/**
+ * Send order cancellation email via Resend
+ */
+async function sendCancellationEmail(order, session) {
+  if (!process.env.RESEND_API_KEY) {
+    console.log('RESEND_API_KEY not configured, skipping email')
+    return
+  }
+
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  const fromEmail = process.env.FROM_EMAIL || 'Diana <noreply@resend.dev>'
+
+  const orderReference = session.id.slice(-12).toUpperCase()
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: fromEmail,
+      to: order.customer_email,
+      subject: `Commande annulee #${orderReference} - Le Coven de Diana`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #faf9f6;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="color: #1a1a1a; font-size: 28px; margin: 0; font-family: Georgia, serif;">Le Coven de Diana</h1>
+    </div>
+
+    <!-- Main Card -->
+    <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+      <!-- Icon -->
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="width: 64px; height: 64px; background: #9ca3af; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+          <span style="color: white; font-size: 32px;">&#10005;</span>
+        </div>
+      </div>
+
+      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Commande annulee</h2>
+      <p style="color: #666; text-align: center; margin: 0 0 32px 0;">
+        Bonjour ${order.customer_name || 'cher client'},<br>
+        Votre commande n'a pas pu etre finalisee.
+      </p>
+
+      <!-- Order Details -->
+      <div style="background: #faf9f6; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+          <span style="color: #666;">Reference</span>
+          <span style="color: #1a1a1a; font-weight: 600; font-family: monospace;">#${orderReference}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: #666;">Article</span>
+          <span style="color: #1a1a1a; font-weight: 500;">${order.product_title || 'Produit'}</span>
+        </div>
+      </div>
+
+      <p style="color: #666; text-align: center; margin: 0 0 24px 0;">
+        Si vous souhaitez finaliser votre achat, vous pouvez retourner sur notre boutique.
+      </p>
+
+      <!-- CTA Button -->
+      <div style="text-align: center;">
+        <a href="https://le-coven-de-diana.netlify.app/boutique" style="display: inline-block; background: #d4a574; color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600;">
+          Retourner a la boutique
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; margin-top: 32px; color: #999; font-size: 14px;">
+      <p style="margin: 0 0 8px 0;">Des questions ? Contactez-nous</p>
+      <a href="mailto:contact@covendediana.ch" style="color: #d4a574; text-decoration: none;">contact@covendediana.ch</a>
+      <p style="margin: 24px 0 0 0; font-size: 12px;">Diana - Le Coven de Diana</p>
+    </div>
+  </div>
+</body>
+</html>
+      `
+    })
+
+    if (error) {
+      console.error('Error sending cancellation email:', error)
+    } else {
+      console.log('Cancellation email sent:', data?.id)
+    }
+  } catch (err) {
+    console.error('Failed to send cancellation email:', err)
+  }
 }
 
 /**
@@ -340,6 +446,13 @@ async function handleCheckoutExpired(supabase, session) {
 async function handleRefund(supabase, charge) {
   console.log('Processing refund for payment intent:', charge.payment_intent)
 
+  // Get order info before updating
+  const { data: order } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('stripe_payment_intent', charge.payment_intent)
+    .single()
+
   const { error } = await supabase
     .from('orders')
     .update({ status: 'refunded' })
@@ -347,5 +460,109 @@ async function handleRefund(supabase, charge) {
 
   if (error) {
     console.error('Error updating refund status:', error)
+  }
+
+  // Send refund email if order found
+  if (order) {
+    await sendRefundEmail(order, charge)
+  }
+}
+
+/**
+ * Send refund confirmation email via Resend
+ */
+async function sendRefundEmail(order, charge) {
+  if (!process.env.RESEND_API_KEY) {
+    console.log('RESEND_API_KEY not configured, skipping email')
+    return
+  }
+
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  const fromEmail = process.env.FROM_EMAIL || 'Diana <noreply@resend.dev>'
+
+  const orderReference = order.stripe_session_id?.slice(-12).toUpperCase() || 'N/A'
+  const refundAmount = ((charge.amount_refunded || 0) / 100).toFixed(2).replace('.', ',')
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: fromEmail,
+      to: order.customer_email,
+      subject: `Remboursement confirme #${orderReference} - Le Coven de Diana`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #faf9f6;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="color: #1a1a1a; font-size: 28px; margin: 0; font-family: Georgia, serif;">Le Coven de Diana</h1>
+    </div>
+
+    <!-- Main Card -->
+    <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+      <!-- Icon -->
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="width: 64px; height: 64px; background: #3b82f6; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+          <span style="color: white; font-size: 28px;">&#8634;</span>
+        </div>
+      </div>
+
+      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Remboursement confirme</h2>
+      <p style="color: #666; text-align: center; margin: 0 0 32px 0;">
+        Bonjour ${order.customer_name || 'cher client'},<br>
+        Votre remboursement a ete effectue avec succes.
+      </p>
+
+      <!-- Order Details -->
+      <div style="background: #faf9f6; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+          <span style="color: #666;">Reference</span>
+          <span style="color: #1a1a1a; font-weight: 600; font-family: monospace;">#${orderReference}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+          <span style="color: #666;">Article</span>
+          <span style="color: #1a1a1a; font-weight: 500;">${order.product_title || 'Produit'}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-top: 1px solid #e5e5e5; padding-top: 12px; margin-top: 12px;">
+          <span style="color: #1a1a1a; font-weight: 600;">Montant rembourse</span>
+          <span style="color: #3b82f6; font-weight: 700; font-size: 18px;">CHF ${refundAmount}</span>
+        </div>
+      </div>
+
+      <p style="color: #666; text-align: center; margin: 0 0 24px 0;">
+        Le remboursement apparaitra sur votre compte dans un delai de 5 a 10 jours ouvrables selon votre banque.
+      </p>
+
+      <!-- CTA Button -->
+      <div style="text-align: center;">
+        <a href="https://le-coven-de-diana.netlify.app/mes-commandes" style="display: inline-block; background: #d4a574; color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600;">
+          Voir mes commandes
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; margin-top: 32px; color: #999; font-size: 14px;">
+      <p style="margin: 0 0 8px 0;">Des questions ? Contactez-nous</p>
+      <a href="mailto:contact@covendediana.ch" style="color: #d4a574; text-decoration: none;">contact@covendediana.ch</a>
+      <p style="margin: 24px 0 0 0; font-size: 12px;">Diana - Le Coven de Diana</p>
+    </div>
+  </div>
+</body>
+</html>
+      `
+    })
+
+    if (error) {
+      console.error('Error sending refund email:', error)
+    } else {
+      console.log('Refund email sent:', data?.id)
+    }
+  } catch (err) {
+    console.error('Failed to send refund email:', err)
   }
 }

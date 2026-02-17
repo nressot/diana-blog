@@ -81,7 +81,9 @@ export default function OrderDetail() {
       // Send shipping notification email if status changed to "shipped"
       if (orderStatus === 'shipped' && previousStatus !== 'shipped') {
         try {
-          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+          // In production (Netlify), use relative URL for functions
+          // In development, use localhost:4000
+          const apiUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:4000')
           const emailResponse = await fetch(`${apiUrl}/api/send-shipping-notification`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

@@ -36,19 +36,19 @@ function getStatusConfig(status) {
   switch (status) {
     case 'completed':
       return {
-        label: 'Confirmee',
+        label: 'Confirmée',
         color: 'bg-emerald-100 text-emerald-700',
         icon: CheckCircle
       }
     case 'shipped':
       return {
-        label: 'Expediee',
+        label: 'Expédiée',
         color: 'bg-blue-100 text-blue-700',
         icon: Truck
       }
     case 'delivered':
       return {
-        label: 'Livree',
+        label: 'Livrée',
         color: 'bg-emerald-100 text-emerald-700',
         icon: CheckCircle
       }
@@ -60,13 +60,19 @@ function getStatusConfig(status) {
       }
     case 'canceled':
       return {
-        label: 'Annulee',
+        label: 'Annulée',
         color: 'bg-red-100 text-red-700',
         icon: XCircle
       }
+    case 'refunded':
+      return {
+        label: 'Remboursée',
+        color: 'bg-blue-100 text-blue-700',
+        icon: AlertCircle
+      }
     case 'failed':
       return {
-        label: 'Echouee',
+        label: 'Échouée',
         color: 'bg-red-100 text-red-700',
         icon: AlertCircle
       }
@@ -142,7 +148,7 @@ export default function Orders() {
               Connectez-vous pour voir vos commandes
             </h1>
             <p className="text-neutral-600 mb-8">
-              Vous devez etre connecte pour acceder a l'historique de vos commandes.
+              Vous devez être connecté pour accéder à l'historique de vos commandes.
             </p>
             <Link
               to="/connexion"
@@ -200,13 +206,13 @@ export default function Orders() {
                 Aucune commande pour le moment
               </h2>
               <p className="text-neutral-600 mb-8">
-                Decouvrez notre boutique et passez votre premiere commande !
+                Découvrez notre boutique et passez votre première commande !
               </p>
               <Link
                 to="/boutique"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl transition-colors"
               >
-                Decouvrir la boutique
+                Découvrir la boutique
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </motion.div>
@@ -265,7 +271,7 @@ export default function Orders() {
                         {/* Items */}
                         <div className="p-6 bg-cream-50">
                           <h4 className="text-sm font-semibold text-neutral-900 mb-4">
-                            Articles commandes
+                            Articles commandés
                           </h4>
                           <div className="space-y-3">
                             {order.items.map((item, itemIndex) => (
@@ -278,7 +284,7 @@ export default function Orders() {
                                     {item.product_title}
                                   </p>
                                   <p className="text-sm text-neutral-500">
-                                    {item.product_type === 'ebook' ? 'E-book' : 'Livre broche'} - Quantite: {item.quantity}
+                                    {item.product_type === 'ebook' ? 'E-book' : 'Livre broché'} - Quantité: {item.quantity}
                                   </p>
                                 </div>
                                 <p className="font-semibold text-neutral-900">
@@ -317,7 +323,7 @@ export default function Orders() {
                             {order.tracking_number ? (
                               <div className="text-sm">
                                 <p className="text-neutral-600 mb-2">
-                                  Numero de suivi: <span className="font-mono font-medium text-neutral-900">{order.tracking_number}</span>
+                                  Numéro de suivi: <span className="font-mono font-medium text-neutral-900">{order.tracking_number}</span>
                                 </p>
                                 {order.tracking_url && (
                                   <a
@@ -334,7 +340,7 @@ export default function Orders() {
                             ) : (
                               <p className="text-sm text-neutral-500">
                                 {order.status === 'completed'
-                                  ? 'Votre colis sera bientot expedie. Vous recevrez un email avec le numero de suivi.'
+                                  ? 'Votre colis sera bientôt expédié. Vous recevrez un email avec le numéro de suivi.'
                                   : 'Informations de suivi non disponibles.'}
                               </p>
                             )}
