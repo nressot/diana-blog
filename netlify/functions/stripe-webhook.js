@@ -3,6 +3,7 @@
 
 const stripe = require('stripe')
 const { createClient } = require('@supabase/supabase-js')
+const { Resend } = require('resend')
 
 exports.handler = async (event, context) => {
   const headers = {
@@ -45,7 +46,8 @@ exports.handler = async (event, context) => {
     }
   }
 
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+  const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!process.env.SUPABASE_URL || !supabaseKey) {
     console.error('Missing Supabase credentials')
     return {
       statusCode: 500,
@@ -57,7 +59,7 @@ exports.handler = async (event, context) => {
   const stripeClient = stripe(process.env.STRIPE_SECRET_KEY)
   const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY
+    supabaseKey
   )
 
   const signature = event.headers['stripe-signature']
@@ -200,6 +202,119 @@ async function handleCheckoutComplete(supabase, stripeClient, session) {
   }
 
   console.log('Order created successfully for session:', session.id)
+
+  // Send confirmation email
+  await sendConfirmationEmail(orderData, session)
+}
+
+/**
+ * Send order confirmation email via Resend
+ */
+async function sendConfirmationEmail(orderData, session) {
+  if (!process.env.RESEND_API_KEY) {
+    console.log('RESEND_API_KEY not configured, skipping email')
+    return
+  }
+
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  const fromEmail = process.env.FROM_EMAIL || 'Diana <noreply@resend.dev>'
+
+  const orderReference = session.id.slice(-12).toUpperCase()
+  const amountFormatted = ((orderData.amount || 0) / 100).toFixed(2).replace('.', ',')
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: fromEmail,
+      to: orderData.customer_email,
+      subject: `Confirmation de commande #${orderReference} - Le Coven de Diana`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #faf9f6;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="color: #1a1a1a; font-size: 28px; margin: 0; font-family: Georgia, serif;">Le Coven de Diana</h1>
+      <p style="color: #666; margin-top: 8px;">Merci pour votre commande</p>
+    </div>
+
+    <!-- Main Card -->
+    <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+      <!-- Confirmation Icon -->
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="width: 64px; height: 64px; background: #d4a574; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+          <span style="color: white; font-size: 32px;">&#10003;</span>
+        </div>
+      </div>
+
+      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Commande confirmee !</h2>
+      <p style="color: #666; text-align: center; margin: 0 0 32px 0;">
+        Bonjour ${orderData.customer_name || 'cher client'},<br>
+        Votre commande a bien ete enregistree.
+      </p>
+
+      <!-- Order Details -->
+      <div style="background: #faf9f6; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+          <span style="color: #666;">Reference</span>
+          <span style="color: #1a1a1a; font-weight: 600; font-family: monospace;">#${orderReference}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+          <span style="color: #666;">Article</span>
+          <span style="color: #1a1a1a; font-weight: 500;">${orderData.product_title}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-top: 1px solid #e5e5e5; padding-top: 12px; margin-top: 12px;">
+          <span style="color: #1a1a1a; font-weight: 600;">Total</span>
+          <span style="color: #d4a574; font-weight: 700; font-size: 18px;">CHF ${amountFormatted}</span>
+        </div>
+      </div>
+
+      <!-- Next Steps -->
+      <div style="margin-bottom: 24px;">
+        <h3 style="color: #1a1a1a; font-size: 16px; margin: 0 0 16px 0;">Prochaines etapes</h3>
+        <div style="display: flex; align-items: flex-start; margin-bottom: 12px;">
+          <div style="width: 24px; height: 24px; background: #d4a574; border-radius: 50%; color: white; text-align: center; line-height: 24px; font-size: 12px; margin-right: 12px; flex-shrink: 0;">1</div>
+          <p style="margin: 0; color: #666; line-height: 24px;">Votre commande sera preparee sous 1-2 jours ouvrables.</p>
+        </div>
+        <div style="display: flex; align-items: flex-start; margin-bottom: 12px;">
+          <div style="width: 24px; height: 24px; background: #d4a574; border-radius: 50%; color: white; text-align: center; line-height: 24px; font-size: 12px; margin-right: 12px; flex-shrink: 0;">2</div>
+          <p style="margin: 0; color: #666; line-height: 24px;">Vous recevrez un email avec le suivi d'expedition.</p>
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <div style="text-align: center;">
+        <a href="https://le-coven-de-diana.netlify.app/mes-commandes" style="display: inline-block; background: #d4a574; color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600;">
+          Suivre ma commande
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; margin-top: 32px; color: #999; font-size: 14px;">
+      <p style="margin: 0 0 8px 0;">Des questions ? Contactez-nous</p>
+      <a href="mailto:contact@diana-auteure.ch" style="color: #d4a574; text-decoration: none;">contact@diana-auteure.ch</a>
+      <p style="margin: 24px 0 0 0; font-size: 12px;">Le Coven de Diana - Litterature et Magie</p>
+    </div>
+  </div>
+</body>
+</html>
+      `
+    })
+
+    if (error) {
+      console.error('Error sending confirmation email:', error)
+    } else {
+      console.log('Confirmation email sent:', data?.id)
+    }
+  } catch (err) {
+    console.error('Failed to send confirmation email:', err)
+    // Don't throw - email failure shouldn't fail the webhook
+  }
 }
 
 /**
