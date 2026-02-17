@@ -19,7 +19,7 @@ import BookExcerpt from '../components/product/BookExcerpt'
 /**
  * Formate un prix en centimes vers un affichage en CHF
  * @param {number} priceInCents - Prix en centimes
- * @returns {string} Prix formate (ex: "CHF 19,90")
+ * @returns {string} Prix formaté (ex: "CHF 19,90")
  */
 function formatPrice(priceInCents) {
   if (!priceInCents) return 'CHF 0,00'
@@ -41,7 +41,7 @@ export default function Product() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [selectedFormat, setSelectedFormat] = useState(null)
 
-  // Selectionner le premier format disponible par defaut
+  // Sélectionner le premier format disponible par défaut
   useEffect(() => {
     if (product?.formats?.length > 0 && !selectedFormat) {
       setSelectedFormat(product.formats[0])
@@ -62,14 +62,14 @@ export default function Product() {
         <ShoppingBag className="w-16 h-16 mb-4 text-neutral-300 dark:text-neutral-700" />
         <h1 className="text-2xl font-semibold mb-2">Produit introuvable</h1>
         <p className="text-neutral-500 dark:text-neutral-400 mb-6">
-          Le produit que vous recherchez n'existe pas ou a ete supprime.
+          Le produit que vous recherchez n'existe pas ou a été supprimé.
         </p>
         <Link
-          to="/boutique-demo"
+          to="/boutique"
           className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour a la boutique
+          Retour à la boutique
         </Link>
       </div>
     )
@@ -86,13 +86,17 @@ export default function Product() {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
   }
 
-  // Prix actuel (selon format selectionne ou prix de base)
+  // Prix actuel (selon format sélectionné ou prix de base)
   const currentPrice = selectedFormat?.price || product.price
-  const currentOriginalPrice = selectedFormat?.originalPrice || product.originalPrice
+  // Pour le prix original, on prend celui du format s'il existe, sinon celui du produit
+  // mais seulement si le format n'a pas de prix original défini (pas juste undefined)
+  const currentOriginalPrice = selectedFormat
+    ? (selectedFormat.originalPrice || null)
+    : product.originalPrice
   const isInStock = selectedFormat ? selectedFormat.inStock !== false : product.inStock
 
-  // Calcul du pourcentage de reduction
-  const discountPercentage = currentOriginalPrice
+  // Calcul du pourcentage de réduction (seulement si prix original > prix actuel)
+  const discountPercentage = (currentOriginalPrice && currentOriginalPrice > currentPrice)
     ? Math.round(
         ((currentOriginalPrice - currentPrice) / currentOriginalPrice) * 100
       )
@@ -123,11 +127,11 @@ export default function Product() {
       <section className="py-4 border-b border-neutral-200 dark:border-neutral-800">
         <div className="container-custom">
           <Link
-            to="/boutique-demo"
+            to="/boutique"
             className="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour a la boutique
+            Retour à la boutique
           </Link>
         </div>
       </section>
@@ -266,9 +270,9 @@ export default function Product() {
                 <button
                   onClick={handleAddToCart}
                   disabled={!isInStock}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-semibold transition-colors border ${
+                  className={`flex-1 inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-semibold transition-all border ${
                     isInStock
-                      ? 'border-primary-600 text-primary-600 hover:bg-primary-50'
+                      ? 'border-primary-600 text-primary-600 hover:bg-primary-50 cursor-pointer active:scale-95'
                       : 'border-neutral-300 text-neutral-400 cursor-not-allowed'
                   }`}
                 >
@@ -280,9 +284,9 @@ export default function Product() {
                 <button
                   onClick={handleBuyNow}
                   disabled={!isInStock || checkoutLoading}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-semibold transition-colors shadow-lg ${
+                  className={`flex-1 inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-semibold transition-all shadow-lg ${
                     isInStock && !checkoutLoading
-                      ? 'bg-primary-600 text-white hover:bg-primary-700'
+                      ? 'bg-primary-600 text-white hover:bg-primary-700 cursor-pointer active:scale-95'
                       : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'
                   }`}
                 >
@@ -314,11 +318,11 @@ export default function Product() {
                   </li>
                   <li className="flex items-center gap-3 text-sm text-neutral-700">
                     <Check className="w-5 h-5 text-green-600 shrink-0" />
-                    Dedicace personnalisee sur demande
+                    Dédicace personnalisée sur demande
                   </li>
                   <li className="flex items-center gap-3 text-sm text-neutral-700">
                     <Check className="w-5 h-5 text-green-600 shrink-0" />
-                    Paiement securise par Stripe
+                    Paiement sécurisé par Stripe
                   </li>
                 </ul>
               </div>
@@ -353,7 +357,7 @@ export default function Product() {
                 </p>
               </div>
               <Link
-                to="/boutique-demo"
+                to="/boutique"
                 className="text-sm font-medium text-primary-600 hover:text-primary-700 hidden sm:block"
               >
                 Voir tous mes produits

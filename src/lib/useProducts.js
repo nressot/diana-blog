@@ -1,10 +1,10 @@
 /**
- * Hooks pour recuperer les produits depuis Sanity
- * Avec fallback vers les donnees statiques si Sanity n'est pas configure
+ * Hooks pour recuperer les produits depuis Supabase
+ * Avec fallback vers les donnees statiques si Supabase n'est pas configure
  */
 
 import { useState, useEffect } from 'react'
-import { client, isSanityConfigured } from './sanity'
+import { supabase } from './supabase'
 
 // Import des donnees statiques pour fallback
 import {
@@ -13,99 +13,33 @@ import {
   featuredProducts as staticFeaturedProducts,
 } from '../data/products'
 
-// Sanity queries pour les produits (a creer dans le schema Sanity)
-const productsQuery = `*[_type == "product"] | order(createdAt desc) {
-  _id,
-  title,
-  slug,
-  excerpt,
-  description,
-  "image": image.asset->url,
-  "images": images[].asset->url,
-  "category": category->name,
-  "categoryColor": category->color,
-  "categorySlug": category->slug.current,
-  price,
-  originalPrice,
-  featured,
-  inStock,
-  createdAt
-}`
-
-const productBySlugQuery = `*[_type == "product" && slug.current == $slug][0] {
-  _id,
-  title,
-  slug,
-  excerpt,
-  description,
-  "image": image.asset->url,
-  "images": images[].asset->url,
-  "category": category->name,
-  "categoryColor": category->color,
-  "categorySlug": category->slug.current,
-  price,
-  originalPrice,
-  featured,
-  inStock,
-  createdAt
-}`
-
-const featuredProductsQuery = `*[_type == "product" && featured == true] | order(createdAt desc) {
-  _id,
-  title,
-  slug,
-  excerpt,
-  "image": image.asset->url,
-  "category": category->name,
-  "categoryColor": category->color,
-  price,
-  originalPrice,
-  featured,
-  inStock
-}`
-
-const productCategoriesQuery = `*[_type == "productCategory"] | order(name asc) {
-  _id,
-  name,
-  "slug": slug.current,
-  color,
-  "count": count(*[_type == "product" && references(^._id)])
-}`
-
-const relatedProductsQuery = `*[_type == "product" && category._ref == $categoryId && _id != $currentId][0...3] {
-  _id,
-  title,
-  slug,
-  excerpt,
-  "image": image.asset->url,
-  "category": category->name,
-  "categoryColor": category->color,
-  price,
-  originalPrice,
-  inStock
-}`
+const isSupabaseConfigured = !!supabase
 
 /**
- * Normalise un produit Sanity vers le format attendu
+ * Normalise un produit Supabase vers le format attendu
  */
 function normalizeProduct(product) {
   if (!product) return null
   return {
-    id: product._id || product.id,
+    id: product.id,
     title: product.title,
-    slug: product.slug?.current || product.slug,
-    excerpt: product.excerpt,
-    description: product.description,
+    slug: product.slug,
+    excerpt: product.excerpt || '',
+    description: product.description || '',
     image: product.image,
-    images: product.images || [product.image],
-    category: product.category,
-    categoryColor: product.categoryColor || 'bg-neutral-400',
-    categorySlug: product.categorySlug,
+    images: (product.images && product.images.length > 0) ? product.images : [product.image].filter(Boolean),
+    category: product.product_categories?.name || 'Non classe',
+    categoryColor: product.product_categories?.color || 'bg-neutral-400',
+    categorySlug: product.product_categories?.slug,
     price: product.price,
-    originalPrice: product.originalPrice,
+    originalPrice: product.original_price,
     featured: product.featured || false,
-    inStock: product.inStock !== false,
-    createdAt: product.createdAt,
+    inStock: product.in_stock !== false,
+    createdAt: product.created_at,
+    formats: product.formats || [],
+    productType: product.product_type,
+    bookMeta: product.book_meta,
+    stripeProductId: product.stripe_product_id,
   }
 }
 
@@ -123,63 +57,54 @@ function normalizeProducts(products) {
 function normalizeProductCategories(categories) {
   if (!categories) return []
   return categories.map((cat) => ({
-    id: cat._id || cat.id,
+    id: cat.id,
     name: cat.name,
     slug: cat.slug,
     color: cat.color || 'bg-neutral-400',
-    count: cat.count || 0,
+    count: cat.product_count || 0,
   }))
-}
-
-/**
- * Hook generique pour les requetes Sanity avec fallback
- */
-function useSanityWithFallback(query, params, fallbackData, normalizer = (x) => x) {
-  const [data, setData] = useState(fallbackData)
-  const [loading, setLoading] = useState(isSanityConfigured)
-  const [error, setError] = useState(null)
-  const [usingSanity, setUsingSanity] = useState(false)
-
-  useEffect(() => {
-    if (!isSanityConfigured) {
-      setLoading(false)
-      return
-    }
-
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        const result = await client.fetch(query, params)
-        if (result && (Array.isArray(result) ? result.length > 0 : true)) {
-          setData(normalizer(result))
-          setUsingSanity(true)
-        }
-        setError(null)
-      } catch (err) {
-        console.warn('Sanity fetch error, using fallback data:', err.message)
-        setError(err)
-        // Garde les donnees de fallback
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [query, JSON.stringify(params)])
-
-  return { data, loading, error, usingSanity }
 }
 
 /**
  * Recuperer tous les produits
  */
 export function useProducts() {
-  return useSanityWithFallback(
-    productsQuery,
-    {},
-    staticProducts,
-    normalizeProducts
-  )
+  const [data, setData] = useState(staticProducts)
+  const [loading, setLoading] = useState(isSupabaseConfigured)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false)
+      return
+    }
+
+    const fetchProducts = async () => {
+      try {
+        setLoading(true)
+        const { data: products, error: fetchError } = await supabase
+          .from('products')
+          .select('*, product_categories(*)')
+          .order('created_at', { ascending: false })
+
+        if (fetchError) throw fetchError
+
+        if (products && products.length > 0) {
+          setData(normalizeProducts(products))
+        }
+        setError(null)
+      } catch (err) {
+        console.warn('Supabase fetch error, using fallback data:', err.message)
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  return { data, loading, error }
 }
 
 /**
@@ -187,39 +112,137 @@ export function useProducts() {
  */
 export function useProduct(slug) {
   const staticProduct = staticProducts.find((p) => p.slug === slug) || null
+  const [product, setProduct] = useState(staticProduct)
+  const [loading, setLoading] = useState(isSupabaseConfigured)
+  const [error, setError] = useState(null)
 
-  const { data, loading, error, usingSanity } = useSanityWithFallback(
-    productBySlugQuery,
-    { slug },
-    staticProduct,
-    normalizeProduct
-  )
+  useEffect(() => {
+    if (!isSupabaseConfigured || !slug) {
+      setLoading(false)
+      return
+    }
 
-  return { product: data, loading, error, usingSanity }
+    const fetchProduct = async () => {
+      try {
+        setLoading(true)
+        const { data, error: fetchError } = await supabase
+          .from('products')
+          .select('*, product_categories(*)')
+          .eq('slug', slug)
+          .single()
+
+        if (fetchError) throw fetchError
+
+        if (data) {
+          setProduct(normalizeProduct(data))
+        }
+        setError(null)
+      } catch (err) {
+        console.warn('Supabase fetch error, using fallback data:', err.message)
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProduct()
+  }, [slug])
+
+  return { product, loading, error }
 }
 
 /**
  * Recuperer les produits mis en avant
  */
 export function useFeaturedProducts() {
-  return useSanityWithFallback(
-    featuredProductsQuery,
-    {},
-    staticFeaturedProducts,
-    normalizeProducts
-  )
+  const [data, setData] = useState(staticFeaturedProducts)
+  const [loading, setLoading] = useState(isSupabaseConfigured)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false)
+      return
+    }
+
+    const fetchFeatured = async () => {
+      try {
+        setLoading(true)
+        const { data: products, error: fetchError } = await supabase
+          .from('products')
+          .select('*, product_categories(*)')
+          .eq('featured', true)
+          .order('created_at', { ascending: false })
+
+        if (fetchError) throw fetchError
+
+        if (products && products.length > 0) {
+          setData(normalizeProducts(products))
+        }
+        setError(null)
+      } catch (err) {
+        console.warn('Supabase fetch error, using fallback data:', err.message)
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchFeatured()
+  }, [])
+
+  return { data, loading, error }
 }
 
 /**
  * Recuperer les categories de produits
  */
 export function useProductCategories() {
-  return useSanityWithFallback(
-    productCategoriesQuery,
-    {},
-    staticProductCategories,
-    normalizeProductCategories
-  )
+  const [data, setData] = useState(staticProductCategories)
+  const [loading, setLoading] = useState(isSupabaseConfigured)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false)
+      return
+    }
+
+    const fetchCategories = async () => {
+      try {
+        setLoading(true)
+
+        // Get categories with product count
+        const { data: categories, error: fetchError } = await supabase
+          .from('product_categories')
+          .select('*, products(count)')
+          .order('name')
+
+        if (fetchError) throw fetchError
+
+        if (categories && categories.length > 0) {
+          const normalized = categories.map((cat) => ({
+            id: cat.id,
+            name: cat.name,
+            slug: cat.slug,
+            color: cat.color || 'bg-neutral-400',
+            count: cat.products?.[0]?.count || 0,
+          }))
+          setData(normalized)
+        }
+        setError(null)
+      } catch (err) {
+        console.warn('Supabase fetch error, using fallback data:', err.message)
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCategories()
+  }, [])
+
+  return { data, loading, error }
 }
 
 /**
@@ -227,25 +250,66 @@ export function useProductCategories() {
  */
 export function useRelatedProducts(categorySlug, currentId, limit = 3) {
   const staticRelated = staticProducts
-    .filter((p) => p.id !== currentId && p.category.toLowerCase() === categorySlug?.toLowerCase())
+    .filter((p) => p.id !== currentId && p.category?.toLowerCase() === categorySlug?.toLowerCase())
     .slice(0, limit)
 
-  // Pour le fallback, on utilise une logique simple basee sur la categorie
   const fallbackRelated = staticRelated.length > 0
     ? staticRelated
     : staticProducts.filter((p) => p.id !== currentId).slice(0, limit)
 
-  return useSanityWithFallback(
-    relatedProductsQuery,
-    { categoryId: categorySlug, currentId },
-    fallbackRelated,
-    normalizeProducts
-  )
+  const [data, setData] = useState(fallbackRelated)
+  const [loading, setLoading] = useState(isSupabaseConfigured)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !currentId) {
+      setLoading(false)
+      return
+    }
+
+    const fetchRelated = async () => {
+      try {
+        setLoading(true)
+
+        // First get the current product's category
+        const { data: currentProduct } = await supabase
+          .from('products')
+          .select('category_id')
+          .eq('id', currentId)
+          .single()
+
+        if (currentProduct?.category_id) {
+          const { data: products, error: fetchError } = await supabase
+            .from('products')
+            .select('*, product_categories(*)')
+            .eq('category_id', currentProduct.category_id)
+            .neq('id', currentId)
+            .limit(limit)
+
+          if (fetchError) throw fetchError
+
+          if (products && products.length > 0) {
+            setData(normalizeProducts(products))
+          }
+        }
+        setError(null)
+      } catch (err) {
+        console.warn('Supabase fetch error, using fallback data:', err.message)
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchRelated()
+  }, [categorySlug, currentId, limit])
+
+  return { data, loading, error }
 }
 
 /**
- * Verifier si Sanity est configure
+ * Verifier si Supabase est configure
  */
-export function isSanityEnabled() {
-  return isSanityConfigured
+export function isSupabaseEnabled() {
+  return isSupabaseConfigured
 }

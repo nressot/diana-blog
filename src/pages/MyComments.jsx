@@ -107,7 +107,7 @@ export default function MyComments() {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'approved':
-        return <span className="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700">Approuve</span>
+        return <span className="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700">Approuvé</span>
       case 'pending':
         return <span className="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-700">En attente</span>
       case 'spam':
@@ -130,7 +130,7 @@ export default function MyComments() {
           className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour a l'accueil
+          Retour à l'accueil
         </Link>
 
         {/* Header */}
@@ -160,13 +160,13 @@ export default function MyComments() {
                 Aucun commentaire
               </h3>
               <p className="text-neutral-500 mb-6">
-                Vous n'avez pas encore laisse de commentaire sur le blog.
+                Vous n'avez pas encore laissé de commentaire sur le blog.
               </p>
               <Link
                 to="/blog"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl transition-colors"
               >
-                Decouvrir les articles
+                Découvrir les articles
               </Link>
             </div>
           ) : (

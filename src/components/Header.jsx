@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import logoSimple from '../assets/brand/logo-simple-dark.svg'
 import UserMenu from './UserMenu'
+import CartIcon from './cart/CartIcon'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -10,7 +11,7 @@ export default function Header() {
   const navLinks = [
     { name: 'Accueil', path: '/' },
     { name: 'Blog', path: '/blog' },
-    { name: 'Ma boutique', path: '/boutique-demo' },
+    { name: 'Ma boutique', path: '/boutique' },
     { name: 'A propos', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ]
@@ -45,6 +46,9 @@ export default function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            {/* Cart Icon */}
+            <CartIcon />
+
             {/* User Menu - Desktop */}
             <div className="hidden lg:block">
               <UserMenu />

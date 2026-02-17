@@ -8,6 +8,7 @@ import {
   MessageSquare,
   FileEdit,
   ShoppingBag,
+  Package,
   Receipt,
   Settings,
   LogOut,
@@ -24,6 +25,7 @@ const navigation = [
   { name: 'Categories', href: '/admin/categories', icon: FolderOpen },
   { name: 'Commentaires', href: '/admin/comments', icon: MessageSquare },
   { name: 'Boutique', href: '/admin/products', icon: ShoppingBag },
+  { name: 'Stocks', href: '/admin/stock', icon: Package },
   { name: 'Commandes', href: '/admin/orders', icon: Receipt },
   { name: 'Pages', href: '/admin/pages', icon: FileEdit },
 ]

@@ -135,7 +135,7 @@ export default function ProductCard({ product, variant = 'default', size = 'defa
               to={`/boutique/${product.slug}`}
               className="inline-flex items-center gap-3 text-sm font-medium tracking-wide uppercase hover:gap-4 transition-all w-fit"
             >
-              Decouvrir
+              Découvrir
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -223,7 +223,7 @@ export default function ProductCard({ product, variant = 'default', size = 'defa
           {showAddToCart ? (
             <button
               onClick={handleAddToCart}
-              className="text-xs text-neutral-500 hover:text-primary-600 flex items-center gap-1 transition-colors"
+              className="text-xs text-neutral-500 hover:text-primary-600 flex items-center gap-1 transition-colors cursor-pointer active:scale-95"
             >
               <ShoppingBag className="w-3 h-3" />
               Ajouter

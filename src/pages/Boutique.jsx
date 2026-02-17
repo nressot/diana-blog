@@ -167,7 +167,7 @@ export default function Boutique() {
                   to={`/boutique/${featured.slug}`}
                   className="inline-flex items-center gap-3 text-sm font-medium tracking-wide uppercase hover:gap-4 transition-all"
                 >
-                  Decouvrir
+                  Découvrir
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

@@ -57,11 +57,17 @@ exports.handler = async (event, context) => {
         productName: productName || '',
         productType: productType || ''
       },
-      success_url: `${siteUrl}/boutique?success=true`,
+      success_url: `${siteUrl}/commande-confirmee?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/boutique?canceled=true`,
       billing_address_collection: 'required',
       shipping_address_collection: {
         allowed_countries: ['FR', 'BE', 'CH', 'LU', 'MC']
+      },
+      allow_promotion_codes: true,
+      locale: 'fr',
+      customer_creation: 'always',
+      invoice_creation: {
+        enabled: true,
       }
     })
 

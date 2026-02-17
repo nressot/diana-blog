@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { CartProvider } from './context/CartContext'
+import CartSidebar from './components/cart/CartSidebar'
 import { AuthProvider } from './context/AuthContext'
 import ScrollToTop from './components/ScrollToTop'
 import Header from './components/Header'
@@ -14,6 +15,7 @@ import Privacy from './pages/Privacy'
 import Article from './pages/Article'
 import Boutique from './pages/Boutique'
 import Product from './pages/Product'
+import OrderConfirmation, { OrderCanceled } from './pages/OrderConfirmation'
 import BackgroundDemo from './pages/BackgroundDemo'
 import BoutiqueDemo from './pages/BoutiqueDemo'
 import BlogDemo from './pages/BlogDemo'
@@ -25,6 +27,7 @@ import ResetPassword from './pages/ResetPassword'
 import NewPassword from './pages/NewPassword'
 import Profile from './pages/Profile'
 import MyComments from './pages/MyComments'
+import Orders from './pages/Orders'
 
 // Admin imports
 import {
@@ -37,6 +40,7 @@ import {
   Pages,
   ProductList,
   ProductEdit,
+  StockManagement,
   OrderList,
   OrderDetail
 } from './admin'
@@ -65,6 +69,7 @@ function App() {
             <Route path="pages" element={<Pages />} />
             <Route path="products" element={<ProductList />} />
             <Route path="products/:id" element={<ProductEdit />} />
+            <Route path="stock" element={<StockManagement />} />
             <Route path="orders" element={<OrderList />} />
             <Route path="orders/:id" element={<OrderDetail />} />
           </Route>
@@ -77,6 +82,7 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
+        <CartSidebar />
         <ScrollToTop />
         <div className="min-h-screen flex flex-col">
           <Header />
@@ -92,6 +98,8 @@ function App() {
               <Route path="/article/:slug" element={<Article />} />
               <Route path="/boutique" element={<Boutique />} />
               <Route path="/boutique/:slug" element={<Product />} />
+              <Route path="/commande-confirmee" element={<OrderConfirmation />} />
+              <Route path="/commande-annulee" element={<OrderCanceled />} />
               <Route path="/boutique-demo" element={<BoutiqueDemo />} />
               <Route path="/boutique-demo/:variant" element={<BoutiqueDemo />} />
               <Route path="/demo/bg/:version" element={<BackgroundDemo />} />
@@ -103,6 +111,7 @@ function App() {
               <Route path="/nouveau-mot-de-passe" element={<NewPassword />} />
               <Route path="/profil" element={<Profile />} />
               <Route path="/mes-commentaires" element={<MyComments />} />
+              <Route path="/mes-commandes" element={<Orders />} />
             </Routes>
           </main>
           <Footer />

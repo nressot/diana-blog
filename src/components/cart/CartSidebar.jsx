@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ShoppingBag, ArrowRight } from 'lucide-react'
+import { X, ShoppingBag, ArrowRight, Loader2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../../context/CartContext'
+import { useCheckout } from '../../lib/useCheckout'
 import CartItem from './CartItem'
 
 function formatPrice(priceInCents) {
@@ -13,6 +14,12 @@ function formatPrice(priceInCents) {
 
 export default function CartSidebar() {
   const { items, isOpen, closeCart, total, clearCart, itemCount } = useCart()
+  const { checkoutCart, loading: checkoutLoading, error: checkoutError, clearError } = useCheckout()
+
+  const handleCheckout = async () => {
+    clearError()
+    await checkoutCart(items)
+  }
 
   // Fermer avec Escape
   useEffect(() => {
@@ -97,7 +104,7 @@ export default function CartSidebar() {
                     onClick={closeCart}
                     className="text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400 font-medium inline-flex items-center gap-1"
                   >
-                    Decouvrir la boutique
+                    Découvrir la boutique
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -116,28 +123,46 @@ export default function CartSidebar() {
 
             {/* Footer avec total et actions */}
             {items.length > 0 && (
-              <div className="p-6 border-t border-neutral-200 dark:border-neutral-800 bg-cream-100/50 dark:bg-neutral-900/50">
+              <div className="p-6 border-t border-neutral-200 dark:border-neutral-800 bg-cream-200 dark:bg-neutral-800">
                 {/* Sous-total */}
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-neutral-600 dark:text-neutral-400">
+                  <span className="text-neutral-700 dark:text-neutral-300">
                     Sous-total
                   </span>
-                  <span className="text-xl font-bold text-neutral-900 dark:text-white">
+                  <span className="text-xl font-bold subtotal-price">
                     {formatPrice(total)}
                   </span>
                 </div>
 
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-                  Frais de livraison calcules a l'etape suivante
+                  Frais de livraison calculés à l'étape suivante
                 </p>
+
+                {/* Error message */}
+                {checkoutError && (
+                  <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
+                    {checkoutError}
+                  </div>
+                )}
 
                 {/* Boutons */}
                 <div className="space-y-3">
                   <button
-                    className="w-full py-3.5 px-6 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
+                    onClick={handleCheckout}
+                    disabled={checkoutLoading}
+                    className="w-full py-3.5 px-6 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                   >
-                    Passer commande
-                    <ArrowRight className="w-4 h-4" />
+                    {checkoutLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Redirection...
+                      </>
+                    ) : (
+                      <>
+                        Passer commande
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
 
                   <div className="flex gap-3">

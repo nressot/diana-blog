@@ -1,36 +1,35 @@
 import { useState } from 'react'
-import { stripePromise } from './stripe'
 
 export function useCheckout() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const checkout = async (product) => {
+  // Checkout pour un seul produit (achat direct)
+  const checkoutSingleProduct = async (product) => {
     setLoading(true)
     setError(null)
 
     try {
-      // For now, simulate checkout or use Stripe Checkout links
-      // In production, this would call your backend API
+      const selectedFormat = product.selectedFormat || product.formats?.[0]
+      const priceId = selectedFormat?.stripePriceId || product.stripePriceId
 
-      // Option 1: Direct Stripe Checkout (if product has stripePriceId)
-      if (product.stripePriceId) {
-        const stripe = await stripePromise
-
-        if (!stripe) {
-          throw new Error('Stripe non configure. Veuillez configurer VITE_STRIPE_PUBLIC_KEY.')
-        }
-
-        // Call backend to create checkout session
+      if (!priceId) {
+        // Fallback: utiliser price_data si pas de stripePriceId
         const response = await fetch('/api/create-checkout-session', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            priceId: product.stripePriceId,
-            productId: product.id,
-            productName: product.title,
+            items: [{
+              id: product.id,
+              productId: product.id,
+              title: product.title,
+              price: selectedFormat?.price || product.price,
+              formatType: selectedFormat?.type,
+              formatLabel: selectedFormat?.label,
+              quantity: 1,
+            }]
           }),
         })
 
@@ -40,16 +39,37 @@ export function useCheckout() {
         }
 
         const { url } = await response.json()
-
-        // Redirect to Stripe Checkout
         if (url) {
           window.location.href = url
           return
         }
       }
 
-      // Option 2: Fallback - show coming soon message
-      alert('Le paiement sera disponible prochainement!')
+      // Utiliser le price ID Stripe
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          singleProduct: {
+            priceId: priceId,
+            productId: product.id,
+            productName: product.title,
+            quantity: 1,
+          }
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erreur lors de la creation de la session de paiement')
+      }
+
+      const { url } = await response.json()
+      if (url) {
+        window.location.href = url
+      }
 
     } catch (err) {
       setError(err.message)
@@ -59,5 +79,68 @@ export function useCheckout() {
     }
   }
 
-  return { checkout, loading, error }
+  // Checkout pour le panier complet
+  const checkoutCart = async (cartItems) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      if (!cartItems || cartItems.length === 0) {
+        throw new Error('Votre panier est vide')
+      }
+
+      // Transformer les items du panier pour l'API
+      const items = cartItems.map(item => {
+        const product = item.product
+        const selectedFormat = product.selectedFormat || product.formats?.[0]
+
+        return {
+          id: product.id,
+          productId: product.id,
+          title: product.title,
+          price: selectedFormat?.price || product.price,
+          stripePriceId: selectedFormat?.stripePriceId || product.stripePriceId,
+          formatType: selectedFormat?.type,
+          formatLabel: selectedFormat?.label,
+          quantity: item.quantity,
+        }
+      })
+
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erreur lors de la creation de la session de paiement')
+      }
+
+      const { url } = await response.json()
+      if (url) {
+        window.location.href = url
+      }
+
+    } catch (err) {
+      setError(err.message)
+      console.error('Checkout error:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Alias pour compatibilite
+  const checkout = checkoutSingleProduct
+
+  return {
+    checkout,
+    checkoutSingleProduct,
+    checkoutCart,
+    loading,
+    error,
+    clearError: () => setError(null)
+  }
 }

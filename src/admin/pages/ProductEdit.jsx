@@ -7,7 +7,11 @@ import {
   Trash2,
   Plus,
   Image,
-  Package
+  Package,
+  RefreshCw,
+  CheckCircle,
+  AlertCircle,
+  ExternalLink
 } from 'lucide-react'
 
 const slugify = (text) => {
@@ -24,6 +28,8 @@ export default function ProductEdit() {
 
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
+  const [syncing, setSyncing] = useState(false)
+  const [syncMessage, setSyncMessage] = useState(null)
   const [categories, setCategories] = useState([])
   const [product, setProduct] = useState({
     title: '',
@@ -50,7 +56,9 @@ export default function ProductEdit() {
     },
     series: null,
     excerpt_text: '',
-    formats: []
+    formats: [],
+    stripe_product_id: null,
+    stripe_synced_at: null
   })
 
   useEffect(() => {
@@ -200,13 +208,18 @@ export default function ProductEdit() {
         updated_at: new Date().toISOString()
       }
 
+      let savedProductId = id
+
       if (isNew) {
         delete productData.id
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('products')
           .insert(productData)
+          .select('id')
+          .single()
 
         if (error) throw error
+        savedProductId = data.id
       } else {
         const { error } = await supabase
           .from('products')
@@ -216,7 +229,27 @@ export default function ProductEdit() {
         if (error) throw error
       }
 
-      alert('Produit sauvegarde !')
+      // Auto-sync to Stripe
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+        const syncResponse = await fetch(`${apiUrl}/api/sync-product-to-stripe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId: savedProductId })
+        })
+
+        if (syncResponse.ok) {
+          const syncData = await syncResponse.json()
+          console.log('Stripe sync:', syncData.message)
+        } else {
+          console.warn('Stripe sync failed:', await syncResponse.text())
+        }
+      } catch (syncError) {
+        console.warn('Stripe sync error:', syncError)
+        // Don't block save if Stripe sync fails
+      }
+
+      alert('Produit sauvegarde et synchronise avec Stripe !')
       navigate('/admin/products')
     } catch (error) {
       console.error('Error saving product:', error)
@@ -227,9 +260,24 @@ export default function ProductEdit() {
   }
 
   const handleDelete = async () => {
-    if (!confirm('Supprimer ce produit ?')) return
+    if (!confirm('Supprimer ce produit ? Il sera aussi archive dans Stripe.')) return
 
     try {
+      // Archive in Stripe first if synced
+      if (product.stripe_product_id) {
+        try {
+          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+          await fetch(`${apiUrl}/api/archive-stripe-product`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ stripeProductId: product.stripe_product_id })
+          })
+        } catch (stripeError) {
+          console.warn('Stripe archive error:', stripeError)
+          // Continue with deletion even if Stripe fails
+        }
+      }
+
       const { error } = await supabase
         .from('products')
         .delete()
@@ -240,6 +288,49 @@ export default function ProductEdit() {
     } catch (error) {
       console.error('Error deleting product:', error)
       alert('Erreur: ' + error.message)
+    }
+  }
+
+  const syncToStripe = async () => {
+    if (isNew) {
+      alert('Veuillez d\'abord sauvegarder le produit avant de le synchroniser avec Stripe.')
+      return
+    }
+
+    setSyncing(true)
+    setSyncMessage(null)
+
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+      const response = await fetch(`${apiUrl}/api/sync-product-to-stripe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: id })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur de synchronisation')
+      }
+
+      // Update local state with new Stripe info
+      setProduct(prev => ({
+        ...prev,
+        stripe_product_id: data.stripeProductId,
+        stripe_synced_at: new Date().toISOString(),
+        formats: prev.formats.map(format => {
+          const syncedFormat = data.formats?.find(f => f.type === format.formatType || f.label === format.label)
+          return syncedFormat ? { ...format, stripe_price_id: syncedFormat.stripe_price_id } : format
+        })
+      }))
+
+      setSyncMessage({ type: 'success', text: data.message })
+    } catch (error) {
+      console.error('Sync error:', error)
+      setSyncMessage({ type: 'error', text: error.message })
+    } finally {
+      setSyncing(false)
     }
   }
 
@@ -582,7 +673,7 @@ export default function ProductEdit() {
                       <Trash2 size={16} />
                     </button>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
                     <div>
                       <label className="block text-xs text-gray-500 mb-1">Label</label>
                       <input
@@ -614,6 +705,24 @@ export default function ProductEdit() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                       />
                     </div>
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">Quantite en stock</label>
+                      <input
+                        type="number"
+                        value={format.stock ?? ''}
+                        onChange={(e) => {
+                          const stock = e.target.value === '' ? null : parseInt(e.target.value)
+                          updateFormat(index, 'stock', stock)
+                          // Auto-update inStock based on quantity
+                          if (stock !== null) {
+                            updateFormat(index, 'inStock', stock > 0)
+                          }
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        placeholder="Illimite si vide"
+                        min="0"
+                      />
+                    </div>
                     <div className="flex items-end">
                       <label className="flex items-center gap-2">
                         <input
@@ -631,6 +740,112 @@ export default function ProductEdit() {
             </div>
           )}
         </div>
+
+        {/* Stripe Sync */}
+        {!isNew && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Synchronisation Stripe</h2>
+
+            <div className="space-y-4">
+              {/* Status */}
+              <div className="flex items-center gap-4 text-sm">
+                {product.stripe_product_id ? (
+                  <>
+                    <div className="flex items-center gap-2 text-green-600">
+                      <CheckCircle size={16} />
+                      <span>Synchronise</span>
+                    </div>
+                    <span className="text-gray-500">|</span>
+                    <span className="text-gray-600">
+                      ID: <code className="bg-gray-100 px-2 py-0.5 rounded text-xs">{product.stripe_product_id}</code>
+                    </span>
+                    {product.stripe_synced_at && (
+                      <>
+                        <span className="text-gray-500">|</span>
+                        <span className="text-gray-500">
+                          Derniere sync: {new Date(product.stripe_synced_at).toLocaleDateString('fr-FR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </span>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <div className="flex items-center gap-2 text-amber-600">
+                    <AlertCircle size={16} />
+                    <span>Non synchronise avec Stripe</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Formats with Stripe Price IDs */}
+              {product.formats.length > 0 && product.stripe_product_id && (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">Prix Stripe par format:</p>
+                  <div className="space-y-1">
+                    {product.formats.map((format, index) => (
+                      <div key={index} className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600">{format.label || format.formatType}</span>
+                        {format.stripe_price_id ? (
+                          <code className="bg-white px-2 py-0.5 rounded text-xs text-green-600 border border-green-200">
+                            {format.stripe_price_id}
+                          </code>
+                        ) : (
+                          <span className="text-amber-500 text-xs">Non synchronise</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sync Message */}
+              {syncMessage && (
+                <div className={`p-3 rounded-lg text-sm ${
+                  syncMessage.type === 'success'
+                    ? 'bg-green-50 text-green-700 border border-green-200'
+                    : 'bg-red-50 text-red-700 border border-red-200'
+                }`}>
+                  {syncMessage.text}
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={syncToStripe}
+                  disabled={syncing}
+                  className="flex items-center gap-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors disabled:opacity-50 cursor-pointer active:scale-95"
+                >
+                  <RefreshCw size={18} className={syncing ? 'animate-spin' : ''} />
+                  {syncing ? 'Synchronisation...' : (product.stripe_product_id ? 'Resynchroniser' : 'Synchroniser avec Stripe')}
+                </button>
+
+                {product.stripe_product_id && (
+                  <a
+                    href={`https://dashboard.stripe.com/products/${product.stripe_product_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <ExternalLink size={18} />
+                    Voir sur Stripe
+                  </a>
+                )}
+              </div>
+
+              <p className="text-xs text-gray-500">
+                La synchronisation cree ou met a jour le produit et ses prix dans Stripe.
+                Les prix existants sont conserves (Stripe ne permet pas de modifier un prix).
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Submit */}
         <div className="flex justify-end gap-4">
