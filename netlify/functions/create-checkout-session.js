@@ -1,8 +1,9 @@
 // Netlify Function - Stripe Checkout Session
+// Supports both single product and cart checkout
+
 const stripe = require('stripe')
 
 exports.handler = async (event, context) => {
-  // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -10,12 +11,10 @@ exports.handler = async (event, context) => {
     'Content-Type': 'application/json'
   }
 
-  // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers, body: '' }
   }
 
-  // Only allow POST
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -24,7 +23,6 @@ exports.handler = async (event, context) => {
     }
   }
 
-  // Check Stripe key
   if (!process.env.STRIPE_SECRET_KEY) {
     return {
       statusCode: 500,
@@ -36,26 +34,96 @@ exports.handler = async (event, context) => {
   const stripeClient = stripe(process.env.STRIPE_SECRET_KEY)
 
   try {
-    const { priceId, productId, productName, productType } = JSON.parse(event.body || '{}')
+    const body = JSON.parse(event.body || '{}')
+    const { items, singleProduct } = body
 
-    if (!priceId) {
+    let lineItems = []
+    let cartItemsMetadata = []
+
+    // Mode: Single product checkout
+    if (singleProduct) {
+      const { priceId, productId, productName, quantity = 1 } = singleProduct
+
+      if (!priceId) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'Price ID is required' })
+        }
+      }
+
+      lineItems = [{
+        price: priceId,
+        quantity: quantity
+      }]
+
+      cartItemsMetadata = [{
+        product_id: productId,
+        product_title: productName,
+        quantity: quantity
+      }]
+    }
+    // Mode: Cart checkout with multiple items
+    else if (items && Array.isArray(items) && items.length > 0) {
+      lineItems = items.map(item => {
+        if (item.stripePriceId) {
+          return {
+            price: item.stripePriceId,
+            quantity: item.quantity || 1
+          }
+        } else {
+          // Fallback: create price_data if no Stripe price ID
+          return {
+            price_data: {
+              currency: 'chf',
+              product_data: {
+                name: item.title || item.productName || 'Produit',
+                description: item.formatLabel ? `Format: ${item.formatLabel}` : undefined
+              },
+              unit_amount: item.price
+            },
+            quantity: item.quantity || 1
+          }
+        }
+      })
+
+      cartItemsMetadata = items.map(item => ({
+        product_id: item.productId || item.id,
+        product_title: item.title || item.productName,
+        format_type: item.formatType,
+        quantity: item.quantity || 1
+      }))
+    }
+    // Legacy mode: direct priceId in body
+    else if (body.priceId) {
+      lineItems = [{
+        price: body.priceId,
+        quantity: 1
+      }]
+
+      cartItemsMetadata = [{
+        product_id: body.productId || '',
+        product_title: body.productName || '',
+        quantity: 1
+      }]
+    }
+    else {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Price ID is required' })
+        body: JSON.stringify({ error: 'No items provided for checkout' })
       }
     }
 
-    const siteUrl = process.env.URL || process.env.SITE_URL || 'http://localhost:5173'
+    const siteUrl = process.env.URL || process.env.SITE_URL || 'https://le-coven-de-diana.netlify.app'
 
     const session = await stripeClient.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],
-      line_items: [{ price: priceId, quantity: 1 }],
+      line_items: lineItems,
       metadata: {
-        productId: productId || '',
-        productName: productName || '',
-        productType: productType || ''
+        cart_items: JSON.stringify(cartItemsMetadata),
+        item_count: cartItemsMetadata.length.toString()
       },
       success_url: `${siteUrl}/commande-confirmee?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/boutique?canceled=true`,
@@ -67,14 +135,14 @@ exports.handler = async (event, context) => {
       locale: 'fr',
       customer_creation: 'always',
       invoice_creation: {
-        enabled: true,
+        enabled: true
       }
     })
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ url: session.url })
+      body: JSON.stringify({ url: session.url, sessionId: session.id })
     }
   } catch (err) {
     console.error('Stripe error:', err)
