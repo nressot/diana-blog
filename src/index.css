@@ -56,6 +56,17 @@ body {
   color: var(--color-neutral-900);
 }
 
+/* Text selection styling */
+::selection {
+  background-color: var(--color-cream-300);
+  color: var(--color-neutral-900);
+}
+
+::-moz-selection {
+  background-color: var(--color-cream-300);
+  color: var(--color-neutral-900);
+}
+
 .dark body {
   background-color: var(--color-neutral-950);
   color: var(--color-neutral-100);
