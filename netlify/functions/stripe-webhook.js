@@ -297,7 +297,7 @@ async function sendConfirmationEmail(orderData, session) {
     <!-- Footer -->
     <div style="text-align: center; margin-top: 32px; color: #999; font-size: 14px;">
       <p style="margin: 0 0 8px 0;">Des questions ? Contactez-nous</p>
-      <a href="mailto:contact@diana-auteure.ch" style="color: #d4a574; text-decoration: none;">contact@diana-auteure.ch</a>
+      <a href="mailto:contact@covendediana.ch" style="color: #d4a574; text-decoration: none;">contact@covendediana.ch</a>
       <p style="margin: 24px 0 0 0; font-size: 12px;">Le Coven de Diana - Litterature et Magie</p>
     </div>
   </div>
