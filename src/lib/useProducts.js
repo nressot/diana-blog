@@ -262,7 +262,11 @@ export function useRelatedProducts(categorySlug, currentId, limit = 3) {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (!isSupabaseConfigured || !currentId) {
+    // Validate UUID format - skip Supabase query if ID is not a valid UUID
+    const isValidUUID = currentId && typeof currentId === 'string' &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(currentId)
+
+    if (!isSupabaseConfigured || !currentId || !isValidUUID) {
       setLoading(false)
       return
     }
