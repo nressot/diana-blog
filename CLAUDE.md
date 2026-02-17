@@ -57,7 +57,24 @@ studio/           # Sanity Studio (CMS)
 ### Category
 - name, slug, color (classe Tailwind), description
 
-## Variables d'Environnement
+## Deploiement
+
+**Site production** : https://le-coven-de-diana.netlify.app/
+
+**Webhook Stripe** : https://le-coven-de-diana.netlify.app/.netlify/functions/stripe-webhook
+
+## Variables d'Environnement Netlify
+
+| Variable | Description |
+|----------|-------------|
+| `STRIPE_SECRET_KEY` | Cle secrete Stripe |
+| `STRIPE_WEBHOOK_SECRET` | Secret webhook Stripe (whsec_...) |
+| `SUPABASE_URL` | URL projet Supabase |
+| `SUPABASE_SERVICE_KEY` | Cle service role Supabase |
+| `RESEND_API_KEY` | Cle API Resend pour emails |
+| `FROM_EMAIL` | Expediteur emails (Diana <noreply@resend.dev>) |
+
+## Variables d'Environnement Local
 
 ```env
 VITE_SANITY_PROJECT_ID=xxx
@@ -65,6 +82,32 @@ VITE_SANITY_DATASET=production
 ```
 
 Si non configure -> utilise `src/data/articles.js` comme fallback.
+
+## Supabase - Execution SQL
+
+**Important**: Supabase ne permet PAS l'execution de SQL brut (ALTER TABLE, CREATE INDEX, etc.) via l'API JS pour des raisons de securite.
+
+### Pour les migrations/DDL (ALTER TABLE, CREATE, etc.)
+
+Utiliser le **SQL Editor** dans le dashboard Supabase:
+1. Aller sur https://supabase.com/dashboard
+2. Menu lateral gauche > **SQL Editor**
+3. Coller le SQL et cliquer **Run**
+
+### Alternatives pour acces programmatique
+
+| Methode | Prerequis | Usage |
+|---------|-----------|-------|
+| Supabase CLI | `npx supabase login` puis `npx supabase link` | Migrations via `supabase db push` |
+| Management API | Personal Access Token (PAT) | `POST /v1/projects/{ref}/database/query` |
+| Connexion directe | DATABASE_URL avec mot de passe | Librairie `pg` pour node.js |
+
+### Cle Service Role
+
+Pour les operations d'ecriture cote serveur, utiliser `SUPABASE_SERVICE_ROLE_KEY` (bypass RLS):
+```javascript
+const supabase = createClient(url, process.env.SUPABASE_SERVICE_ROLE_KEY)
+```
 
 ## Commandes
 
