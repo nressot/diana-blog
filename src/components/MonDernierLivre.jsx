@@ -23,12 +23,27 @@ export default function MonDernierLivre() {
   const description = bookData?.description
   const ctaText = bookData?.ctaText || 'Acheter'
   const ctaLink = bookData?.ctaLink || '#'
-  const bookCover = bookData?.bookCover
-  const geometricShape = bookData?.geometricShape
 
-  // URLs des images
-  const bookCoverUrl = bookCover ? urlFor(bookCover).width(280).url() : '/book-cover.png'
-  const geometricShapeUrl = geometricShape ? urlFor(geometricShape).width(330).url() : '/geometric-shape.png'
+  // URLs des images - supporter les deux formats (URL directe ou reference Sanity)
+  let bookCoverUrl = '/book-cover.png'
+  let geometricShapeUrl = '/geometric-shape.png'
+
+  // Verifier si c'est une URL directe ou une reference Sanity
+  if (bookData?.bookCoverUrl) {
+    // URL directe depuis Supabase
+    bookCoverUrl = bookData.bookCoverUrl
+  } else if (bookData?.bookCover) {
+    // Reference Sanity (legacy)
+    bookCoverUrl = urlFor(bookData.bookCover).width(280).url()
+  }
+
+  if (bookData?.geometricShapeUrl) {
+    // URL directe depuis Supabase
+    geometricShapeUrl = bookData.geometricShapeUrl
+  } else if (bookData?.geometricShape) {
+    // Reference Sanity (legacy)
+    geometricShapeUrl = urlFor(bookData.geometricShape).width(330).url()
+  }
 
   return (
     <section className="py-12 lg:py-20">
@@ -85,7 +100,7 @@ export default function MonDernierLivre() {
             {/* Book cover - floating animation, in front */}
             <img
               src={bookCoverUrl}
-              alt={bookData?.bookCover?.alt || title}
+              alt={bookData?.bookTitle || title}
               className="absolute top-0 left-10 w-[280px] rotate-[4deg] z-10 animate-float"
             />
           </div>
@@ -101,7 +116,7 @@ export default function MonDernierLivre() {
               />
               <img
                 src={bookCoverUrl}
-                alt={bookData?.bookCover?.alt || title}
+                alt={bookData?.bookTitle || title}
                 className="absolute top-0 left-4 w-[180px] rotate-[4deg] z-10 animate-float"
               />
             </div>

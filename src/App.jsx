@@ -42,7 +42,8 @@ import {
   ProductEdit,
   StockManagement,
   OrderList,
-  OrderDetail
+  OrderDetail,
+  BookSection
 } from './admin'
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
             <Route path="stock" element={<StockManagement />} />
             <Route path="orders" element={<OrderList />} />
             <Route path="orders/:id" element={<OrderDetail />} />
+            <Route path="book" element={<BookSection />} />
           </Route>
         </Routes>
       </AuthProvider>

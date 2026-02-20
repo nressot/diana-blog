@@ -6,7 +6,8 @@ import {
   FolderOpen,
   MessageSquare,
   Plus,
-  ShoppingBag
+  ShoppingBag,
+  BookOpen
 } from 'lucide-react'
 
 export default function Dashboard() {
@@ -114,13 +115,22 @@ export default function Dashboard() {
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-600 mt-1">Bienvenue dans votre espace d'administration</p>
         </div>
-        <Link
-          to="/admin/articles/new"
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-        >
-          <Plus size={20} />
-          Nouvel article
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            to="/admin/book"
+            className="flex items-center gap-2 px-4 py-2 border border-primary-300 text-primary-700 rounded-lg hover:bg-primary-50 transition-colors"
+          >
+            <BookOpen size={20} />
+            Mon dernier livre
+          </Link>
+          <Link
+            to="/admin/articles/new"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <Plus size={20} />
+            Nouvel article
+          </Link>
+        </div>
       </div>
 
       {/* Stats Grid */}

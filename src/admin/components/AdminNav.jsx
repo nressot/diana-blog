@@ -16,7 +16,8 @@ import {
   X,
   ChevronDown,
   Palette,
-  ExternalLink
+  ExternalLink,
+  BookOpen
 } from 'lucide-react'
 
 const navigation = [
@@ -28,6 +29,7 @@ const navigation = [
   { name: 'Stocks', href: '/admin/stock', icon: Package },
   { name: 'Commandes', href: '/admin/orders', icon: Receipt },
   { name: 'Pages', href: '/admin/pages', icon: FileEdit },
+  { name: 'Mon dernier livre', href: '/admin/book', icon: BookOpen },
 ]
 
 export default function AdminNav() {

@@ -282,6 +282,95 @@ body {
   margin: 1.5rem 0;
 }
 
+/* ===== IMAGE ALIGNMENT & SIZING IN ARTICLES ===== */
+
+/* Image wrapper base styles */
+.prose-content .image-wrapper,
+.prose-content figure[data-alignment] {
+  margin: 1.5rem 0;
+  display: block;
+}
+
+/* Clear floats after images */
+.prose-content .image-wrapper::after,
+.prose-content figure[data-alignment]::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* Image alignments */
+.prose-content figure[data-alignment="left"],
+.prose-content .image-wrapper[style*="float: left"] {
+  float: left;
+  margin-right: 1.5rem;
+  margin-bottom: 1rem;
+  max-width: 50%;
+}
+
+.prose-content figure[data-alignment="right"],
+.prose-content .image-wrapper[style*="float: right"] {
+  float: right;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  max-width: 50%;
+}
+
+.prose-content figure[data-alignment="center"],
+.prose-content .image-wrapper[style*="margin-left: auto"] {
+  margin-left: auto;
+  margin-right: auto;
+  clear: both;
+}
+
+/* Image sizes */
+.prose-content figure[data-size="small"],
+.prose-content .image-wrapper .max-w-xs {
+  max-width: 20rem;
+}
+
+.prose-content figure[data-size="medium"],
+.prose-content .image-wrapper .max-w-md {
+  max-width: 28rem;
+}
+
+.prose-content figure[data-size="large"],
+.prose-content .image-wrapper .max-w-2xl {
+  max-width: 42rem;
+}
+
+.prose-content figure[data-size="full"],
+.prose-content .image-wrapper .max-w-full {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Image inside wrapper */
+.prose-content .image-wrapper img,
+.prose-content figure[data-alignment] img {
+  border-radius: 0.75rem;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Clearfix for floated images */
+.prose-content p:has(+ figure[data-alignment="left"]),
+.prose-content p:has(+ figure[data-alignment="right"]) {
+  clear: both;
+}
+
+/* Responsive: stack images on mobile */
+@media (max-width: 640px) {
+  .prose-content figure[data-alignment="left"],
+  .prose-content figure[data-alignment="right"],
+  .prose-content .image-wrapper[style*="float"] {
+    float: none !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
 .prose-content code {
   background-color: var(--color-neutral-100);
   padding: 0.125rem 0.375rem;

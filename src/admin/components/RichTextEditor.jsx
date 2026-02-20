@@ -1,6 +1,5 @@
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
@@ -10,8 +9,11 @@ import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
 import CharacterCount from '@tiptap/extension-character-count'
 import Youtube from '@tiptap/extension-youtube'
+import { TextStyle } from '@tiptap/extension-text-style'
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { uploadImage } from '../../lib/supabase'
+import { ImageExtension } from './extensions/ImageExtension'
+import { FontFamilyExtension, FONT_FAMILIES } from './extensions/FontFamilyExtension'
 import {
   Bold,
   Italic,
@@ -37,8 +39,25 @@ import {
   Youtube as YoutubeIcon,
   Type,
   ChevronDown,
-  Upload
+  Upload,
+  Maximize2,
+  Minimize2
 } from 'lucide-react'
+
+// Options de taille d'image
+const IMAGE_SIZES = [
+  { name: 'Petite', value: 'small', desc: 'Dans le texte' },
+  { name: 'Moyenne', value: 'medium', desc: '50% largeur' },
+  { name: 'Grande', value: 'large', desc: '75% largeur' },
+  { name: 'Pleine largeur', value: 'full', desc: '100%' },
+]
+
+// Options d'alignement d'image
+const IMAGE_ALIGNMENTS = [
+  { name: 'Gauche', value: 'left', icon: AlignLeft },
+  { name: 'Centre', value: 'center', icon: AlignCenter },
+  { name: 'Droite', value: 'right', icon: AlignRight },
+]
 
 // Bouton de menu simple - utilise onMouseDown pour garder le focus dans l'editeur
 const MenuButton = ({ onAction, isActive, disabled, children, title }) => (
@@ -125,9 +144,12 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
   const [showImageModal, setShowImageModal] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
   const [imageAlt, setImageAlt] = useState('')
+  const [imageAlignment, setImageAlignment] = useState('center')
+  const [imageSize, setImageSize] = useState('large')
   const [isUploadingImage, setIsUploadingImage] = useState(false)
   const [showVideoModal, setShowVideoModal] = useState(false)
   const [videoUrl, setVideoUrl] = useState('')
+  const [selectedImage, setSelectedImage] = useState(null)
   const lastReadTimeRef = useRef(null)
   const onReadTimeChangeRef = useRef(onReadTimeChange)
   const savedSelectionRef = useRef(null)
@@ -148,11 +170,9 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
         }
       }
     }),
-    Image.configure({
-      HTMLAttributes: {
-        class: 'rounded-lg max-w-full mx-auto'
-      }
-    }),
+    ImageExtension,
+    TextStyle,
+    FontFamilyExtension,
     Link.configure({
       openOnClick: false,
       HTMLAttributes: {
@@ -197,6 +217,19 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
       if (readTime !== lastReadTimeRef.current && onReadTimeChangeRef.current) {
         lastReadTimeRef.current = readTime
         onReadTimeChangeRef.current(readTime)
+      }
+    },
+    onSelectionUpdate: ({ editor }) => {
+      // Detecter si une image est selectionnee
+      const { from } = editor.state.selection
+      const node = editor.state.doc.nodeAt(from)
+      if (node?.type.name === 'image') {
+        setSelectedImage({
+          pos: from,
+          attrs: node.attrs
+        })
+      } else {
+        setSelectedImage(null)
       }
     }
   })
@@ -260,15 +293,38 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
     editor.chain().focus().unsetLink().run()
   }, [editor])
 
+  // Mettre a jour les attributs d'une image selectionnee
+  const updateSelectedImage = useCallback((attrs) => {
+    if (!editor || !selectedImage) return
+
+    const { pos } = selectedImage
+    const node = editor.state.doc.nodeAt(pos)
+    if (!node || node.type.name !== 'image') return
+
+    editor.chain().focus()
+      .setNodeSelection(pos)
+      .updateAttributes('image', attrs)
+      .run()
+
+    setSelectedImage(prev => prev ? { ...prev, attrs: { ...prev.attrs, ...attrs } } : null)
+  }, [editor, selectedImage])
+
   // Gestion des images
   const handleAddImage = useCallback(() => {
     if (imageUrl) {
-      editor.chain().focus().setImage({ src: imageUrl, alt: imageAlt }).run()
+      editor.chain().focus().setImage({
+        src: imageUrl,
+        alt: imageAlt,
+        alignment: imageAlignment,
+        size: imageSize
+      }).run()
     }
     setShowImageModal(false)
     setImageUrl('')
     setImageAlt('')
-  }, [editor, imageUrl, imageAlt])
+    setImageAlignment('center')
+    setImageSize('large')
+  }, [editor, imageUrl, imageAlt, imageAlignment, imageSize])
 
   // Upload d'image depuis l'ordinateur
   const handleFileUpload = useCallback(async (file) => {
@@ -281,10 +337,17 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
     try {
       const url = await uploadImage(file, 'articles')
       if (url) {
-        editor.chain().focus().setImage({ src: url, alt: imageAlt || file.name }).run()
+        editor.chain().focus().setImage({
+          src: url,
+          alt: imageAlt || file.name,
+          alignment: imageAlignment,
+          size: imageSize
+        }).run()
         setShowImageModal(false)
         setImageUrl('')
         setImageAlt('')
+        setImageAlignment('center')
+        setImageSize('large')
       }
     } catch (error) {
       console.error('Erreur upload image:', error)
@@ -292,7 +355,7 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
     } finally {
       setIsUploadingImage(false)
     }
-  }, [editor, imageAlt])
+  }, [editor, imageAlt, imageAlignment, imageSize])
 
   const handleFileInputChange = useCallback((e) => {
     const file = e.target.files?.[0]
@@ -386,6 +449,31 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
           >
             <span className="font-bold">Titre 4</span>
           </DropdownItem>
+        </DropdownMenu>
+
+        {/* Selecteur de police */}
+        <DropdownMenu
+          trigger={<span className="text-sm font-medium px-1">Police</span>}
+          isOpen={openDropdown === 'fontFamily'}
+          onToggle={() => toggleDropdown('fontFamily')}
+        >
+          <div className="max-h-60 overflow-y-auto">
+            {FONT_FAMILIES.map(font => (
+              <DropdownItem
+                key={font.name}
+                onMouseDown={() => executeCommand(() => {
+                  if (font.value) {
+                    editor.commands.setFontFamily(font.value)
+                  } else {
+                    editor.commands.unsetFontFamily()
+                  }
+                })}
+                isActive={font.value ? editor.isActive('textStyle', { fontFamily: font.value }) : !editor.getAttributes('textStyle').fontFamily}
+              >
+                <span style={{ fontFamily: font.preview }}>{font.name}</span>
+              </DropdownItem>
+            ))}
+          </div>
         </DropdownMenu>
 
         <Divider />
@@ -595,19 +683,66 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
       </div>
 
       {/* Editeur */}
-      <EditorContent
-        editor={editor}
-        className="prose max-w-none p-4 min-h-[400px] focus:outline-none
-          prose-headings:font-serif prose-headings:text-gray-900
-          prose-p:text-gray-700 prose-p:leading-relaxed
-          prose-blockquote:border-l-primary-500 prose-blockquote:bg-primary-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:italic prose-blockquote:text-gray-700
-          prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline
-          prose-img:rounded-xl prose-img:shadow-sm
-          prose-hr:border-gray-300 prose-hr:my-6 prose-hr:cursor-pointer
-          prose-table:border-collapse prose-th:bg-gray-50
-          [&_.ProseMirror-selectednode]:outline [&_.ProseMirror-selectednode]:outline-2 [&_.ProseMirror-selectednode]:outline-primary-500 [&_.ProseMirror-selectednode]:outline-offset-2
-          [&_hr]:hover:border-primary-400 [&_hr]:transition-colors"
-      />
+      <div className="relative">
+        <EditorContent
+          editor={editor}
+          className="prose max-w-none p-4 min-h-[400px] focus:outline-none
+            prose-headings:font-serif prose-headings:text-gray-900
+            prose-p:text-gray-700 prose-p:leading-relaxed
+            prose-blockquote:border-l-primary-500 prose-blockquote:bg-primary-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:italic prose-blockquote:text-gray-700
+            prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline
+            prose-img:rounded-xl prose-img:shadow-sm
+            prose-hr:border-gray-300 prose-hr:my-6 prose-hr:cursor-pointer
+            prose-table:border-collapse prose-th:bg-gray-50
+            [&_.ProseMirror-selectednode]:outline [&_.ProseMirror-selectednode]:outline-2 [&_.ProseMirror-selectednode]:outline-primary-500 [&_.ProseMirror-selectednode]:outline-offset-2
+            [&_hr]:hover:border-primary-400 [&_hr]:transition-colors"
+        />
+
+        {/* Barre d'outils image */}
+        {selectedImage && (
+          <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2 flex items-center gap-2">
+            <span className="text-xs text-gray-500 px-2">Image:</span>
+
+            {/* Alignement */}
+            <div className="flex items-center border-r border-gray-200 pr-2">
+              {IMAGE_ALIGNMENTS.map(({ name, value, icon: Icon }) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => updateSelectedImage({ alignment: value })}
+                  className={`p-1.5 rounded transition-colors ${
+                    selectedImage.attrs?.alignment === value
+                      ? 'bg-primary-100 text-primary-700'
+                      : 'text-gray-500 hover:bg-gray-100'
+                  }`}
+                  title={name}
+                >
+                  <Icon size={16} />
+                </button>
+              ))}
+            </div>
+
+            {/* Taille */}
+            <div className="flex items-center gap-1">
+              {IMAGE_SIZES.map(({ name, value }) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => updateSelectedImage({ size: value })}
+                  className={`px-2 py-1 text-xs rounded transition-colors ${
+                    selectedImage.attrs?.size === value
+                      ? 'bg-primary-100 text-primary-700 font-medium'
+                      : 'text-gray-500 hover:bg-gray-100'
+                  }`}
+                  title={name}
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Barre de statut */}
       <div className="flex items-center justify-between px-4 py-2 border-t border-gray-200 bg-gray-50 text-xs text-gray-500">
@@ -729,6 +864,52 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   disabled={isUploadingImage}
                 />
+              </div>
+
+              {/* Alignement */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Alignement</label>
+                <div className="flex gap-2">
+                  {IMAGE_ALIGNMENTS.map(({ name, value, icon: Icon }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setImageAlignment(value)}
+                      className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
+                        imageAlignment === value
+                          ? 'border-primary-500 bg-primary-50 text-primary-700'
+                          : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                      disabled={isUploadingImage}
+                    >
+                      <Icon size={16} />
+                      <span className="text-sm">{name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Taille */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Taille</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {IMAGE_SIZES.map(({ name, value, desc }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setImageSize(value)}
+                      className={`px-3 py-2 rounded-lg border text-left transition-colors ${
+                        imageSize === value
+                          ? 'border-primary-500 bg-primary-50 text-primary-700'
+                          : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                      disabled={isUploadingImage}
+                    >
+                      <span className="text-sm font-medium block">{name}</span>
+                      <span className="text-xs text-gray-500">{desc}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-6">
