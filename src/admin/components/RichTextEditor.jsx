@@ -10,6 +10,7 @@ import Superscript from '@tiptap/extension-superscript'
 import CharacterCount from '@tiptap/extension-character-count'
 import Youtube from '@tiptap/extension-youtube'
 import { TextStyle } from '@tiptap/extension-text-style'
+import { Color } from '@tiptap/extension-color'
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { uploadImage } from '../../lib/supabase'
 import { ImageExtension } from './extensions/ImageExtension'
@@ -38,10 +39,16 @@ import {
   Minus,
   Youtube as YoutubeIcon,
   Type,
+  Palette,
   ChevronDown,
+  ChevronRight,
   Upload,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Copy,
+  Scissors,
+  ClipboardPaste,
+  Trash2
 } from 'lucide-react'
 
 // Options de taille d'image
@@ -137,6 +144,22 @@ const HIGHLIGHT_COLORS = [
   { name: 'Orange', value: '#FED7AA' },
 ]
 
+// Couleurs de texte
+const TEXT_COLORS = [
+  { name: 'Noir', value: '#000000' },
+  { name: 'Gris fonce', value: '#374151' },
+  { name: 'Gris', value: '#6B7280' },
+  { name: 'Rouge', value: '#DC2626' },
+  { name: 'Orange', value: '#EA580C' },
+  { name: 'Jaune', value: '#CA8A04' },
+  { name: 'Vert', value: '#16A34A' },
+  { name: 'Bleu', value: '#2563EB' },
+  { name: 'Violet', value: '#7C3AED' },
+  { name: 'Rose', value: '#DB2777' },
+  { name: 'Terracotta', value: '#C2410C' },
+  { name: 'Turquoise', value: '#0891B2' },
+]
+
 export default function RichTextEditor({ content, onChange, onReadTimeChange }) {
   const [openDropdown, setOpenDropdown] = useState(null)
   const [showLinkModal, setShowLinkModal] = useState(false)
@@ -150,6 +173,7 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
   const [showVideoModal, setShowVideoModal] = useState(false)
   const [videoUrl, setVideoUrl] = useState('')
   const [selectedImage, setSelectedImage] = useState(null)
+  const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0, hasSelection: false, isLink: false, activeSubmenu: null })
   const lastReadTimeRef = useRef(null)
   const onReadTimeChangeRef = useRef(onReadTimeChange)
   const savedSelectionRef = useRef(null)
@@ -201,7 +225,8 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
       HTMLAttributes: {
         class: 'w-full aspect-video rounded-lg'
       }
-    })
+    }),
+    Color
   ], [])
 
   const editor = useEditor({
@@ -259,6 +284,150 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
   }
 
   const closeDropdowns = () => setOpenDropdown(null)
+  const closeContextMenu = () => setContextMenu({ show: false, x: 0, y: 0, hasSelection: false, isLink: false, activeSubmenu: null })
+
+  // Gestion du clic droit (menu contextuel)
+  const handleContextMenu = useCallback((e) => {
+    e.preventDefault()
+    if (!editor) return
+
+    // Capturer l'etat de la selection AVANT d'ouvrir le menu
+    const hasSelection = !editor.state.selection.empty
+    const isLink = editor.isActive('link')
+
+    // Position du menu
+    const x = e.clientX
+    const y = e.clientY
+
+    setContextMenu({ show: true, x, y, hasSelection, isLink })
+  }, [editor])
+
+  // Actions du menu contextuel (utilise l'etat capture a l'ouverture du menu)
+  const getContextMenuActions = useCallback(() => {
+    if (!editor) return []
+
+    // Utiliser les valeurs capturees au moment du clic droit
+    const hasSelection = contextMenu.hasSelection
+    const isLink = contextMenu.isLink
+
+    return [
+      {
+        label: 'Couper',
+        icon: Scissors,
+        action: () => {
+          document.execCommand('cut')
+          closeContextMenu()
+        },
+        disabled: !hasSelection
+      },
+      {
+        label: 'Copier',
+        icon: Copy,
+        action: () => {
+          document.execCommand('copy')
+          closeContextMenu()
+        },
+        disabled: !hasSelection
+      },
+      {
+        label: 'Coller',
+        icon: ClipboardPaste,
+        action: async () => {
+          try {
+            const text = await navigator.clipboard.readText()
+            editor.chain().focus().insertContent(text).run()
+          } catch {
+            document.execCommand('paste')
+          }
+          closeContextMenu()
+        }
+      },
+      { divider: true },
+      {
+        label: 'Gras',
+        icon: Bold,
+        action: () => {
+          editor.chain().focus().toggleBold().run()
+          closeContextMenu()
+        },
+        isActive: editor.isActive('bold'),
+        disabled: !hasSelection
+      },
+      {
+        label: 'Italique',
+        icon: Italic,
+        action: () => {
+          editor.chain().focus().toggleItalic().run()
+          closeContextMenu()
+        },
+        isActive: editor.isActive('italic'),
+        disabled: !hasSelection
+      },
+      {
+        label: 'Souligne',
+        icon: UnderlineIcon,
+        action: () => {
+          editor.chain().focus().toggleUnderline().run()
+          closeContextMenu()
+        },
+        isActive: editor.isActive('underline'),
+        disabled: !hasSelection
+      },
+      {
+        label: 'Barre',
+        icon: Strikethrough,
+        action: () => {
+          editor.chain().focus().toggleStrike().run()
+          closeContextMenu()
+        },
+        isActive: editor.isActive('strike'),
+        disabled: !hasSelection
+      },
+      { divider: true },
+      {
+        label: 'Couleur du texte',
+        icon: Palette,
+        disabled: !hasSelection,
+        submenu: 'colors'
+      },
+      {
+        label: 'Surlignage',
+        icon: Highlighter,
+        disabled: !hasSelection,
+        submenu: 'highlight'
+      },
+      { divider: true },
+      {
+        label: 'Inserer un lien',
+        icon: LinkIcon,
+        action: () => {
+          setShowLinkModal(true)
+          closeContextMenu()
+        },
+        disabled: !hasSelection
+      },
+      {
+        label: 'Supprimer le lien',
+        icon: Unlink,
+        action: () => {
+          editor.chain().focus().unsetLink().run()
+          closeContextMenu()
+        },
+        show: isLink
+      },
+      { divider: true },
+      {
+        label: 'Supprimer la selection',
+        icon: Trash2,
+        action: () => {
+          editor.chain().focus().deleteSelection().run()
+          closeContextMenu()
+        },
+        disabled: !hasSelection,
+        danger: true
+      }
+    ]
+  }, [editor, contextMenu.hasSelection, contextMenu.isLink])
 
   // Executer une commande en restaurant la selection
   const executeCommand = useCallback((command) => {
@@ -546,6 +715,46 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
           </div>
         </DropdownMenu>
 
+        {/* Couleur de texte */}
+        <DropdownMenu
+          trigger={<Palette size={18} />}
+          isOpen={openDropdown === 'textColor'}
+          onToggle={() => toggleDropdown('textColor')}
+        >
+          <div className="px-3 py-2">
+            <p className="text-xs text-gray-500 mb-2">Couleur du texte</p>
+            <div className="grid grid-cols-4 gap-1">
+              {TEXT_COLORS.map(color => (
+                <button
+                  key={color.value}
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault()
+                    executeCommand(() => editor.commands.setColor(color.value))
+                  }}
+                  className="w-6 h-6 rounded border border-gray-200 hover:scale-110 transition-transform flex items-center justify-center"
+                  style={{ backgroundColor: color.value }}
+                  title={color.name}
+                >
+                  {color.value === '#000000' && (
+                    <span className="text-white text-xs font-bold">A</span>
+                  )}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onMouseDown={(e) => {
+                e.preventDefault()
+                executeCommand(() => editor.commands.unsetColor())
+              }}
+              className="mt-2 text-xs text-gray-500 hover:text-gray-700"
+            >
+              Reinitialiser
+            </button>
+          </div>
+        </DropdownMenu>
+
         <Divider />
 
         {/* Exposant / Indice */}
@@ -683,7 +892,7 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
       </div>
 
       {/* Editeur */}
-      <div className="relative">
+      <div className="relative" onContextMenu={handleContextMenu}>
         <EditorContent
           editor={editor}
           className="prose max-w-none p-4 min-h-[400px] focus:outline-none
@@ -741,6 +950,129 @@ export default function RichTextEditor({ content, onChange, onReadTimeChange }) 
               ))}
             </div>
           </div>
+        )}
+
+        {/* Menu contextuel (clic droit) */}
+        {contextMenu.show && (
+          <>
+            {/* Overlay pour fermer le menu */}
+            <div
+              className="fixed inset-0 z-40"
+              onClick={closeContextMenu}
+              onContextMenu={(e) => {
+                e.preventDefault()
+                closeContextMenu()
+              }}
+            />
+            {/* Menu */}
+            <div
+              className="fixed z-50 bg-white rounded-lg shadow-xl border border-gray-200 py-1 min-w-[200px]"
+              style={{
+                left: Math.min(contextMenu.x, window.innerWidth - 220),
+                top: Math.min(contextMenu.y, window.innerHeight - 400)
+              }}
+            >
+              {getContextMenuActions()
+                .filter(item => item.show !== false)
+                .map((item, index) => {
+                  if (item.divider) {
+                    return <div key={index} className="border-t border-gray-100 my-1" />
+                  }
+                  const Icon = item.icon
+
+                  // Item avec sous-menu (couleurs)
+                  if (item.submenu) {
+                    return (
+                      <div
+                        key={index}
+                        className="relative"
+                        onMouseEnter={() => !item.disabled && setContextMenu(prev => ({ ...prev, activeSubmenu: item.submenu }))}
+                        onMouseLeave={() => setContextMenu(prev => ({ ...prev, activeSubmenu: null }))}
+                      >
+                        <button
+                          type="button"
+                          disabled={item.disabled}
+                          className={`w-full flex items-center justify-between gap-3 px-4 py-2 text-sm transition-colors
+                            ${item.disabled ? 'text-gray-300 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-50'}
+                          `}
+                        >
+                          <span className="flex items-center gap-3">
+                            <Icon size={16} />
+                            <span>{item.label}</span>
+                          </span>
+                          <ChevronRight size={14} />
+                        </button>
+
+                        {/* Sous-menu couleurs */}
+                        {contextMenu.activeSubmenu === item.submenu && !item.disabled && (
+                          <div className="absolute left-full top-0 ml-1 bg-white rounded-lg shadow-xl border border-gray-200 p-3 min-w-[160px]">
+                            <p className="text-xs text-gray-500 mb-2">
+                              {item.submenu === 'colors' ? 'Couleur du texte' : 'Surlignage'}
+                            </p>
+                            <div className="grid grid-cols-4 gap-1.5">
+                              {(item.submenu === 'colors' ? TEXT_COLORS : HIGHLIGHT_COLORS).map(color => (
+                                <button
+                                  key={color.value}
+                                  type="button"
+                                  onClick={() => {
+                                    if (item.submenu === 'colors') {
+                                      editor.chain().focus().setColor(color.value).run()
+                                    } else {
+                                      editor.chain().focus().toggleHighlight({ color: color.value }).run()
+                                    }
+                                    closeContextMenu()
+                                  }}
+                                  className="w-7 h-7 rounded border border-gray-200 hover:scale-110 transition-transform flex items-center justify-center"
+                                  style={{ backgroundColor: color.value }}
+                                  title={color.name}
+                                >
+                                  {color.value === '#000000' && (
+                                    <span className="text-white text-xs font-bold">A</span>
+                                  )}
+                                </button>
+                              ))}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (item.submenu === 'colors') {
+                                  editor.chain().focus().unsetColor().run()
+                                } else {
+                                  editor.chain().focus().unsetHighlight().run()
+                                }
+                                closeContextMenu()
+                              }}
+                              className="mt-2 text-xs text-gray-500 hover:text-gray-700"
+                            >
+                              Reinitialiser
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  }
+
+                  // Item normal
+                  return (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={item.action}
+                      disabled={item.disabled}
+                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors
+                        ${item.disabled ? 'text-gray-300 cursor-not-allowed' : ''}
+                        ${item.danger && !item.disabled ? 'text-red-600 hover:bg-red-50' : ''}
+                        ${item.isActive && !item.disabled ? 'bg-primary-50 text-primary-700' : ''}
+                        ${!item.disabled && !item.danger && !item.isActive ? 'text-gray-700 hover:bg-gray-50' : ''}
+                      `}
+                    >
+                      <Icon size={16} />
+                      <span>{item.label}</span>
+                    </button>
+                  )
+                })}
+            </div>
+          </>
         )}
       </div>
 
