@@ -73,6 +73,8 @@ studio/           # Sanity Studio (CMS)
 | `SUPABASE_SERVICE_KEY` | Cle service role Supabase |
 | `RESEND_API_KEY` | Cle API Resend pour emails |
 | `FROM_EMAIL` | Expediteur emails (Diana <noreply@resend.dev>) |
+| `SITE_VIEWER_PASSWORD` | Mot de passe pour voir le site en mode prive |
+| `SITE_ADMIN_PASSWORD` | Mot de passe admin pour rendre le site public |
 
 ## Variables d'Environnement Local
 
