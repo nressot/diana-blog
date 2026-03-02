@@ -4,6 +4,8 @@ import { Search, BookOpen, Feather, Users, Sparkles, PenTool, Loader2, ArrowRigh
 import ArticleCard from '../components/ArticleCard'
 import AuthorCard from '../components/AuthorCard'
 import { useSupabaseArticles, useSupabaseCategories, useSupabaseFeaturedArticle } from '../lib/useSupabaseArticles'
+import { useRecentComments } from '../lib/useSupabaseComments'
+import { getAvatarColor, getInitials } from '../lib/avatarUtils'
 
 /* Floating Stars Component - SVG stars inspired by bg-stars-v2 */
 function FloatingStars() {
@@ -980,7 +982,7 @@ function CommunityHubLayout({ articles, allArticles, categories, featuredArticle
             <div className="bg-cream-50 rounded-2xl p-6 border border-cream-200">
               <div className="flex items-center gap-2 mb-4">
                 <MessageCircle className="w-5 h-5 text-primary-600" />
-                <h3 className="font-semibold">Les plus commentes</h3>
+                <h3 className="font-semibold">Les plus commentés</h3>
               </div>
               <div className="space-y-4">
                 {popularByComments.map((article, index) => (
@@ -1009,7 +1011,7 @@ function CommunityHubLayout({ articles, allArticles, categories, featuredArticle
             <div className="bg-cream-50 rounded-2xl p-6 border border-cream-200">
               <div className="flex items-center gap-2 mb-4">
                 <Users className="w-5 h-5 text-primary-600" />
-                <h3 className="font-semibold">Discussions recentes</h3>
+                <h3 className="font-semibold">Discussions récentes</h3>
               </div>
               <div className="space-y-4">
                 {/* Simulated recent comments */}
@@ -1064,12 +1066,8 @@ function StoryCommunityLayout({ articles, allArticles, categories, featuredArtic
   const popularByComments = [...(allArticles || [])].sort((a, b) => (b.comments || 0) - (a.comments || 0)).slice(0, 3)
   const totalComments = (allArticles || []).reduce((acc, a) => acc + (a.comments || 0), 0)
 
-  // Discussions simulees
-  const recentDiscussions = [
-    { id: 1, author: 'Marie L.', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop', comment: 'Ce texte m\'a profondement touchee...', articleTitle: 'Les murmures du soir' },
-    { id: 2, author: 'Thomas B.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop', comment: 'Votre poeme m\'a inspire...', articleTitle: 'Les saisons de l\'ame' },
-    { id: 3, author: 'Claire D.', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop', comment: 'J\'attends la suite avec impatience !', articleTitle: 'Le gardien des mots' },
-  ]
+  // Discussions depuis Supabase
+  const { comments: recentDiscussions, loading: discussionsLoading } = useRecentComments(3)
 
   return (
     <div className="bg-cream-200 min-h-screen">
@@ -1169,32 +1167,50 @@ function StoryCommunityLayout({ articles, allArticles, categories, featuredArtic
             {/* Sidebar Community */}
             <div className="lg:col-span-1">
               <div className="sticky top-44 space-y-6">
-                {/* Discussions recentes - style terracotta */}
+                {/* Discussions récentes - style terracotta */}
                 <div className="relative bg-primary-600 rounded-2xl p-6 overflow-hidden">
                   <FloatingStars />
                   <div className="relative z-10">
                     <h3 className="font-semibold mb-4 flex items-center gap-2 text-white">
                       <MessageCircle className="w-4 h-4 text-white/80" />
-                      Discussions recentes
+                      Discussions récentes
                     </h3>
-                    <div className="space-y-4">
-                      {recentDiscussions.map((d) => (
-                        <div key={d.id} className="flex gap-3">
-                          <img src={d.avatar} alt={d.author} className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-white/20" />
-                          <div className="min-w-0">
-                            <p className="text-sm font-medium text-white">{d.author}</p>
-                            <p className="text-xs text-white/70 line-clamp-2 mb-1">{d.comment}</p>
-                            <p className="text-xs text-white/90 font-medium">{d.articleTitle}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    {discussionsLoading ? (
+                      <div className="text-center py-4">
+                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
+                      </div>
+                    ) : recentDiscussions.length === 0 ? (
+                      <div className="text-center py-6">
+                        <MessageCircle className="w-10 h-10 mx-auto mb-3 text-white/30" />
+                        <p className="text-sm text-white/70">Aucune discussion pour le moment</p>
+                        <p className="text-xs text-white/50 mt-1">Soyez le premier à commenter !</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {recentDiscussions.map((d) => (
+                          <Link key={d.id} to={`/article/${d.articleSlug}`} className="flex gap-3 group">
+                            {d.avatar ? (
+                              <img src={d.avatar} alt={d.author} className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-white/20" />
+                            ) : (
+                              <div className={`w-10 h-10 rounded-full ${getAvatarColor(d.author)} flex items-center justify-center text-white font-medium text-sm shrink-0 ring-2 ring-white/20`}>
+                                {getInitials(d.author)}
+                              </div>
+                            )}
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-white">{d.author}</p>
+                              <p className="text-xs text-white/70 line-clamp-2 mb-1">{d.comment}</p>
+                              <p className="text-xs text-white/90 font-medium group-hover:underline">{d.articleTitle}</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Articles les plus commentes */}
+                {/* Articles les plus commentés */}
                 <div className="bg-cream-100 rounded-2xl p-6 border border-neutral-200">
-                  <h3 className="font-semibold mb-4 flex items-center gap-2"><Heart className="w-4 h-4 text-primary-600" />Plus commentes</h3>
+                  <h3 className="font-semibold mb-4 flex items-center gap-2"><Heart className="w-4 h-4 text-primary-600" />Plus commentés</h3>
                   <div className="space-y-3">
                     {popularByComments.map((article, index) => (
                       <Link key={article.id} to={`/article/${article.slug}`} className="flex items-start gap-3 group">
@@ -1210,7 +1226,7 @@ function StoryCommunityLayout({ articles, allArticles, categories, featuredArtic
 
                 {/* Categories */}
                 <div className="bg-cream-100 rounded-2xl p-6 border border-neutral-200">
-                  <h3 className="font-semibold mb-4">Categories</h3>
+                  <h3 className="font-semibold mb-4">Catégories</h3>
                   <div className="space-y-2">
                     {(categories || []).map((category) => (
                       <button key={category.id} onClick={() => setSelectedCategory(category.name)} className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm transition-colors ${selectedCategory === category.name ? 'bg-primary-100 text-primary-700' : 'hover:bg-cream-200'}`}>
@@ -1378,7 +1394,7 @@ function CommunityHeroLayout({ articles, allArticles, categories, featuredArticl
             <div className="bg-white rounded-2xl p-6 border border-cream-300">
               <div className="flex items-center gap-2 mb-4">
                 <MessageCircle className="w-5 h-5 text-primary-600" />
-                <h3 className="font-semibold">Les plus commentes</h3>
+                <h3 className="font-semibold">Les plus commentés</h3>
               </div>
               <div className="space-y-4">
                 {popularByComments.map((article, index) => (
@@ -1393,11 +1409,11 @@ function CommunityHeroLayout({ articles, allArticles, categories, featuredArticl
               </div>
             </div>
 
-            {/* Discussions recentes */}
+            {/* Discussions récentes */}
             <div className="bg-white rounded-2xl p-6 border border-cream-300">
               <div className="flex items-center gap-2 mb-4">
                 <Users className="w-5 h-5 text-primary-600" />
-                <h3 className="font-semibold">Discussions recentes</h3>
+                <h3 className="font-semibold">Discussions récentes</h3>
               </div>
               <div className="space-y-4">
                 {[
@@ -1546,7 +1562,7 @@ function ClassicLayout({ articles, allArticles, categories, featuredArticles, se
 
                 {/* Categories */}
                 <div className="bg-cream-200 rounded-2xl p-6 border border-neutral-200">
-                  <h3 className="font-semibold mb-4">Categories</h3>
+                  <h3 className="font-semibold mb-4">Catégories</h3>
                   <div className="space-y-2">
                     {(categories || []).map((category) => (
                       <button
