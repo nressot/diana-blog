@@ -30,9 +30,8 @@ export default function CGV() {
             <ul className="text-neutral-600 space-y-2 mb-6">
               <li><strong>Vendeur :</strong> Diana Pereira</li>
               <li><strong>Forme juridique :</strong> Entreprise individuelle</li>
-              <li><strong>Adresse :</strong> Rue du Rhone 42, 1204 Geneve, Suisse</li>
+              <li><strong>Adresse :</strong> Place du Traite-de-Turin 3, 1226 Thonex, Suisse</li>
               <li><strong>Email :</strong> diana@covendediana.ch</li>
-              <li><strong>Telephone :</strong> +41 22 000 00 00</li>
             </ul>
 
             <h2 className="text-xl font-semibold mt-8 mb-4">2. Objet</h2>
