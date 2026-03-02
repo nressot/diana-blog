@@ -159,24 +159,24 @@ exports.handler = async (event, context) => {
 
       <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Bienvenue${firstName ? ` ${firstName.trim()}` : ''} !</h2>
       <p style="color: #666; text-align: center; margin: 0 0 24px 0; line-height: 1.6;">
-        Merci de vous etre inscrit${firstName ? 'e' : ''} a ma newsletter.<br>
-        Vous recevrez desormais mes reflexions, nouveaux textes et decouvertes litteraires directement dans votre boite mail.
+        Merci de vous être inscrit${firstName ? 'e' : ''} à ma newsletter.<br>
+        Vous recevrez désormais mes réflexions, nouveaux textes et découvertes littéraires directement dans votre boîte mail.
       </p>
 
       <div style="background: #faf9f6; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
         <p style="color: #666; margin: 0; text-align: center; font-style: italic;">
-          "Les mots sont des fenetres, ou bien ce sont des murs."
+          "Les mots sont des fenêtres, ou bien ce sont des murs."
         </p>
       </div>
 
       <p style="color: #666; text-align: center; margin: 0 0 24px 0;">
-        A tres bientot dans votre boite mail !
+        À très bientôt dans votre boîte mail !
       </p>
 
       <!-- CTA Button -->
       <div style="text-align: center;">
         <a href="https://le-coven-de-diana.netlify.app/blog" style="display: inline-block; background: #d4a574; color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600;">
-          Decouvrir le blog
+          Découvrir le blog
         </a>
       </div>
     </div>
@@ -185,7 +185,7 @@ exports.handler = async (event, context) => {
     <div style="text-align: center; margin-top: 32px; color: #999; font-size: 14px;">
       <p style="margin: 0 0 8px 0;">Diana - Le Coven de Diana</p>
       <p style="margin: 0; font-size: 12px;">
-        Vous recevez cet email car vous vous etes inscrit a la newsletter.
+        Vous recevez cet email car vous vous êtes inscrit à la newsletter.
       </p>
     </div>
   </div>
@@ -204,7 +204,7 @@ exports.handler = async (event, context) => {
         await resend.emails.send({
           from: fromEmail,
           to: 'diana@covendediana.ch',
-          subject: 'Nouvel abonne a la newsletter !',
+          subject: 'Nouvel abonné à la newsletter !',
           html: `
 <!DOCTYPE html>
 <html>
@@ -213,9 +213,9 @@ exports.handler = async (event, context) => {
 </head>
 <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #faf9f6; padding: 20px;">
   <div style="max-width: 500px; margin: 0 auto; background: white; border-radius: 12px; padding: 24px;">
-    <h2 style="color: #1a1a1a; margin: 0 0 16px 0;">Nouvel abonne !</h2>
+    <h2 style="color: #1a1a1a; margin: 0 0 16px 0;">Nouvel abonné !</h2>
     <p style="color: #666; margin: 0;">
-      ${firstName ? `<strong>Prenom :</strong> ${firstName.trim()}<br>` : ''}
+      ${firstName ? `<strong>Prénom :</strong> ${firstName.trim()}<br>` : ''}
       <strong>Email :</strong> ${email}<br>
       <strong>Date :</strong> ${new Date().toLocaleString('fr-CH')}
     </p>
