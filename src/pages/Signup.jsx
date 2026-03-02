@@ -53,7 +53,7 @@ export default function Signup() {
 
     // Validate password
     if (password.length < 6) {
-      setError('Le mot de passe doit contenir au moins 6 caracteres')
+      setError('Le mot de passe doit contenir au moins 6 caractères')
       setLoading(false)
       return
     }
@@ -83,7 +83,7 @@ export default function Signup() {
       }
     } catch (err) {
       if (err.message.includes('already registered')) {
-        setError('Cet email est deja utilise')
+        setError('Cet email est déjà utilisé')
       } else {
         setError(err.message)
       }
@@ -121,17 +121,17 @@ export default function Signup() {
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
             <h2 className="text-2xl font-semibold tracking-tight text-neutral-900 mb-2">
-              Verifiez votre email
+              Vérifiez votre email
             </h2>
             <p className="text-neutral-600 mb-6">
-              Un email de verification a ete envoye a <strong>{email}</strong>.
+              Un email de vérification a été envoyé à <strong>{email}</strong>.
               Cliquez sur le lien dans l'email pour activer votre compte.
             </p>
             <Link
               to="/connexion"
               className="inline-block px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
             >
-              Retour a la connexion
+              Retour à la connexion
             </Link>
           </div>
         </motion.div>
@@ -156,10 +156,10 @@ export default function Signup() {
             />
           </Link>
           <h1 className="text-3xl font-semibold tracking-tight text-neutral-900 mb-2">
-            Creer un compte
+            Créer un compte
           </h1>
           <p className="text-neutral-600">
-            Rejoignez la communaute de lecteurs
+            Rejoignez la communauté de lecteurs
           </p>
         </div>
 
@@ -180,7 +180,7 @@ export default function Signup() {
               <span className="text-neutral-700">Continuer avec Google</span>
             </button>
 
-            {/* Twitter/X desactive temporairement
+            {/* Twitter/X désactivé temporairement
             <button
               onClick={() => handleOAuthLogin('twitter', signInWithTwitter)}
               disabled={oauthLoading}
@@ -279,13 +279,13 @@ export default function Signup() {
                   required
                   minLength={6}
                   className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                  placeholder="Minimum 6 caracteres"
+                  placeholder="Minimum 6 caractères"
                 />
               </div>
             </div>
 
             <p className="text-xs text-neutral-500">
-              Un email de verification vous sera envoye pour activer votre compte.
+              Un email de vérification vous sera envoyé pour activer votre compte.
             </p>
 
             {/* Newsletter checkbox */}
@@ -297,7 +297,7 @@ export default function Signup() {
                 className="mt-1 w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
               />
               <span className="text-sm text-neutral-600">
-                S'abonner a la newsletter pour recevoir les nouveaux articles et actualites
+                S'abonner à la newsletter pour recevoir les nouveaux articles et actualités
               </span>
             </label>
 
@@ -309,17 +309,17 @@ export default function Signup() {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Creation...
+                  Création...
                 </>
               ) : (
-                'Creer mon compte'
+                'Créer mon compte'
               )}
             </button>
           </form>
 
           {/* Login link */}
           <p className="mt-6 text-center text-neutral-600">
-            Deja un compte ?{' '}
+            Déjà un compte ?{' '}
             <Link to="/connexion" className="text-primary-600 hover:text-primary-700 font-medium">
               Se connecter
             </Link>
@@ -329,7 +329,7 @@ export default function Signup() {
         {/* Back to home */}
         <p className="mt-6 text-center">
           <Link to="/" className="text-neutral-500 hover:text-neutral-700 text-sm">
-            Retour a l'accueil
+            Retour à l'accueil
           </Link>
         </p>
       </motion.div>
