@@ -34,9 +34,10 @@ export default function Privacy() {
             <h2 className="text-xl font-semibold mt-8 mb-4">2. Responsable du traitement</h2>
             <p className="text-neutral-600 mb-6">
               Le responsable du traitement des donnees est :<br />
-              Diana Pereira<br />
-              Geneve, Suisse<br />
-              Email : diana@covendediana.ch
+              Diana Pereira (Entreprise individuelle)<br />
+              Rue du Rhone 42, 1204 Geneve, Suisse<br />
+              Email : diana@covendediana.ch<br />
+              Telephone : +41 22 000 00 00
             </p>
 
             <h2 className="text-xl font-semibold mt-8 mb-4">3. Donnees collectees</h2>

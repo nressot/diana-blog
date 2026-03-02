@@ -8,7 +8,7 @@ export default function Footer() {
     navigation: [
       { name: 'Accueil', path: '/' },
       { name: 'Blog', path: '/blog' },
-      { name: 'Ma boutique', path: '/boutique' },
+      // { name: 'Ma boutique', path: '/boutique' }, // Boutique desactivee temporairement
       { name: 'A propos', path: '/about' },
       { name: 'Contact', path: '/contact' },
     ],
@@ -20,7 +20,8 @@ export default function Footer() {
     ],
     legal: [
       { name: 'Mentions légales', path: '/legal' },
-      { name: 'Politique de confidentialité', path: '/privacy' },
+      { name: 'CGV', path: '/cgv' },
+      { name: 'Confidentialité', path: '/privacy' },
     ],
   }
 

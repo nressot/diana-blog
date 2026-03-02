@@ -14,6 +14,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Legal from './pages/Legal'
 import Privacy from './pages/Privacy'
+import CGV from './pages/CGV'
 // Blog page is now handled by BlogDemo with variants
 import Article from './pages/Article'
 import Boutique from './pages/Boutique'
@@ -123,6 +124,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/legal" element={<Legal />} />
               <Route path="/privacy" element={<Privacy />} />
+              <Route path="/cgv" element={<CGV />} />
               <Route path="/blog" element={<BlogDemo />} />
               <Route path="/blog/:variant" element={<BlogDemo />} />
               <Route path="/article/:slug" element={<Article />} />

@@ -20,12 +20,14 @@ export default function Legal() {
 
             <h2 className="text-xl font-semibold mt-8 mb-4">1. Editeur du site</h2>
             <p className="text-neutral-600 mb-4">
-              Ce site est edite par Diana Pereira, ecrivaine independante.
+              Ce site est edite par Diana Pereira, ecrivaine independante (entreprise individuelle).
             </p>
             <ul className="text-neutral-600 space-y-2 mb-6">
-              <li>Nom : Diana Pereira</li>
-              <li>Localisation : Geneve, Suisse</li>
-              <li>Email : diana@covendediana.ch</li>
+              <li><strong>Nom :</strong> Diana Pereira</li>
+              <li><strong>Forme juridique :</strong> Entreprise individuelle</li>
+              <li><strong>Adresse :</strong> Rue du Rhone 42, 1204 Geneve, Suisse</li>
+              <li><strong>Email :</strong> diana@covendediana.ch</li>
+              <li><strong>Telephone :</strong> +41 22 000 00 00</li>
             </ul>
 
             <h2 className="text-xl font-semibold mt-8 mb-4">2. Hebergement</h2>

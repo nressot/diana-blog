@@ -119,7 +119,7 @@ exports.handler = async (event, context) => {
 
     const sessionConfig = {
       mode: 'payment',
-      payment_method_types: ['card'],
+      payment_method_types: ['card', 'twint'],
       line_items: lineItems,
       metadata: {
         cart_items: JSON.stringify(cartItemsMetadata),
