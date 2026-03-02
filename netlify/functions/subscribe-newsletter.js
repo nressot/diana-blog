@@ -70,32 +70,56 @@ exports.handler = async (event, context) => {
         }
       } else {
         // Reactivate subscription
+        const updateData = {
+          status: 'active',
+          updated_at: new Date().toISOString()
+        }
+        if (firstName?.trim()) {
+          updateData.first_name = firstName.trim()
+        }
         await supabase
           .from('subscribers')
-          .update({
-            status: 'active',
-            first_name: firstName?.trim() || null,
-            updated_at: new Date().toISOString()
-          })
+          .update(updateData)
           .eq('id', existing.id)
       }
     } else {
       // Insert new subscriber
+      const subscriberData = {
+        email: email.toLowerCase().trim(),
+        status: 'active',
+        source: 'website'
+      }
+
+      // Add first_name only if provided
+      if (firstName?.trim()) {
+        subscriberData.first_name = firstName.trim()
+      }
+
       const { error: insertError } = await supabase
         .from('subscribers')
-        .insert({
-          email: email.toLowerCase().trim(),
-          first_name: firstName?.trim() || null,
-          status: 'active',
-          source: 'website'
-        })
+        .insert(subscriberData)
 
       if (insertError) {
         console.error('Error inserting subscriber:', insertError)
-        return {
-          statusCode: 500,
-          headers,
-          body: JSON.stringify({ error: 'Erreur lors de l\'inscription' })
+        // If first_name column doesn't exist, retry without it
+        if (insertError.message?.includes('first_name')) {
+          delete subscriberData.first_name
+          const { error: retryError } = await supabase
+            .from('subscribers')
+            .insert(subscriberData)
+          if (retryError) {
+            return {
+              statusCode: 500,
+              headers,
+              body: JSON.stringify({ error: 'Erreur lors de l\'inscription' })
+            }
+          }
+        } else {
+          return {
+            statusCode: 500,
+            headers,
+            body: JSON.stringify({ error: 'Erreur lors de l\'inscription' })
+          }
         }
       }
     }
