@@ -1,4 +1,5 @@
-import { ArrowRight, BookOpen, PenLine } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowRight, BookOpen, PenLine, Loader2, Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ArticleCard from '../components/ArticleCard'
 import CategoryCard from '../components/CategoryCard'
@@ -16,6 +17,45 @@ export default function Home() {
   const { data: featuredArticles } = useSupabaseFeaturedArticle()
   const { data: author } = useSupabaseAuthor()
   const { data: pageContent } = useHomePage()
+
+  // Newsletter state
+  const [email, setEmail] = useState('')
+  const [newsletterLoading, setNewsletterLoading] = useState(false)
+  const [newsletterMessage, setNewsletterMessage] = useState(null)
+  const [newsletterSuccess, setNewsletterSuccess] = useState(false)
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault()
+    if (!email || !email.includes('@')) {
+      setNewsletterMessage('Veuillez entrer un email valide')
+      return
+    }
+
+    setNewsletterLoading(true)
+    setNewsletterMessage(null)
+
+    try {
+      const response = await fetch('/.netlify/functions/subscribe-newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setNewsletterSuccess(true)
+        setNewsletterMessage(data.message)
+        setEmail('')
+      } else {
+        setNewsletterMessage(data.error || 'Erreur lors de l\'inscription')
+      }
+    } catch (err) {
+      setNewsletterMessage('Erreur de connexion')
+    } finally {
+      setNewsletterLoading(false)
+    }
+  }
 
   // Extraire le contenu de la page avec valeurs par defaut
   const hero = pageContent?.hero || {}
@@ -184,16 +224,37 @@ export default function Home() {
               <p className="text-primary-100 mb-8 text-lg">
                 {newsletter.description || 'Une newsletter mensuelle avec mes réflexions, nouveaux textes et découvertes littéraires. Pas de spam, promis.'}
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder={newsletter.placeholder || 'votre@email.com'}
-                  className="flex-1 h-14 px-6 rounded-full bg-white/15 border border-white/25 placeholder-white/60 focus:bg-white/25 focus:border-white/50 outline-none transition-all text-white"
-                />
-                <button className="h-14 px-8 rounded-full bg-white text-primary-700 font-semibold hover:bg-primary-50 transition-colors shadow-lg">
-                  {newsletter.buttonText || 'S\'abonner'}
-                </button>
-              </div>
+              {newsletterSuccess ? (
+                <div className="flex items-center justify-center gap-3 text-white bg-white/20 rounded-full py-4 px-8 max-w-md mx-auto">
+                  <Check className="w-6 h-6" />
+                  <span className="font-medium">{newsletterMessage}</span>
+                </div>
+              ) : (
+                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={newsletter.placeholder || 'votre@email.com'}
+                    className="flex-1 h-14 px-6 rounded-full bg-white/15 border border-white/25 placeholder-white/60 focus:bg-white/25 focus:border-white/50 outline-none transition-all text-white"
+                    disabled={newsletterLoading}
+                  />
+                  <button
+                    type="submit"
+                    disabled={newsletterLoading}
+                    className="h-14 px-8 rounded-full bg-white text-primary-700 font-semibold hover:bg-primary-50 transition-colors shadow-lg disabled:opacity-70 flex items-center justify-center gap-2"
+                  >
+                    {newsletterLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      newsletter.buttonText || 'S\'abonner'
+                    )}
+                  </button>
+                </form>
+              )}
+              {newsletterMessage && !newsletterSuccess && (
+                <p className="text-white/80 text-sm mt-3 text-center">{newsletterMessage}</p>
+              )}
             </div>
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
