@@ -19,6 +19,7 @@ export default function Home() {
   const { data: pageContent } = useHomePage()
 
   // Newsletter state
+  const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
   const [newsletterLoading, setNewsletterLoading] = useState(false)
   const [newsletterMessage, setNewsletterMessage] = useState(null)
@@ -38,7 +39,7 @@ export default function Home() {
       const response = await fetch('/.netlify/functions/subscribe-newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email, firstName: firstName.trim() })
       })
 
       const data = await response.json()
@@ -230,19 +231,29 @@ export default function Home() {
                   <span className="font-medium">{newsletterMessage}</span>
                 </div>
               ) : (
-                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={newsletter.placeholder || 'votre@email.com'}
-                    className="flex-1 h-14 px-6 rounded-full bg-white/15 border border-white/25 placeholder-white/60 focus:bg-white/25 focus:border-white/50 outline-none transition-all text-white"
-                    disabled={newsletterLoading}
-                  />
+                <form onSubmit={handleSubscribe} className="flex flex-col gap-3 justify-center max-w-md mx-auto">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="Votre prenom"
+                      className="sm:w-40 h-14 px-6 rounded-full bg-white/15 border border-white/25 placeholder-white/60 focus:bg-white/25 focus:border-white/50 outline-none transition-all text-white"
+                      disabled={newsletterLoading}
+                    />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder={newsletter.placeholder || 'votre@email.com'}
+                      className="flex-1 h-14 px-6 rounded-full bg-white/15 border border-white/25 placeholder-white/60 focus:bg-white/25 focus:border-white/50 outline-none transition-all text-white"
+                      disabled={newsletterLoading}
+                    />
+                  </div>
                   <button
                     type="submit"
                     disabled={newsletterLoading}
-                    className="h-14 px-8 rounded-full bg-white text-primary-700 font-semibold hover:bg-primary-50 transition-colors shadow-lg disabled:opacity-70 flex items-center justify-center gap-2"
+                    className="h-14 px-8 rounded-full bg-white text-primary-700 font-semibold hover:bg-primary-50 transition-colors shadow-lg disabled:opacity-70 flex items-center justify-center gap-2 sm:self-center"
                   >
                     {newsletterLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />

@@ -38,7 +38,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { email } = JSON.parse(event.body || '{}')
+    const { email, firstName } = JSON.parse(event.body || '{}')
 
     // Validate email
     if (!email || !email.includes('@')) {
@@ -72,7 +72,11 @@ exports.handler = async (event, context) => {
         // Reactivate subscription
         await supabase
           .from('subscribers')
-          .update({ status: 'active', updated_at: new Date().toISOString() })
+          .update({
+            status: 'active',
+            first_name: firstName?.trim() || null,
+            updated_at: new Date().toISOString()
+          })
           .eq('id', existing.id)
       }
     } else {
@@ -81,6 +85,7 @@ exports.handler = async (event, context) => {
         .from('subscribers')
         .insert({
           email: email.toLowerCase().trim(),
+          first_name: firstName?.trim() || null,
           status: 'active',
           source: 'website'
         })
@@ -128,9 +133,9 @@ exports.handler = async (event, context) => {
         </div>
       </div>
 
-      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Bienvenue !</h2>
+      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Bienvenue${firstName ? ` ${firstName.trim()}` : ''} !</h2>
       <p style="color: #666; text-align: center; margin: 0 0 24px 0; line-height: 1.6;">
-        Merci de vous etre inscrit a ma newsletter.<br>
+        Merci de vous etre inscrit${firstName ? 'e' : ''} a ma newsletter.<br>
         Vous recevrez desormais mes reflexions, nouveaux textes et decouvertes litteraires directement dans votre boite mail.
       </p>
 
@@ -186,6 +191,7 @@ exports.handler = async (event, context) => {
   <div style="max-width: 500px; margin: 0 auto; background: white; border-radius: 12px; padding: 24px;">
     <h2 style="color: #1a1a1a; margin: 0 0 16px 0;">Nouvel abonne !</h2>
     <p style="color: #666; margin: 0;">
+      ${firstName ? `<strong>Prenom :</strong> ${firstName.trim()}<br>` : ''}
       <strong>Email :</strong> ${email}<br>
       <strong>Date :</strong> ${new Date().toLocaleString('fr-CH')}
     </p>

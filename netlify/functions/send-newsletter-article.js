@@ -74,7 +74,7 @@ exports.handler = async (event, context) => {
     // Get all active subscribers
     const { data: subscribers, error: subError } = await supabase
       .from('subscribers')
-      .select('email')
+      .select('email, first_name')
       .eq('status', 'active')
 
     if (subError) {
@@ -106,7 +106,7 @@ exports.handler = async (event, context) => {
           from: fromEmail,
           to: subscriber.email,
           subject: `Nouvel article : ${article.title} - Le Coven de Diana`,
-          html: generateEmailHtml(article, articleUrl, articleImage, siteUrl)
+          html: generateEmailHtml(article, articleUrl, articleImage, siteUrl, subscriber.first_name)
         }).catch(err => {
           console.error(`Failed to send to ${subscriber.email}:`, err.message)
           errorCount++
@@ -176,10 +176,11 @@ exports.handler = async (event, context) => {
   }
 }
 
-function generateEmailHtml(article, articleUrl, articleImage, siteUrl) {
+function generateEmailHtml(article, articleUrl, articleImage, siteUrl, firstName) {
   const excerpt = article.excerpt || article.content?.substring(0, 200) + '...' || ''
   const readTime = article.read_time || '5 min'
   const category = article.category_name || ''
+  const greeting = firstName ? `Bonjour ${firstName},` : 'Bonjour,'
 
   return `
 <!DOCTYPE html>
@@ -195,6 +196,10 @@ function generateEmailHtml(article, articleUrl, articleImage, siteUrl) {
       <h1 style="color: #1a1a1a; font-size: 24px; margin: 0; font-family: Georgia, serif;">Le Coven de Diana</h1>
       <p style="color: #999; margin-top: 8px; font-size: 14px;">Nouvel article</p>
     </div>
+
+    <!-- Greeting -->
+    <p style="color: #333; font-size: 16px; margin-bottom: 24px;">${greeting}</p>
+    <p style="color: #666; font-size: 15px; margin-bottom: 24px;">Un nouvel article vient d'etre publie sur Le Coven de Diana :</p>
 
     <!-- Main Card -->
     <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
