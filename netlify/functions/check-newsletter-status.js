@@ -48,7 +48,7 @@ exports.handler = async (event, context) => {
     // Try to find subscriber - use maybeSingle to handle no rows case
     const { data: subscriber, error } = await supabase
       .from('subscribers')
-      .select('id, status')
+      .select('id, status, first_name')
       .eq('email', email.toLowerCase().trim())
       .maybeSingle()
 
@@ -61,7 +61,7 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({
         subscribed: subscriber?.status === 'active',
-        firstName: null // Simplified - don't rely on first_name column
+        firstName: subscriber?.first_name || null
       })
     }
 
