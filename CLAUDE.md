@@ -85,28 +85,40 @@ VITE_SANITY_DATASET=production
 
 Si non configure -> utilise `src/data/articles.js` comme fallback.
 
-## Supabase - Execution SQL
+## Supabase
 
-**Important**: Supabase ne permet PAS l'execution de SQL brut (ALTER TABLE, CREATE INDEX, etc.) via l'API JS pour des raisons de securite.
+**Project ref**: `jxdzlhybtrudrauwnizi`
+**Dashboard**: https://supabase.com/dashboard/project/jxdzlhybtrudrauwnizi
 
-### Pour les migrations/DDL (ALTER TABLE, CREATE, etc.)
+### Acces Claude
 
-Utiliser le **SQL Editor** dans le dashboard Supabase:
-1. Aller sur https://supabase.com/dashboard
-2. Menu lateral gauche > **SQL Editor**
-3. Coller le SQL et cliquer **Run**
+Claude a acces en lecture/ecriture via les credentials dans `.env`:
+- `VITE_SUPABASE_URL` - URL du projet
+- `VITE_SUPABASE_ANON_KEY` - Cle publique (lecture)
+- `SUPABASE_SERVICE_ROLE_KEY` - Cle service (lecture/ecriture, bypass RLS)
 
-### Alternatives pour acces programmatique
+### Tables Supabase
 
-| Methode | Prerequis | Usage |
-|---------|-----------|-------|
-| Supabase CLI | `npx supabase login` puis `npx supabase link` | Migrations via `supabase db push` |
-| Management API | Personal Access Token (PAT) | `POST /v1/projects/{ref}/database/query` |
-| Connexion directe | DATABASE_URL avec mot de passe | Librairie `pg` pour node.js |
+| Table | Description |
+|-------|-------------|
+| `articles` | Articles du blog |
+| `categories` | Categories d'articles |
+| `authors` | Auteurs |
+| `comments` | Commentaires des articles |
+| `products` | Produits de la boutique |
+| `orders` | Commandes Stripe |
+| `subscribers` | Abonnes newsletter |
+| `pages` | Contenu des pages (Home, About, etc.) |
+
+### Execution SQL (DDL)
+
+Pour CREATE TABLE, ALTER TABLE, etc., utiliser le **SQL Editor**:
+1. https://supabase.com/dashboard/project/jxdzlhybtrudrauwnizi/sql
+2. Coller le SQL et cliquer **Run**
 
 ### Cle Service Role
 
-Pour les operations d'ecriture cote serveur, utiliser `SUPABASE_SERVICE_ROLE_KEY` (bypass RLS):
+Pour les operations d'ecriture cote serveur (bypass RLS):
 ```javascript
 const supabase = createClient(url, process.env.SUPABASE_SERVICE_ROLE_KEY)
 ```
