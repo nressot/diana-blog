@@ -45,18 +45,23 @@ exports.handler = async (event, context) => {
 
     const supabase = createClient(process.env.SUPABASE_URL, supabaseKey)
 
-    const { data: subscriber } = await supabase
+    // Try to find subscriber - use maybeSingle to handle no rows case
+    const { data: subscriber, error } = await supabase
       .from('subscribers')
-      .select('id, status, first_name')
+      .select('id, status')
       .eq('email', email.toLowerCase().trim())
-      .single()
+      .maybeSingle()
+
+    if (error) {
+      console.error('Error checking subscriber:', error)
+    }
 
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
         subscribed: subscriber?.status === 'active',
-        firstName: subscriber?.first_name || null
+        firstName: null // Simplified - don't rely on first_name column
       })
     }
 
