@@ -157,20 +157,20 @@ exports.handler = async (event, context) => {
         </div>
       </div>
 
-      <h2 style="color: #1a1a1a; text-align: center; margin: 0 0 8px 0; font-size: 24px;">Bienvenue${firstName ? ` ${firstName.trim()}` : ''} !</h2>
-      <p style="color: #666; text-align: center; margin: 0 0 24px 0; line-height: 1.6;">
-        Merci de vous être inscrit${firstName ? 'e' : ''} à ma newsletter.<br>
-        Vous recevrez désormais mes réflexions, nouveaux textes et découvertes littéraires directement dans votre boîte mail.
+      <p style="color: #1a1a1a; margin: 0 0 24px 0; font-size: 18px;">
+        Bonjour${firstName ? ` ${firstName.trim()}` : ''},
       </p>
 
-      <div style="background: #faf9f6; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-        <p style="color: #666; margin: 0; text-align: center; font-style: italic;">
-          "Les mots sont des fenêtres, ou bien ce sont des murs."
-        </p>
-      </div>
+      <p style="color: #666; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
+        Ça y est, tu fais officiellement partie du coven ✨
+      </p>
 
-      <p style="color: #666; text-align: center; margin: 0 0 24px 0;">
-        À très bientôt dans votre boîte mail !
+      <p style="color: #666; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
+        Je t'écrirai dès qu'un nouvel article sera publié.
+      </p>
+
+      <p style="color: #666; margin: 0 0 24px 0; line-height: 1.6; font-size: 16px;">
+        À très vite entre les pages et bienvenue !
       </p>
 
       <!-- CTA Button -->
