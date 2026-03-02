@@ -34,6 +34,7 @@ export default function Signup() {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [subscribeNewsletter, setSubscribeNewsletter] = useState(true)
   const [loading, setLoading] = useState(false)
   const [oauthLoading, setOauthLoading] = useState(null)
   const [error, setError] = useState('')
@@ -59,6 +60,20 @@ export default function Signup() {
 
     try {
       const data = await signUpWithEmail(email, password, displayName)
+
+      // Subscribe to newsletter if checked
+      if (subscribeNewsletter) {
+        try {
+          await fetch('/.netlify/functions/subscribe-newsletter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, firstName: displayName.split(' ')[0] })
+          })
+        } catch (newsletterErr) {
+          console.error('Newsletter subscription error:', newsletterErr)
+          // Don't block signup if newsletter fails
+        }
+      }
 
       // Check if email confirmation is required
       if (data?.user && !data?.session) {
@@ -272,6 +287,19 @@ export default function Signup() {
             <p className="text-xs text-neutral-500">
               Un email de verification vous sera envoye pour activer votre compte.
             </p>
+
+            {/* Newsletter checkbox */}
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={subscribeNewsletter}
+                onChange={(e) => setSubscribeNewsletter(e.target.checked)}
+                className="mt-1 w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+              />
+              <span className="text-sm text-neutral-600">
+                S'abonner a la newsletter pour recevoir les nouveaux articles et actualites
+              </span>
+            </label>
 
             <button
               type="submit"

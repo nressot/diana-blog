@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ArrowRight, BookOpen, PenLine, Loader2, Check } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
 import ArticleCard from '../components/ArticleCard'
 import CategoryCard from '../components/CategoryCard'
@@ -18,12 +19,40 @@ export default function Home() {
   const { data: author } = useSupabaseAuthor()
   const { data: pageContent } = useHomePage()
 
+  // Auth
+  const { user, isAuthenticated } = useAuth()
+
   // Newsletter state
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
   const [newsletterLoading, setNewsletterLoading] = useState(false)
   const [newsletterMessage, setNewsletterMessage] = useState(null)
   const [newsletterSuccess, setNewsletterSuccess] = useState(false)
+  const [alreadySubscribed, setAlreadySubscribed] = useState(false)
+  const [subscriberName, setSubscriberName] = useState('')
+
+  // Check if logged-in user is already subscribed
+  useEffect(() => {
+    const checkSubscription = async () => {
+      if (isAuthenticated && user?.email) {
+        try {
+          const response = await fetch('/.netlify/functions/check-newsletter-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: user.email })
+          })
+          const data = await response.json()
+          if (data.subscribed) {
+            setAlreadySubscribed(true)
+            setSubscriberName(data.firstName || '')
+          }
+        } catch (err) {
+          console.error('Error checking subscription:', err)
+        }
+      }
+    }
+    checkSubscription()
+  }, [isAuthenticated, user?.email])
 
   const handleSubscribe = async (e) => {
     e.preventDefault()
@@ -225,7 +254,14 @@ export default function Home() {
               <p className="text-primary-100 mb-8 text-lg">
                 {newsletter.description || 'Une newsletter mensuelle avec mes réflexions, nouveaux textes et découvertes littéraires. Pas de spam, promis.'}
               </p>
-              {newsletterSuccess ? (
+              {alreadySubscribed ? (
+                <div className="flex items-center justify-center gap-3 text-white bg-white/20 rounded-full py-4 px-8 max-w-md mx-auto">
+                  <Check className="w-6 h-6" />
+                  <span className="font-medium">
+                    {subscriberName ? `${subscriberName}, vous` : 'Vous'} etes deja inscrit{subscriberName ? '' : 'e'} a la newsletter !
+                  </span>
+                </div>
+              ) : newsletterSuccess ? (
                 <div className="flex items-center justify-center gap-3 text-white bg-white/20 rounded-full py-4 px-8 max-w-md mx-auto">
                   <Check className="w-6 h-6" />
                   <span className="font-medium">{newsletterMessage}</span>
