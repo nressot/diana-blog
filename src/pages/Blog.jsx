@@ -3,34 +3,8 @@ import { Link } from 'react-router-dom'
 import { Search, Clock, MessageCircle, ArrowRight, BookOpen, Users, FileText } from 'lucide-react'
 import CommunityBanner from '../components/CommunityBanner'
 import { useSupabaseArticles, useSupabaseCategories, useSupabaseFeaturedArticle } from '../lib/useSupabaseArticles'
-
-// Donnees simulees pour les discussions recentes
-const recentDiscussions = [
-  {
-    id: 1,
-    author: 'Marie L.',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
-    comment: 'Ce texte m\'a profondement touchee, merci pour cette belle reflexion...',
-    articleSlug: 'murmures-du-soir',
-    articleTitle: 'Les murmures du soir'
-  },
-  {
-    id: 2,
-    author: 'Thomas B.',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
-    comment: 'Votre poeme sur les saisons m\'a inspire pour ma propre ecriture.',
-    articleSlug: 'poeme-saisons-ame',
-    articleTitle: 'Les saisons de l\'ame'
-  },
-  {
-    id: 3,
-    author: 'Claire D.',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
-    comment: 'J\'attends la suite avec impatience ! Le gardien est fascinant.',
-    articleSlug: 'gardien-mots-oublies',
-    articleTitle: 'Le gardien des mots oublies'
-  }
-]
+import { useRecentComments } from '../lib/useSupabaseComments'
+import { getAvatarColor, getInitials } from '../lib/avatarUtils'
 
 export default function Blog() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -39,6 +13,7 @@ export default function Blog() {
   const { data: articles } = useSupabaseArticles()
   const { data: categories } = useSupabaseCategories()
   const { data: featuredArticles, loading: featuredLoading } = useSupabaseFeaturedArticle()
+  const { comments: recentDiscussions, loading: discussionsLoading } = useRecentComments(3)
 
   // Article featured pour le hero (utilise l'article en vedette de Supabase)
   // Ne pas utiliser de fallback pendant le chargement
@@ -261,30 +236,48 @@ export default function Blog() {
                     <MessageCircle className="w-4 h-4 text-primary-600" />
                     Discussions recentes
                   </h3>
-                  <div className="space-y-4">
-                    {recentDiscussions.map((discussion) => (
-                      <Link
-                        key={discussion.id}
-                        to={`/article/${discussion.articleSlug}`}
-                        className="flex gap-3 group"
-                      >
-                        <img
-                          src={discussion.avatar}
-                          alt={discussion.author}
-                          className="w-10 h-10 rounded-full object-cover shrink-0"
-                        />
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium">{discussion.author}</p>
-                          <p className="text-xs text-neutral-500 line-clamp-2 mb-1">
-                            {discussion.comment}
-                          </p>
-                          <p className="text-xs text-primary-600 group-hover:underline truncate">
-                            {discussion.articleTitle}
-                          </p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
+                  {discussionsLoading ? (
+                    <div className="text-center py-4">
+                      <div className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                    </div>
+                  ) : recentDiscussions.length === 0 ? (
+                    <div className="text-center py-6">
+                      <MessageCircle className="w-10 h-10 mx-auto mb-3 text-neutral-300" />
+                      <p className="text-sm text-neutral-500">Aucune discussion pour le moment</p>
+                      <p className="text-xs text-neutral-400 mt-1">Soyez le premier a commenter !</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {recentDiscussions.map((discussion) => (
+                        <Link
+                          key={discussion.id}
+                          to={`/article/${discussion.articleSlug}`}
+                          className="flex gap-3 group"
+                        >
+                          {discussion.avatar ? (
+                            <img
+                              src={discussion.avatar}
+                              alt={discussion.author}
+                              className="w-10 h-10 rounded-full object-cover shrink-0"
+                            />
+                          ) : (
+                            <div className={`w-10 h-10 rounded-full ${getAvatarColor(discussion.author)} flex items-center justify-center text-white font-medium text-sm shrink-0`}>
+                              {getInitials(discussion.author)}
+                            </div>
+                          )}
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium">{discussion.author}</p>
+                            <p className="text-xs text-neutral-500 line-clamp-2 mb-1">
+                              {discussion.comment}
+                            </p>
+                            <p className="text-xs text-primary-600 group-hover:underline truncate">
+                              {discussion.articleTitle}
+                            </p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Articles les plus commentes */}

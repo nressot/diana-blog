@@ -119,6 +119,62 @@ export function useCommentCount(articleId) {
 }
 
 /**
+ * Hook pour recuperer les commentaires recents (tous articles confondus)
+ */
+export function useRecentComments(limit = 3) {
+  const [comments, setComments] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
+
+    const fetchRecentComments = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('comments')
+          .select(`
+            id,
+            content,
+            author_name,
+            author_avatar,
+            created_at,
+            article_id,
+            articles(slug, title)
+          `)
+          .eq('status', 'approved')
+          .order('created_at', { ascending: false })
+          .limit(limit)
+
+        if (error) throw error
+
+        const adaptedComments = (data || []).map(comment => ({
+          id: comment.id,
+          author: comment.author_name,
+          avatar: comment.author_avatar,
+          comment: comment.content,
+          articleSlug: comment.articles?.slug,
+          articleTitle: comment.articles?.title
+        }))
+
+        setComments(adaptedComments)
+      } catch (err) {
+        console.error('Erreur lors de la recuperation des commentaires recents:', err.message)
+        setComments([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchRecentComments()
+  }, [limit])
+
+  return { comments, loading }
+}
+
+/**
  * Hook pour soumettre un nouveau commentaire
  */
 export function useSubmitComment() {

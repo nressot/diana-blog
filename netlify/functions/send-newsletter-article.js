@@ -106,7 +106,7 @@ exports.handler = async (event, context) => {
           from: fromEmail,
           to: subscriber.email,
           subject: `Nouvel article : ${article.title} - Le Coven de Diana`,
-          html: generateEmailHtml(article, articleUrl, articleImage, siteUrl, subscriber.first_name)
+          html: generateEmailHtml(article, articleUrl, articleImage, siteUrl, subscriber.first_name, subscriber.email)
         }).catch(err => {
           console.error(`Failed to send to ${subscriber.email}:`, err.message)
           errorCount++
@@ -176,11 +176,11 @@ exports.handler = async (event, context) => {
   }
 }
 
-function generateEmailHtml(article, articleUrl, articleImage, siteUrl, firstName) {
+function generateEmailHtml(article, articleUrl, articleImage, siteUrl, firstName, subscriberEmail) {
   const excerpt = article.excerpt || article.content?.substring(0, 200) + '...' || ''
   const readTime = article.read_time || '5 min'
   const category = article.category_name || ''
-  const greeting = firstName ? `Bonjour ${firstName},` : 'Bonjour,'
+  const greeting = firstName ? `Bonjour ch&#232;re ${firstName},` : 'Bonjour,'
 
   return `
 <!DOCTYPE html>
@@ -198,8 +198,19 @@ function generateEmailHtml(article, articleUrl, articleImage, siteUrl, firstName
     </div>
 
     <!-- Greeting -->
-    <p style="color: #333; font-size: 16px; margin-bottom: 24px;">${greeting}</p>
-    <p style="color: #666; font-size: 15px; margin-bottom: 24px;">Un nouvel article vient d'etre publie sur Le Coven de Diana :</p>
+    <p style="color: #333; font-size: 18px; margin-bottom: 24px;">${greeting}</p>
+
+    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+      Je sais que tu l'attendais avec impatience... et ton souhait a &#233;t&#233; entendu !
+    </p>
+
+    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+      Le nouvel article est en ligne ! &#127881;
+    </p>
+
+    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+      Prends un moment pour le d&#233;couvrir et surtout raconte-moi ce que tu en as pens&#233;.
+    </p>
 
     <!-- Main Card -->
     <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
@@ -231,6 +242,11 @@ function generateEmailHtml(article, articleUrl, articleImage, siteUrl, firstName
       </div>
     </div>
 
+    <!-- Closing -->
+    <p style="color: #333; font-size: 16px; margin-top: 32px; text-align: center;">
+      Tr&#232;s belle lecture &#10024;
+    </p>
+
     <!-- Footer -->
     <div style="text-align: center; margin-top: 32px; color: #999; font-size: 14px;">
       <p style="margin: 0 0 8px 0;">Diana - Le Coven de Diana</p>
@@ -238,7 +254,8 @@ function generateEmailHtml(article, articleUrl, articleImage, siteUrl, firstName
         <a href="${siteUrl}" style="color: #d4a574; text-decoration: none;">Visiter le site</a>
       </p>
       <p style="margin: 16px 0 0 0; font-size: 11px; color: #bbb;">
-        Vous recevez cet email car vous etes inscrit a la newsletter.
+        Vous recevez cet email car vous &#234;tes inscrit &#224; la newsletter.<br>
+        Si vous d&#233;sirez vous d&#233;sinscrire, <a href="${siteUrl}/.netlify/functions/unsubscribe-newsletter?email=${encodeURIComponent(subscriberEmail)}" style="color: #bbb; text-decoration: underline;">cliquez ici</a>.
       </p>
     </div>
   </div>
