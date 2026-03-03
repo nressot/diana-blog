@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 
 const SITE_NAME = 'Le Coven de Diana'
-const SITE_URL = 'https://le-coven-de-diana.netlify.app'
+const SITE_URL = 'https://covendediana.ch'
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.jpg`
 const DEFAULT_DESCRIPTION = 'Blog litteraire de Diana - Explorez mes pensees, recits et inspirations. Fiction, poesie, reflexions et voyages a travers les mots.'
 

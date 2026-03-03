@@ -17,7 +17,7 @@ dotenv.config()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const SITE_URL = 'https://le-coven-de-diana.netlify.app'
+const SITE_URL = 'https://covendediana.ch'
 
 // Pages statiques avec leurs priorites
 const STATIC_PAGES = [

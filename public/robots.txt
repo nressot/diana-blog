@@ -1,5 +1,5 @@
 # robots.txt - Le Coven de Diana
-# https://le-coven-de-diana.netlify.app
+# https://covendediana.ch
 
 User-agent: *
 Allow: /
@@ -36,7 +36,7 @@ Disallow: /commande-confirmee
 Disallow: /commande-annulee
 
 # Sitemap
-Sitemap: https://le-coven-de-diana.netlify.app/sitemap.xml
+Sitemap: https://covendediana.ch/sitemap.xml
 
 # Crawl-delay pour eviter la surcharge (optionnel)
 Crawl-delay: 1

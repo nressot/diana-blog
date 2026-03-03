@@ -59,9 +59,53 @@ studio/           # Sanity Studio (CMS)
 
 ## Deploiement
 
-**Site production** : https://le-coven-de-diana.netlify.app/
+**Domaine principal** : https://covendediana.ch
 
-**Webhook Stripe** : https://le-coven-de-diana.netlify.app/.netlify/functions/stripe-webhook
+**Netlify** : https://le-coven-de-diana.netlify.app/ (redirige vers covendediana.ch)
+
+**Webhook Stripe** : https://covendediana.ch/.netlify/functions/stripe-webhook
+
+## SEO
+
+### Fichiers SEO
+
+| Fichier | Description |
+|---------|-------------|
+| `public/robots.txt` | Regles de crawl pour Google |
+| `public/sitemap.xml` | Sitemap genere au build |
+| `scripts/generate-sitemap.mjs` | Script generation sitemap |
+| `src/components/SEO.jsx` | Meta tags dynamiques |
+| `src/components/StructuredData.jsx` | Donnees structurees JSON-LD |
+
+### Meta Tags (react-helmet-async)
+
+Chaque page a des meta tags uniques:
+- `<title>` dynamique
+- `<meta name="description">`
+- Open Graph (og:title, og:description, og:image)
+- Twitter Cards
+
+### Donnees Structurees JSON-LD
+
+| Page | Schemas |
+|------|---------|
+| Home | WebSite, Person, ItemList |
+| Blog | ItemList (articles) |
+| Article | BlogPosting, BreadcrumbList |
+| Boutique | ItemList (produits) |
+| Product | Product/Book, BreadcrumbList |
+| Contact | FAQPage |
+
+### Sitemap Dynamique
+
+Le sitemap est regenere a chaque build avec les articles et produits depuis Supabase:
+```bash
+npm run generate:sitemap  # Execute automatiquement avant build
+```
+
+### Google Search Console
+
+Soumettre le sitemap: https://covendediana.ch/sitemap.xml
 
 ## Variables d'Environnement Netlify
 

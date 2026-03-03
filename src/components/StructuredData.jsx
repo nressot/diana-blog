@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 
-const SITE_URL = 'https://le-coven-de-diana.netlify.app'
+const SITE_URL = 'https://covendediana.ch'
 const SITE_NAME = 'Le Coven de Diana'
 const AUTHOR_NAME = 'Diana'
 const AUTHOR_IMAGE = `${SITE_URL}/author-avatar.jpg`
