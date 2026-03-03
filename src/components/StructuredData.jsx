@@ -227,10 +227,8 @@ export function ItemListSchema({ items, type = 'Article' }) {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    itemListElement: items.slice(0, 10).map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      item: {
+    itemListElement: items.slice(0, 10).map((item, index) => {
+      const baseItem = {
         '@type': type,
         name: item.title,
         url: type === 'Product'
@@ -238,7 +236,22 @@ export function ItemListSchema({ items, type = 'Article' }) {
           : `${SITE_URL}/article/${item.slug}`,
         image: item.image
       }
-    }))
+
+      // Ajouter les champs specifiques aux articles
+      if (type === 'Article') {
+        baseItem.headline = item.title
+        baseItem.author = {
+          '@type': 'Person',
+          name: item.author?.name || AUTHOR_NAME
+        }
+      }
+
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        item: baseItem
+      }
+    })
   }
 
   return (
