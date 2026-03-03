@@ -1,5 +1,6 @@
 import { BookOpen, PenTool, Heart, Award, ArrowRight, Star, Lightbulb, Users, Globe } from 'lucide-react'
 import AuthorCard from '../components/AuthorCard'
+import SEO from '../components/SEO'
 import { useAboutPage } from '../lib/usePages'
 import { PortableText } from '@portabletext/react'
 
@@ -112,6 +113,11 @@ export default function About() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
+      <SEO
+        title="A propos"
+        description="Decouvrez Diana, ecrivaine et blogueuse passionnee. Son parcours, ses valeurs et sa passion pour les mots et la litterature."
+        url="/about"
+      />
       <FloatingStars />
       {/* Hero Section */}
       <section className="py-10 lg:py-14 bg-gradient-to-b from-cream-200 to-transparent dark:from-neutral-900/50 dark:to-transparent">

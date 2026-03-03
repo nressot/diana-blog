@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, ArrowRight, Loader2 } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
+import SEO from '../components/SEO'
+import { ItemListSchema } from '../components/StructuredData'
 import { useProducts, useProductCategories, useFeaturedProducts } from '../lib/useProducts'
 
 /* Floating Stars Component - SVG stars inspired by bg-stars-v2 */
@@ -67,6 +69,12 @@ export default function Boutique() {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Boutique"
+        description="Decouvrez les livres, ebooks et creations de Diana. Romans, recueils de poesie et guides d'ecriture creative."
+        url="/boutique"
+      />
+      {products && products.length > 0 && <ItemListSchema items={products} type="Product" />}
       {/* Filter Bar - Minimal */}
       <section className="sticky top-20 z-30 border-b border-neutral-200 dark:border-neutral-800 bg-cream-50/95 dark:bg-primary-950/95 backdrop-blur-sm">
         <div className="container-custom">

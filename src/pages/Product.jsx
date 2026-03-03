@@ -9,6 +9,8 @@ import {
   Loader2,
 } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
+import SEO from '../components/SEO'
+import { ProductSchema, BreadcrumbSchema } from '../components/StructuredData'
 import { useProduct, useRelatedProducts } from '../lib/useProducts'
 import { useCheckout } from '../lib/useCheckout'
 import { useCart } from '../context/CartContext'
@@ -123,6 +125,23 @@ export default function Product() {
 
   return (
     <div>
+      <SEO
+        title={product.title}
+        description={product.excerpt || `Decouvrez "${product.title}" par Diana dans la boutique Le Coven de Diana.`}
+        image={product.image}
+        url={`/boutique/${slug}`}
+        type="product"
+        product={{
+          price: selectedFormat?.price || product.price,
+          availability: product.in_stock ? 'in stock' : 'out of stock'
+        }}
+      />
+      <ProductSchema product={product} selectedFormat={selectedFormat} />
+      <BreadcrumbSchema items={[
+        { name: 'Accueil', url: '/' },
+        { name: 'Boutique', url: '/boutique' },
+        { name: product.title }
+      ]} />
       {/* Breadcrumb */}
       <section className="py-4 border-b border-neutral-200 dark:border-neutral-800">
         <div className="container-custom">

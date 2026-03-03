@@ -1,0 +1,42 @@
+# robots.txt - Le Coven de Diana
+# https://le-coven-de-diana.netlify.app
+
+User-agent: *
+Allow: /
+
+# Pages publiques importantes
+Allow: /
+Allow: /blog
+Allow: /about
+Allow: /contact
+Allow: /boutique
+Allow: /article/
+
+# Bloquer les pages admin
+Disallow: /admin
+Disallow: /admin/
+
+# Bloquer les pages de demo
+Disallow: /demo/
+Disallow: /boutique-demo
+Disallow: /boutique-demo/
+
+# Bloquer les pages d'authentification
+Disallow: /connexion
+Disallow: /inscription
+Disallow: /mot-de-passe-oublie
+Disallow: /nouveau-mot-de-passe
+Disallow: /auth/
+
+# Bloquer les pages utilisateur privees
+Disallow: /profil
+Disallow: /mes-commentaires
+Disallow: /mes-commandes
+Disallow: /commande-confirmee
+Disallow: /commande-annulee
+
+# Sitemap
+Sitemap: https://le-coven-de-diana.netlify.app/sitemap.xml
+
+# Crawl-delay pour eviter la surcharge (optionnel)
+Crawl-delay: 1

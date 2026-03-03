@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import { Search, BookOpen, Feather, Users, Sparkles, PenTool, Loader2, ArrowRight, Clock, Eye, MessageCircle, UserPlus, Quote, BookMarked, Mail, Heart, LayoutGrid, Filter } from 'lucide-react'
 import ArticleCard from '../components/ArticleCard'
 import AuthorCard from '../components/AuthorCard'
+import SEO from '../components/SEO'
+import { ItemListSchema } from '../components/StructuredData'
 import { useSupabaseArticles, useSupabaseCategories, useSupabaseFeaturedArticle } from '../lib/useSupabaseArticles'
 import { useRecentComments } from '../lib/useSupabaseComments'
 import { getAvatarColor, getInitials } from '../lib/avatarUtils'
@@ -237,6 +239,12 @@ export default function BlogDemo() {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Blog"
+        description="Explorez les articles de Diana - Fiction, poesie, reflexions litteraires et recits de voyage. Un univers de mots et d'emotions."
+        url="/blog"
+      />
+      {articles && articles.length > 0 && <ItemListSchema items={articles} type="Article" />}
       {renderVariant()}
     </div>
   )

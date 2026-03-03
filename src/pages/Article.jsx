@@ -4,6 +4,8 @@ import { PortableText } from '@portabletext/react'
 import ArticleCard from '../components/ArticleCard'
 import AuthorCard from '../components/AuthorCard'
 import CommentSection from '../components/CommentSection'
+import SEO from '../components/SEO'
+import { BlogPostingSchema, BreadcrumbSchema } from '../components/StructuredData'
 import { useSupabaseArticle, useSupabaseArticles } from '../lib/useSupabaseArticles'
 import { portableTextComponents } from '../lib/PortableTextComponents'
 
@@ -69,6 +71,26 @@ export default function Article() {
 
   return (
     <div key={slug}>
+      <SEO
+        title={article.title}
+        description={article.excerpt || `Lisez "${article.title}" par Diana sur Le Coven de Diana.`}
+        image={imageUrl}
+        url={`/article/${slug}`}
+        type="article"
+        article={{
+          publishedAt: article.publishedAt || article.published_at,
+          modifiedAt: article.updatedAt || article.updated_at,
+          author: author.name,
+          category: article.category?.name
+        }}
+      />
+      <BlogPostingSchema article={{ ...article, image: imageUrl, author, slug }} />
+      <BreadcrumbSchema items={[
+        { name: 'Accueil', url: '/' },
+        { name: 'Blog', url: '/blog' },
+        { name: article.category?.name || 'Article', url: '/blog' },
+        { name: article.title }
+      ]} />
       {/* Hero Section */}
       <section className="relative">
         <div className="aspect-[21/9] lg:aspect-[3/1]">

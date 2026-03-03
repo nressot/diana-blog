@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Mail, MapPin, Clock, Send, Instagram, Phone, Globe, Twitter, Linkedin, Facebook, Youtube } from 'lucide-react'
+import SEO from '../components/SEO'
+import { FAQSchema } from '../components/StructuredData'
 import { useContactPage } from '../lib/usePages'
 
 // Map des icones
@@ -60,6 +62,12 @@ export default function Contact() {
 
   return (
     <div>
+      <SEO
+        title="Contact"
+        description="Contactez Diana pour vos questions, collaborations ou simplement pour echanger. Formulaire de contact et informations pour me joindre."
+        url="/contact"
+      />
+      <FAQSchema items={faqSection.items} />
       {/* Hero Section */}
       <section className="py-10 lg:py-14 bg-gradient-to-b from-cream-200 to-transparent dark:from-neutral-900/50 dark:to-transparent">
         <div className="container-custom">

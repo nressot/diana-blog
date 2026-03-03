@@ -8,6 +8,8 @@ import AuthorCard from '../components/AuthorCard'
 import TypewriterEffect from '../components/TypewriterEffect'
 import MonDernierLivre from '../components/MonDernierLivre'
 import CssCat from '../components/CssCat'
+import SEO from '../components/SEO'
+import { WebSiteSchema, PersonSchema, ItemListSchema } from '../components/StructuredData'
 import { useSupabaseArticles, useSupabaseCategories, useSupabaseFeaturedArticle, useSupabaseAuthor } from '../lib/useSupabaseArticles'
 import { useHomePage } from '../lib/usePages'
 
@@ -93,6 +95,14 @@ export default function Home() {
   const newsletter = pageContent?.newsletter || {}
   return (
     <div className="bg-terracotta-pattern">
+      <SEO
+        title={null}
+        description="Blog litteraire de Diana - Explorez mes pensees, recits et inspirations. Fiction, poesie, reflexions et voyages a travers les mots."
+        url="/"
+      />
+      <WebSiteSchema />
+      <PersonSchema socialLinks={['https://instagram.com/neelagram']} />
+      {articles && articles.length > 0 && <ItemListSchema items={articles} type="Article" />}
       {/* Hero Section */}
       <section className="relative py-12 lg:py-20 overflow-hidden">
         <div className="container-custom relative z-10">
