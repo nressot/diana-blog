@@ -1,2 +1,8 @@
 /guideline/*  /guideline/:splat  200
+
+# Fichiers statiques SEO (ne pas rediriger)
+/sitemap.xml    /sitemap.xml    200
+/robots.txt     /robots.txt     200
+
+# SPA fallback (doit etre en dernier)
 /*    /index.html   200
