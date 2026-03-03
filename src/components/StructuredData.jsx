@@ -242,7 +242,8 @@ export function ItemListSchema({ items, type = 'Article' }) {
         baseItem.headline = item.title
         baseItem.author = {
           '@type': 'Person',
-          name: item.author?.name || AUTHOR_NAME
+          name: item.author?.name || AUTHOR_NAME,
+          url: SITE_URL
         }
       }
 
