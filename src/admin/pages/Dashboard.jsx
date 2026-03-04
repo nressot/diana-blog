@@ -7,7 +7,8 @@ import {
   MessageSquare,
   Plus,
   ShoppingBag,
-  BookOpen
+  BookOpen,
+  Users
 } from 'lucide-react'
 
 export default function Dashboard() {
@@ -15,7 +16,8 @@ export default function Dashboard() {
     articles: 0,
     categories: 0,
     comments: 0,
-    sales: 0
+    sales: 0,
+    subscribers: 0
   })
   const [recentArticles, setRecentArticles] = useState([])
   const [loading, setLoading] = useState(true)
@@ -57,11 +59,34 @@ export default function Dashboard() {
         salesCount = 0
       }
 
+      // Fetch subscribers count (from subscribers table)
+      let subscribersCount = 0
+      try {
+        // Methode alternative: select avec count
+        const { data: subscribersData, error: subsError } = await supabase
+          .from('subscribers')
+          .select('id')
+          .eq('status', 'active')
+
+        if (subsError) {
+          console.error('Erreur subscribers:', subsError)
+          subscribersCount = 0
+        } else {
+          subscribersCount = subscribersData?.length || 0
+          console.log('Subscribers count:', subscribersCount, subscribersData)
+        }
+      } catch (err) {
+        // Subscribers table may not exist yet
+        console.error('Exception subscribers:', err)
+        subscribersCount = 0
+      }
+
       setStats({
         articles: articlesCount || 0,
         categories: categoriesCount || 0,
         comments: commentsCount || 0,
-        sales: salesCount
+        sales: salesCount,
+        subscribers: subscribersCount
       })
 
       setRecentArticles(articles || [])
@@ -90,6 +115,12 @@ export default function Dashboard() {
       value: stats.comments,
       icon: MessageSquare,
       href: '/admin/comments'
+    },
+    {
+      name: 'Abonné(e)s',
+      value: stats.subscribers,
+      icon: Users,
+      href: '/admin'
     },
     {
       name: 'Ventes',
@@ -134,7 +165,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         {statCards.map((stat) => (
           <Link
             key={stat.name}

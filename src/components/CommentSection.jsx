@@ -1,18 +1,19 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MessageCircle, Send, Loader2, CheckCircle, AlertCircle, LogIn } from 'lucide-react'
+import { MessageCircle, Send, Loader2, CheckCircle, AlertCircle, LogIn, X } from 'lucide-react'
 import { useComments, useSubmitComment } from '../lib/useSupabaseComments'
 import { useAuth } from '../context/AuthContext'
 import { getAvatarColor, getInitials } from '../lib/avatarUtils'
 import CommentCard from './CommentCard'
 
-export default function CommentSection({ articleId }) {
+export default function CommentSection({ articleId, articleTitle, articleSlug }) {
   const { comments, loading: loadingComments, refetch } = useComments(articleId)
   const { submitComment, loading: submitting, error: submitError, success, reset } = useSubmitComment()
   const { isAuthenticated, user, displayName, avatarUrl } = useAuth()
 
   const [content, setContent] = useState('')
   const [formError, setFormError] = useState('')
+  const [replyingTo, setReplyingTo] = useState(null)
 
   const handleContentChange = (e) => {
     setContent(e.target.value)
@@ -32,6 +33,19 @@ export default function CommentSection({ articleId }) {
     return true
   }
 
+  const handleReply = (comment) => {
+    setReplyingTo(comment)
+    setContent('')
+    setFormError('')
+    if (success) reset()
+  }
+
+  const cancelReply = () => {
+    setReplyingTo(null)
+    setContent('')
+    setFormError('')
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -39,15 +53,20 @@ export default function CommentSection({ articleId }) {
 
     const submitted = await submitComment({
       articleId,
+      articleTitle,
+      articleSlug,
       name: displayName,
       email: user?.email || '',
       content: content.trim(),
       userId: user?.id,
-      avatarUrl: avatarUrl // Ajouter l'avatar pour affichage
+      avatarUrl: avatarUrl,
+      parentId: replyingTo?.id || null,
+      parentAuthor: replyingTo?.name || null
     })
 
     if (submitted) {
       setContent('')
+      setReplyingTo(null)
       refetch()
     }
   }
@@ -88,10 +107,22 @@ export default function CommentSection({ articleId }) {
                   {initials}
                 </div>
               )}
-              <div>
+              <div className="flex-1">
                 <p className="font-medium text-neutral-900">{displayName}</p>
-                <p className="text-sm text-neutral-500">Laisser un commentaire</p>
+                <p className="text-sm text-neutral-500">
+                  {replyingTo ? `Repondre a ${replyingTo.name}` : 'Laisser un commentaire'}
+                </p>
               </div>
+              {replyingTo && (
+                <button
+                  type="button"
+                  onClick={cancelReply}
+                  className="p-2 hover:bg-neutral-200 rounded-lg transition-colors"
+                  title="Annuler"
+                >
+                  <X className="w-4 h-4 text-neutral-600" />
+                </button>
+              )}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -204,7 +235,12 @@ export default function CommentSection({ articleId }) {
           </div>
         ) : (
           comments.map((comment) => (
-            <CommentCard key={comment._id || comment.id} comment={comment} />
+            <CommentCard
+              key={comment._id || comment.id}
+              comment={comment}
+              onReply={handleReply}
+              isAuthenticated={isAuthenticated}
+            />
           ))
         )}
       </div>

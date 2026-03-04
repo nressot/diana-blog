@@ -253,7 +253,11 @@ export default function Article() {
               </div>
 
               {/* Comment Section */}
-              <CommentSection articleId={article._id || article.id} />
+              <CommentSection
+                articleId={article._id || article.id}
+                articleTitle={article.title}
+                articleSlug={article.slug}
+              />
             </div>
 
             {/* Sidebar */}

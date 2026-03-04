@@ -6,9 +6,6 @@ import { AuthProvider } from './context/AuthContext'
 import ScrollToTop from './components/ScrollToTop'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import PasswordGate from './components/PasswordGate'
-import { useSiteAccess } from './hooks/useSiteAccess'
-import { Loader2 } from 'lucide-react'
 import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
@@ -53,37 +50,12 @@ import {
 function App() {
   const location = useLocation()
   const isAdminRoute = location.pathname.startsWith('/admin')
-  const { isPublic, hasAccess, loading, error, verifyPassword, makePublic, clearError } = useSiteAccess()
 
   // Forcer le mode light
   useEffect(() => {
     document.documentElement.classList.remove('dark')
     localStorage.removeItem('darkMode')
   }, [])
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-cream-50 via-cream-100 to-primary-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-primary-500 animate-spin mx-auto mb-4" />
-          <p className="text-neutral-500">Chargement...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Password gate for private site (except admin routes)
-  if (!isPublic && !hasAccess && !isAdminRoute) {
-    return (
-      <PasswordGate
-        onVerify={verifyPassword}
-        onMakePublic={makePublic}
-        error={error}
-        clearError={clearError}
-      />
-    )
-  }
 
   // Admin routes - separate layout (uses same AuthProvider as public routes)
   if (isAdminRoute) {

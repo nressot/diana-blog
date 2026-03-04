@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { supabase } from './supabase'
 
 /**
- * Hook pour recuperer les commentaires approuves d'un article
+ * Hook pour recuperer les commentaires approuves d'un article avec leurs reponses
  */
 export function useComments(articleId) {
   const [comments, setComments] = useState([])
@@ -42,16 +42,37 @@ export function useComments(articleId) {
 
       if (fetchError) throw fetchError
 
-      // Adapter les donnees pour le format attendu par CommentCard
-      const adaptedComments = (data || []).map(comment => ({
-        id: comment.id,
-        name: comment.author_name,
-        email: comment.author_email,
-        avatarUrl: comment.author_avatar,
-        content: comment.content,
-        createdAt: comment.created_at,
-        userId: comment.user_id
-      }))
+      // Separer les commentaires parents et les reponses
+      const allComments = data || []
+      const parentComments = allComments.filter(c => !c.parent_id)
+      const replies = allComments.filter(c => c.parent_id)
+
+      // Adapter les donnees et attacher les reponses aux commentaires parents
+      const adaptedComments = parentComments.map(comment => {
+        const commentReplies = replies
+          .filter(r => r.parent_id === comment.id)
+          .map(reply => ({
+            id: reply.id,
+            name: reply.author_name,
+            email: reply.author_email,
+            avatarUrl: reply.author_avatar,
+            content: reply.content,
+            createdAt: reply.created_at,
+            userId: reply.user_id,
+            parentId: reply.parent_id
+          }))
+
+        return {
+          id: comment.id,
+          name: comment.author_name,
+          email: comment.author_email,
+          avatarUrl: comment.author_avatar,
+          content: comment.content,
+          createdAt: comment.created_at,
+          userId: comment.user_id,
+          replies: commentReplies
+        }
+      })
 
       setComments(adaptedComments)
       setError(null)
@@ -175,14 +196,25 @@ export function useRecentComments(limit = 3) {
 }
 
 /**
- * Hook pour soumettre un nouveau commentaire
+ * Hook pour soumettre un nouveau commentaire ou une reponse
  */
 export function useSubmitComment() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
 
-  const submitComment = useCallback(async ({ articleId, name, email, content, userId, avatarUrl }) => {
+  const submitComment = useCallback(async ({
+    articleId,
+    articleTitle,
+    articleSlug,
+    name,
+    email,
+    content,
+    userId,
+    avatarUrl,
+    parentId = null,
+    parentAuthor = null
+  }) => {
     if (!supabase) {
       setError(new Error('Supabase non configure'))
       return false
@@ -205,6 +237,7 @@ export function useSubmitComment() {
         author_avatar: avatarUrl || null,
         content: content.trim(),
         user_id: userId || null,
+        parent_id: parentId || null,
         status: 'approved' // Les commentaires sont directement approuves
       }
 
@@ -213,6 +246,28 @@ export function useSubmitComment() {
         .insert([commentData])
 
       if (insertError) throw insertError
+
+      // Envoyer la notification email a Diana
+      if (articleTitle && articleSlug) {
+        try {
+          await fetch('/.netlify/functions/notify-new-comment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              articleTitle,
+              articleSlug,
+              authorName: name.trim(),
+              authorEmail: email ? email.trim() : '',
+              content: content.trim(),
+              isReply: !!parentId,
+              parentAuthor
+            })
+          })
+        } catch (notifError) {
+          // Ne pas bloquer la soumission du commentaire si la notification echoue
+          console.error('Erreur lors de l\'envoi de la notification:', notifError)
+        }
+      }
 
       setSuccess(true)
       return true
