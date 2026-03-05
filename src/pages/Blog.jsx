@@ -177,10 +177,12 @@ export default function Blog() {
                             <Clock className="w-4 h-4" />
                             {article.readTime}
                           </span>
-                          <span className="flex items-center gap-1">
-                            <MessageCircle className="w-4 h-4" />
-                            {article.comments}
-                          </span>
+                          {article.comments > 0 && (
+                            <span className="flex items-center gap-1">
+                              <MessageCircle className="w-4 h-4" />
+                              {article.comments}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </Link>
@@ -248,12 +250,17 @@ export default function Blog() {
                               src={discussion.avatar}
                               alt={discussion.author}
                               className="w-10 h-10 rounded-full object-cover shrink-0"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'flex';
+                              }}
                             />
-                          ) : (
-                            <div className={`w-10 h-10 rounded-full ${getAvatarColor(discussion.author)} flex items-center justify-center text-white font-medium text-sm shrink-0`}>
-                              {getInitials(discussion.author)}
-                            </div>
-                          )}
+                          ) : null}
+                          <div
+                            className={`w-10 h-10 rounded-full ${getAvatarColor(discussion.author)} items-center justify-center text-white font-medium text-sm shrink-0 ${discussion.avatar ? 'hidden' : 'flex'}`}
+                          >
+                            {getInitials(discussion.author)}
+                          </div>
                           <div className="min-w-0">
                             <p className="text-sm font-medium">{discussion.author}</p>
                             <p className="text-xs text-neutral-500 line-clamp-2 mb-1">

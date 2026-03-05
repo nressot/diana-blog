@@ -40,6 +40,8 @@ function normalizeArticle(article) {
     date: formatDate(article.published_at),
     readTime: article.read_time,
     featured: article.featured,
+    views: article.views || 0,
+    comments: article.comments || 0,
     // Flatten category to match static data format
     category: article.category?.name || null,
     categoryColor: article.category?.color || 'bg-neutral-300',

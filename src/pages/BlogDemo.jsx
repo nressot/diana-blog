@@ -367,8 +367,12 @@ function EditorialImmersifLayout({ articles, allArticles, categories, featuredAr
                       <span>{article.date}</span>
                       <span className="w-1 h-1 rounded-full bg-neutral-300" />
                       <span>{article.readTime}</span>
-                      <span className="w-1 h-1 rounded-full bg-neutral-300" />
-                      <span>{article.comments} commentaires</span>
+                      {article.comments > 0 && (
+                        <>
+                          <span className="w-1 h-1 rounded-full bg-neutral-300" />
+                          <span>{article.comments} commentaires</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </Link>
@@ -477,7 +481,7 @@ function BentoGridLayout({ articles, allArticles, categories, featuredArticles, 
                   <p className="text-white/80 text-sm line-clamp-2 mb-4 hidden lg:block">{featured.excerpt}</p>
                   <div className="flex items-center gap-4 text-xs text-white/70">
                     <span>{featured.readTime}</span>
-                    <span>{featured.comments} commentaires</span>
+                    {featured.comments > 0 && <span>{featured.comments} commentaires</span>}
                   </div>
                 </div>
               </Link>
@@ -665,10 +669,12 @@ function ReaderFirstLayout({ articles, allArticles, categories, featuredArticles
                       <Clock className="w-3.5 h-3.5" />
                       {article.readTime}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <MessageCircle className="w-3.5 h-3.5" />
-                      {article.comments}
-                    </span>
+                    {article.comments > 0 && (
+                      <span className="flex items-center gap-1">
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        {article.comments}
+                      </span>
+                    )}
                   </div>
                 </Link>
 
@@ -814,7 +820,7 @@ function VisualStoryLayout({ articles, allArticles, categories, featuredArticles
                         <div className={`flex items-center gap-6 text-sm text-neutral-500 ${index % 2 === 1 ? 'lg:justify-end' : ''}`}>
                           <span>{article.date}</span>
                           <span>{article.readTime}</span>
-                          <span>{article.comments} commentaires</span>
+                          {article.comments > 0 && <span>{article.comments} commentaires</span>}
                         </div>
                       </div>
                     </div>
@@ -960,15 +966,19 @@ function CommunityHubLayout({ articles, allArticles, categories, featuredArticle
                                 <Clock className="w-3.5 h-3.5" />
                                 {article.readTime}
                               </span>
-                              <span className="flex items-center gap-1">
-                                <Eye className="w-3.5 h-3.5" />
-                                {article.views}
-                              </span>
+                              {article.views > 0 && (
+                                <span className="flex items-center gap-1">
+                                  <Eye className="w-3.5 h-3.5" />
+                                  {article.views}
+                                </span>
+                              )}
                             </div>
-                            <div className="flex items-center gap-1 text-primary-600">
-                              <MessageCircle className="w-4 h-4" />
-                              <span className="text-sm font-medium">{article.comments}</span>
-                            </div>
+                            {article.comments > 0 && (
+                              <div className="flex items-center gap-1 text-primary-600">
+                                <MessageCircle className="w-4 h-4" />
+                                <span className="text-sm font-medium">{article.comments}</span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1096,10 +1106,6 @@ function StoryCommunityLayout({ articles, allArticles, categories, featuredArtic
                   <MessageCircle className="w-4 h-4" />
                   <span className="text-sm font-medium">{totalComments} commentaires</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/80">
-                  <Users className="w-4 h-4" />
-                  <span className="text-sm font-medium">847 membres</span>
-                </div>
               </div>
               <span className={`${featured.categoryColor || 'bg-neutral-500'} text-white text-xs font-medium px-3 py-1 rounded-full inline-block mb-4`}>
                 {featured.category}
@@ -1161,7 +1167,9 @@ function StoryCommunityLayout({ articles, allArticles, categories, featuredArtic
                         <div className={`flex items-center gap-4 text-sm text-neutral-500 ${index % 2 === 1 ? 'md:justify-end' : ''}`}>
                           <span>{article.date}</span>
                           <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{article.readTime}</span>
-                          <span className="flex items-center gap-1"><MessageCircle className="w-4 h-4" />{article.comments}</span>
+                          {article.comments > 0 && (
+                            <span className="flex items-center gap-1"><MessageCircle className="w-4 h-4" />{article.comments}</span>
+                          )}
                         </div>
                       </div>
                     </Link>
@@ -1305,10 +1313,6 @@ function CommunityHeroLayout({ articles, allArticles, categories, featuredArticl
                   <MessageCircle className="w-4 h-4" />
                   <span className="text-sm font-medium">{totalComments} commentaires</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/80">
-                  <Users className="w-4 h-4" />
-                  <span className="text-sm font-medium">847 membres</span>
-                </div>
               </div>
               <span className={`${featured.categoryColor || 'bg-neutral-500'} text-white text-xs font-medium px-3 py-1 rounded-full inline-block mb-4`}>
                 {featured.category}
@@ -1375,12 +1379,16 @@ function CommunityHeroLayout({ articles, allArticles, categories, featuredArticl
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4 text-xs text-neutral-500">
                               <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{article.readTime}</span>
-                              <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{article.views}</span>
+                              {article.views > 0 && (
+                                <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{article.views}</span>
+                              )}
                             </div>
-                            <div className="flex items-center gap-1 text-primary-600">
-                              <MessageCircle className="w-4 h-4" />
-                              <span className="text-sm font-medium">{article.comments}</span>
-                            </div>
+                            {article.comments > 0 && (
+                              <div className="flex items-center gap-1 text-primary-600">
+                                <MessageCircle className="w-4 h-4" />
+                                <span className="text-sm font-medium">{article.comments}</span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>

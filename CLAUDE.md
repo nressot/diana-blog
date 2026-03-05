@@ -144,7 +144,7 @@ Claude a acces en lecture/ecriture via les credentials dans `.env`:
 
 | Table | Description |
 |-------|-------------|
-| `articles` | Articles du blog |
+| `articles` | Articles du blog (avec `views` et `comments` pour les compteurs) |
 | `categories` | Categories d'articles |
 | `authors` | Auteurs |
 | `comments` | Commentaires des articles |
@@ -152,6 +152,14 @@ Claude a acces en lecture/ecriture via les credentials dans `.env`:
 | `orders` | Commandes Stripe |
 | `subscribers` | Abonnes newsletter |
 | `pages` | Contenu des pages (Home, About, etc.) |
+
+#### Colonnes articles
+
+La table `articles` contient les colonnes suivantes pour les compteurs:
+- `views` (INTEGER): Nombre de vues de l'article (par defaut 0)
+- `comments` (INTEGER): Nombre de commentaires approuves (mis a jour automatiquement via trigger)
+
+**Trigger automatique**: Le compteur `comments` est mis a jour automatiquement via la fonction `update_article_comments_count()` qui s'execute a chaque INSERT/UPDATE/DELETE sur la table `comments` avec status='approved'.
 
 ### Execution SQL (DDL)
 

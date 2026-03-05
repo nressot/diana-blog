@@ -101,12 +101,15 @@ export default function CommentSection({ articleId, articleTitle, articleSlug })
                   src={avatarUrl}
                   alt={displayName}
                   className="w-10 h-10 rounded-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
                 />
-              ) : (
-                <div className={`w-10 h-10 rounded-full ${avatarColor} flex items-center justify-center text-white font-medium text-sm`}>
-                  {initials}
-                </div>
-              )}
+              ) : null}
+              <div className={`w-10 h-10 rounded-full ${avatarColor} items-center justify-center text-white font-medium text-sm ${avatarUrl ? 'hidden' : 'flex'}`}>
+                {initials}
+              </div>
               <div className="flex-1">
                 <p className="font-medium text-neutral-900">{displayName}</p>
                 <p className="text-sm text-neutral-500">

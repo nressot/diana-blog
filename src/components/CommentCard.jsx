@@ -33,12 +33,15 @@ export default function CommentCard({ comment, onReply, isAuthenticated, isReply
             src={comment.avatarUrl}
             alt={comment.name}
             className="shrink-0 w-10 h-10 rounded-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
           />
-        ) : (
-          <div className={`shrink-0 w-10 h-10 rounded-full ${avatarColor} flex items-center justify-center`}>
-            <span className="text-white text-sm font-semibold">{initials}</span>
-          </div>
-        )}
+        ) : null}
+        <div className={`shrink-0 w-10 h-10 rounded-full ${avatarColor} items-center justify-center ${comment.avatarUrl ? 'hidden' : 'flex'}`}>
+          <span className="text-white text-sm font-semibold">{initials}</span>
+        </div>
 
         {/* Contenu */}
         <div className="flex-1 min-w-0">

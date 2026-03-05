@@ -40,14 +40,18 @@ export default function ArticleCard({ article, variant = 'default', disabled = f
                 <Clock className="w-4 h-4" />
                 {article.readTime}
               </span>
-              <span className="flex items-center gap-1">
-                <Eye className="w-4 h-4" />
-                {article.views}
-              </span>
-              <span className="flex items-center gap-1">
-                <MessageCircle className="w-4 h-4" />
-                {article.comments}
-              </span>
+              {article.views > 0 && (
+                <span className="flex items-center gap-1">
+                  <Eye className="w-4 h-4" />
+                  {article.views}
+                </span>
+              )}
+              {article.comments > 0 && (
+                <span className="flex items-center gap-1">
+                  <MessageCircle className="w-4 h-4" />
+                  {article.comments}
+                </span>
+              )}
             </div>
           </div>
           </Wrapper>
@@ -121,14 +125,18 @@ export default function ArticleCard({ article, variant = 'default', disabled = f
             {article.readTime}
           </span>
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1">
-              <Eye className="w-3.5 h-3.5" />
-              {article.views}
-            </span>
-            <span className="flex items-center gap-1">
-              <MessageCircle className="w-3.5 h-3.5" />
-              {article.comments}
-            </span>
+            {article.views > 0 && (
+              <span className="flex items-center gap-1">
+                <Eye className="w-3.5 h-3.5" />
+                {article.views}
+              </span>
+            )}
+            {article.comments > 0 && (
+              <span className="flex items-center gap-1">
+                <MessageCircle className="w-3.5 h-3.5" />
+                {article.comments}
+              </span>
+            )}
           </div>
         </div>
       </div>
