@@ -94,11 +94,12 @@ async function generateSitemap() {
   // Generer le XML
   const urlEntries = []
 
-  // Pages statiques
+  // Pages statiques (avec lastmod pour forcer le recrawl)
+  const today = formatDate(new Date())
   for (const page of STATIC_PAGES) {
     urlEntries.push(generateUrlEntry(
       `${SITE_URL}${page.path}`,
-      null,
+      today,
       page.changefreq,
       page.priority
     ))

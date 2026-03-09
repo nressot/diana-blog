@@ -1,0 +1,36 @@
+# Headers specifiques pour chaque type de page
+
+/*
+  X-Robots-Tag: index, follow
+  Link: </sitemap.xml>; rel="sitemap"; type="application/xml"
+
+# Articles
+/article/*
+  X-Robots-Tag: index, follow, max-image-preview:large
+
+# Boutique
+/boutique
+  X-Robots-Tag: index, follow
+
+/boutique/*
+  X-Robots-Tag: index, follow, max-image-preview:large
+
+# Pages statiques
+/about
+  X-Robots-Tag: index, follow
+
+/blog
+  X-Robots-Tag: index, follow
+
+/contact
+  X-Robots-Tag: index, follow
+
+# Pages legales
+/legal
+  X-Robots-Tag: index, follow
+
+/privacy
+  X-Robots-Tag: index, follow
+
+/cgv
+  X-Robots-Tag: index, follow

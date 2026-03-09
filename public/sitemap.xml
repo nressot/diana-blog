@@ -2,67 +2,67 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://covendediana.ch/</loc>
-    
+    <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/blog</loc>
-    
+    <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/boutique</loc>
-    
+    <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/about</loc>
-    
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/contact</loc>
-    
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/legal</loc>
-    
+    <lastmod>2026-03-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/privacy</loc>
-    
+    <lastmod>2026-03-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/cgv</loc>
-    
+    <lastmod>2026-03-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/article/coeur-coulant-une-recette-de-cuisine-ou-d-amour</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/article/nouveau-cycle-nouveau-chapitre</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://covendediana.ch/article/prenons-le-bus-direction-l-amour</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

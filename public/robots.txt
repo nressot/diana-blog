@@ -38,5 +38,7 @@ Disallow: /commande-annulee
 # Sitemap
 Sitemap: https://covendediana.ch/sitemap.xml
 
-# Crawl-delay pour eviter la surcharge (optionnel)
-Crawl-delay: 1
+# Google specific rules
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
