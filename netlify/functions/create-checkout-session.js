@@ -133,10 +133,7 @@ exports.handler = async (event, context) => {
       },
       allow_promotion_codes: true,
       locale: 'fr',
-      customer_creation: 'always',
-      invoice_creation: {
-        enabled: true
-      }
+      customer_creation: 'always'
     }
 
     // Pre-fill customer email if provided (from logged-in user)

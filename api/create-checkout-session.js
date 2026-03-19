@@ -98,10 +98,6 @@ export default async function handler(req, res) {
       locale: 'fr',
       // Create customer to enable email receipts (activate in Stripe Dashboard > Settings > Emails)
       customer_creation: 'always',
-      // Generate invoice for each payment (sends detailed receipt with invoice PDF)
-      invoice_creation: {
-        enabled: true,
-      },
     })
 
     res.status(200).json({ url: session.url, sessionId: session.id })
